@@ -139,12 +139,16 @@ def infer_component_type(json_node, clickable):
     :param clickable: 其他属性
     :return: 推断的控件类型结果
     """
-    # TODO 在这个函数内部编写规则，返回相应的推断类型；
+    # TODO 在这个函数内部编写规则，返回相应的推断类型；注意规则放置的先后顺序对结果有影响。
 
     # 先判断class_name是否存在明确的控件类型标识
     component_type = infer_component_from_string(json_node['class'])
     if component_type is not Component.Unclassified:
         return component_type
+
+    # 此处为人为添加的一条规则
+    if 'ActionMenuItemView' in json_node['class']:
+        return Component.ImageButton
 
     # 再遍历地判断当前节点的所有祖先是否存在明确标识
     for ancestor in json_node['ancestors']:
@@ -169,6 +173,8 @@ def infer_component_from_string(str):
         return Component.CheckBox
     if "EditText" in str:
         return Component.EditText
+    if "ImageButton" in str:
+        return Component.ImageButton
     if "Button" in str:
         return Component.Button
     if "TextView" in str:
