@@ -6,7 +6,12 @@ from enum import Enum
 
 CLEAN_JSON = False
 LEVEL = 1
-CREATE_DRAWINGS = True
+CREATE_SKETCHES = True
+
+WIDTH = 1440
+HEIGHT = 2560
+
+KEY_PARENT_CLICKABLE = 'key_parent_clickable'
 
 # 控件对应的图像
 im_button = Image.open('./drawings/button.png')
@@ -18,7 +23,8 @@ im_text_link = Image.open('./drawings/text_link.png')
 im_checkbox = Image.open('./drawings/checkbox.png')
 
 
-class Component(Enum):
+class Widget(Enum):
+    Layout = 0
     Button = 1
     EditText = 2
     ImageView = 3
@@ -53,9 +59,9 @@ def json_handler(read_json_path, write_json_path):
 
 def sketch_generation(layout_json_path, output_img_path):
     """
-    读入json文件，生成处理后的草图文件
-    :param layout_json_path: 待处理json文件路径
-    :param output_img_path: 输出的草图图片格式文件路径
+    读入布局文件，生成处理后的草图文件并保存到指定路径中
+    :param layout_json_path: 待处理json格式布局文件的路径
+    :param output_img_path: 生成的草图图片的保存路径
     :return:
     """
     with open(layout_json_path, 'r') as f:
@@ -68,10 +74,11 @@ def sketch_generation(layout_json_path, output_img_path):
     # FIXME 检查Rico数据集中layout是否从root.children[0]开始
     top_layout = root_children[0]
 
-    im = Image.new('RGB', (img_bounds[2], img_bounds[3]), (255, 255, 255))
-    dfs_draw_component(top_layout, im)
+    im = Image.new('RGB', (WIDTH, HEIGHT), (255, 255, 255))
+    args = {KEY_PARENT_CLICKABLE: False}
+    dfs_draw_widget(top_layout, im, args)
 
-    im.save(output_img_path, "JPEG")
+    im.save(output_img_path, "PNG")
 
 
 def dfs_clean(json_obj):
@@ -107,11 +114,12 @@ def remove_unrelated_keys(json_node):
         del json_node[k]
 
 
-def dfs_draw_component(json_obj, im):
+def dfs_draw_widget(json_obj, im, args):
     """
     通过深度优先搜索的方式按节点绘制草图，将其直接绘制在im对象上
     :param json_obj: 待分析的json节点
     :param im: 待绘制的图片对象
+    :param args: 其他需要逐层传递的参数
     :return:
     """
     # 不绘制属性visible-to-user值为真的控件
@@ -120,133 +128,147 @@ def dfs_draw_component(json_obj, im):
 
     # TODO 修改或加入更多规则判断并调用 im.paste 绘制相应的图形；修改或增加参数来确定额外属性，如上层传递的 clickable 属性
 
-    component_type = infer_component_type(json_obj, False)
+    widget_type = infer_widget_type(json_obj, args)
+
+    # 如果外层layout的clickable属性为真，则传递该参数用于后续类型判断
+    if widget_type == Widget.Layout and json_obj['clickable']:
+        args[KEY_PARENT_CLICKABLE] = True
 
     # 经过规则推断仍无法判断控件类型的，不绘制
-    if component_type is not Component.Unclassified:
-        draw_component(im, component_type, json_obj['bounds'])
+    if widget_type != Widget.Unclassified and widget_type != Widget.Layout:
+        draw_widget(im, widget_type, json_obj['bounds'])
 
     # 当json_obj无children属性时，不再递归执行
-    if 'children' in json_obj:
+    # TODO 是否还有其他不再需要递归访问的情形
+    if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
         for i in range(len(json_obj['children'])):
-            dfs_draw_component(json_obj['children'][i], im)
+            dfs_draw_widget(json_obj['children'][i], im, args)
+    args[KEY_PARENT_CLICKABLE] = False
 
 
-def infer_component_type(json_node, clickable):
+def infer_widget_type(json_node, args):
     """
     接收json节点，返回根据规则推断的控件类型
     :param json_node: 待分析json节点
-    :param clickable: 其他属性
+    :param args: 其他属性
     :return: 推断的控件类型结果
     """
-    # TODO 在这个函数内部编写规则，返回相应的推断类型；注意规则放置的先后顺序对结果有影响。
+    # TODO 在这个函数内编写规则，返回相应的推断类型；注意规则放置的先后顺序对结果有影响。
 
-    # 先判断class_name是否存在明确的控件类型标识
-    component_type = infer_component_from_string(json_node['class'])
-    if component_type is not Component.Unclassified:
-        return component_type
+    # 次序1：判断class_name是否存在明确的控件类型标识
+    widget_type = infer_widget_from_string(json_node['class'])
 
-    # 此处为人为添加的一条规则
+    # 次序2
     if 'ActionMenuItemView' in json_node['class']:
-        return Component.ImageButton
+        return Widget.ImageButton
 
-    # 再遍历地判断当前节点的所有祖先是否存在明确标识
+    # 次序3：确定嵌套在layout内部属性不可点击但实际行为可点击情况
+    if widget_type != Widget.Unclassified:
+        if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+            widget_type = Widget.TextLink
+        elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+            widget_type = Widget.ImageButton  # TODO 确定这里的类型是否合适
+        return widget_type
+
+    # 次序3：判断当前节点的任何一个祖先是否存在明确标识
     for ancestor in json_node['ancestors']:
-        component_type = infer_component_from_string(ancestor)
-        if component_type is not Component.Unclassified:
+        widget_type = infer_widget_from_string(ancestor)
+        if widget_type != Widget.Unclassified:  # 当找到某个可判断类型的祖先时退出
             break
-    if component_type is not Component.Unclassified:
-        return component_type
 
     # TODO 还要结合clickable等其他属性判断结果
-    return component_type
+    return widget_type
 
 
-def infer_component_from_string(str):
+def infer_widget_from_string(class_name):
     """
-    当控件类型名称明确地出现在str中时，返回对应的控件类型；如果均未出现，返回Component.Unclassified
-    :param str: 待匹配字符串
+    当控件类型名称明确地出现在字符串中时，返回对应的控件类型；如果均未出现，返回Widget.Unclassified
+    :param class_name: 待检查字符串
     :return: 控件类型
     """
     # TODO 注意这里的判断顺序对结果有影响
-    if "CheckBox" in str:
-        return Component.CheckBox
-    if "EditText" in str:
-        return Component.EditText
-    if "ImageButton" in str:
-        return Component.ImageButton
-    if "Button" in str:
-        return Component.Button
-    if "TextView" in str:
-        return Component.TextView
-    if "Image" in str:
-        return Component.ImageView
+    if "Layout" in class_name:
+        return Widget.Layout
+    if "CheckBox" in class_name:
+        return Widget.CheckBox
+    if "EditText" in class_name:
+        return Widget.EditText
+    if "ImageButton" in class_name:
+        return Widget.ImageButton
+    if "Button" in class_name:
+        return Widget.Button
+    if "TextView" in class_name:
+        return Widget.TextView
+    if "Image" in class_name:
+        return Widget.ImageView
 
-    return Component.Unclassified
+    return Widget.Unclassified
 
 
-def draw_component(im, component_type, bounds):
+def draw_widget(im, widget_type, bounds):
     """
     在im对象中绘制范围为bounds的控件草图
     :param im: 待绘制的图片对象
-    :param component_type: 待绘制的控件类型
+    :param widget_type: 待绘制的控件类型
     :param bounds: 待绘制的控件范围
     :return:
     """
     w = bounds[2] - bounds[0]
     h = bounds[3] - bounds[1]
-    # 不绘制面积为0的控件
+    # 不绘制面积过小的控件
+    # TODO 确定不需要绘制的面积阈值
     if w <= 0 or h <= 0:
         return
 
-    if component_type is Component.Button:
+    if widget_type == Widget.Button:
         im.paste(im_button.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif component_type is Component.ImageView:
+    elif widget_type == Widget.ImageView:
         im.paste(im_image_view.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif component_type is Component.EditText:
+    elif widget_type == Widget.EditText:
         im.paste(im_edit_text.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif component_type is Component.TextView:
+    elif widget_type == Widget.TextView:
         im.paste(im_text_view.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif component_type is Component.CheckBox:
+    elif widget_type == Widget.CheckBox:
         im.paste(im_checkbox.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif component_type is Component.ImageButton:
+    elif widget_type == Widget.ImageButton:
         im.paste(im_image_button.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif component_type is Component.TextLink:
+    elif widget_type == Widget.TextLink:
         im.paste(im_text_link.resize((w, h)), box=(bounds[0], bounds[1]))
 
 
 if __name__ == '__main__':
-    main_path = "./Top Apps"
+    app_layout_dir = "./Top Apps"
     output_path = "./output"
 
+    # 遍历布局文件访问节点清理结构
     if CLEAN_JSON:
         print("Start cleaning json files ...")
-        for case_dir in os.listdir(main_path):
+        for case_dir in os.listdir(app_layout_dir):
             if not case_dir.startswith("."):  # hidden files
                 if not os.path.exists(os.path.join(output_path, case_dir)):
                     os.makedirs(os.path.join(output_path, case_dir))
-                for file in os.listdir(os.path.join(main_path, case_dir)):
+                for file in os.listdir(os.path.join(app_layout_dir, case_dir)):
                     # print(file)
                     if file.endswith(".json"):
                         file_name = file.split('.')[0]
-                        json_handler(os.path.join(main_path, case_dir, file),
+                        json_handler(os.path.join(app_layout_dir, case_dir, file),
                                      os.path.join(output_path, case_dir, file_name + "." + str(LEVEL) + ".json"))
                 print(os.path.join(output_path, case_dir))
         print("Output cleaned json files saved in " + output_path)
 
+    # 根据布局信息生成草图
     output_path = "./Top Apps"
-    # turn screenshots to sketches
-    if CREATE_DRAWINGS:
+    if CREATE_SKETCHES:
         print("Start generating sketches ...")
-        for case_dir in os.listdir(main_path):
+        for case_dir in os.listdir(app_layout_dir):
             if not case_dir.startswith("."):  # hidden files
                 if not os.path.exists(os.path.join(output_path, case_dir)):
                     os.makedirs(os.path.join(output_path, case_dir))
-                for file in os.listdir(os.path.join(main_path, case_dir)):
+                for file in os.listdir(os.path.join(app_layout_dir, case_dir)):
                     # print(file)
                     if file.endswith(".json"):
                         file_name = file.split('.')[0]
-                        sketch_generation(os.path.join(main_path, case_dir, file),
-                                          os.path.join(output_path, case_dir, file_name + '-sketch.jpg'))
-                print(os.path.join(output_path, case_dir))
-        print("Output drawings saved in " + output_path)
+                        sketch_generation(os.path.join(app_layout_dir, case_dir, file),
+                                          os.path.join(output_path, case_dir, file_name + '-sketch.png'))
+                print(os.path.join(output_path, case_dir), "finished")
+        print("Output sketches saved in", output_path, "ended in -sketch.png")
