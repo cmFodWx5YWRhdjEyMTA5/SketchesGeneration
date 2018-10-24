@@ -154,7 +154,6 @@ def infer_widget_type(json_node, args):
     :return: 推断的控件类型结果
     """
     # TODO 在这个函数内编写规则，返回相应的推断类型；注意规则放置的先后顺序对结果有影响。
-
     # 次序1：判断class_name是否存在明确的控件类型标识
     widget_type = infer_widget_from_string(json_node['class'])
 
