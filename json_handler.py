@@ -29,7 +29,7 @@ class Widget(Enum):
     EditText = 2
     ImageView = 3
     TextView = 4
-    ImageButton = 5
+    ImageLink = 5
     TextLink = 6
     CheckBox = 7
     Unclassified = 8
@@ -160,7 +160,7 @@ def infer_widget_type(json_node, args):
 
     # 次序2：ActionMenuItemView
     if 'ActionMenuItemView' in json_node['class']:
-        return Widget.ImageButton
+        return Widget.ImageLink
 
     # 次序3：判断当前节点的任何一个祖先是否存在明确标识
     for ancestor in json_node['ancestors']:
@@ -172,8 +172,12 @@ def infer_widget_type(json_node, args):
     if widget_type != Widget.Unclassified:
         if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
             widget_type = Widget.TextLink
-        elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
-            widget_type = Widget.ImageButton  # TODO 确定这里的类型是否合适
+        elif widget_type == Widget.ImageView:
+            if json_node['clickable']:
+                widget_type = Widget.Button
+            elif args[KEY_PARENT_CLICKABLE]:
+                widget_type = Widget.ImageLink
+
         return widget_type
 
     return widget_type
@@ -192,8 +196,8 @@ def infer_widget_from_string(class_name):
         return Widget.CheckBox
     if "EditText" in class_name:
         return Widget.EditText
-    if "ImageButton" in class_name:
-        return Widget.ImageButton
+    # if "ImageButton" in class_name:
+    #     return Widget.ImageButton
     if "Button" in class_name:
         return Widget.Button
     if "TextView" in class_name:
@@ -229,7 +233,7 @@ def draw_widget(im, widget_type, bounds):
         im.paste(im_text_view.resize((w, h)), box=(bounds[0], bounds[1]))
     elif widget_type == Widget.CheckBox:
         im.paste(im_checkbox.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif widget_type == Widget.ImageButton:
+    elif widget_type == Widget.ImageLink:
         im.paste(im_image_button.resize((w, h)), box=(bounds[0], bounds[1]))
     elif widget_type == Widget.TextLink:
         im.paste(im_text_link.resize((w, h)), box=(bounds[0], bounds[1]))
