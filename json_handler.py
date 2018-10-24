@@ -159,13 +159,14 @@ def infer_widget_type(json_node, args):
 
     # 次序2：ActionMenuItemView
     if 'ActionMenuItemView' in json_node['class']:
-        return Widget.ImageLink
+        return Widget.Button
 
     # 次序3：判断当前节点的任何一个祖先是否存在明确标识
-    for ancestor in json_node['ancestors']:
-        widget_type = infer_widget_from_string(ancestor)
-        if widget_type != Widget.Unclassified:  # 当找到某个可判断类型的祖先时退出
-            break
+    if widget_type == Widget.Unclassified:
+        for ancestor in json_node['ancestors']:
+            widget_type = infer_widget_from_string(ancestor)
+            if widget_type != Widget.Unclassified:  # 当找到某个可判断类型的祖先时退出
+                break
 
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
     if widget_type != Widget.Unclassified:
@@ -176,7 +177,7 @@ def infer_widget_type(json_node, args):
                 widget_type = Widget.Button
             elif args[KEY_PARENT_CLICKABLE]:
                 widget_type = Widget.ImageLink
-        return widget_type
+        #return widget_type
     return widget_type
 
 
