@@ -176,9 +176,7 @@ def infer_widget_type(json_node, args):
                 widget_type = Widget.Button
             elif args[KEY_PARENT_CLICKABLE]:
                 widget_type = Widget.ImageLink
-
         return widget_type
-
     return widget_type
 
 
