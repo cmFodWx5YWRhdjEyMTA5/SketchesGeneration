@@ -158,17 +158,9 @@ def infer_widget_type(json_node, args):
     # 次序1：判断class_name是否存在明确的控件类型标识
     widget_type = infer_widget_from_string(json_node['class'])
 
-    # 次序2
+    # 次序2：ActionMenuItemView
     if 'ActionMenuItemView' in json_node['class']:
         return Widget.ImageButton
-
-    # 次序3：确定嵌套在layout内部属性不可点击但实际行为可点击情况
-    if widget_type != Widget.Unclassified:
-        if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
-            widget_type = Widget.TextLink
-        elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
-            widget_type = Widget.ImageButton  # TODO 确定这里的类型是否合适
-        return widget_type
 
     # 次序3：判断当前节点的任何一个祖先是否存在明确标识
     for ancestor in json_node['ancestors']:
@@ -176,7 +168,14 @@ def infer_widget_type(json_node, args):
         if widget_type != Widget.Unclassified:  # 当找到某个可判断类型的祖先时退出
             break
 
-    # TODO 还要结合clickable等其他属性判断结果
+    # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
+    if widget_type != Widget.Unclassified:
+        if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+            widget_type = Widget.TextLink
+        elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+            widget_type = Widget.ImageButton  # TODO 确定这里的类型是否合适
+        return widget_type
+
     return widget_type
 
 
