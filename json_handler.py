@@ -138,6 +138,7 @@ def dfs_draw_widget(json_obj, im, args):
     if widget_type != Widget.Unclassified and widget_type != Widget.Layout:
         draw_widget(im, widget_type, json_obj['bounds'])
 
+
     # 当json_obj无children属性时，不再递归执行
     # TODO 是否还有其他不再需要递归访问的情形
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
