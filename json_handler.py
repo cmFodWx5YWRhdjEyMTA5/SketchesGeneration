@@ -158,6 +158,14 @@ def infer_widget_type(json_node, args):
     # 次序1：判断class_name是否存在明确的控件类型标识
     widget_type = infer_widget_from_string(json_node['class'])
 
+    #如果button属性是文字类型，将其统一成textlink
+    if widget_type == Widget.Button:
+        for ancestor in json_node['ancestors']:
+            if 'TextView' in ancestor:
+                widget_type = Widget.TextLink
+                break
+    return widget_type
+
     # 次序2：ActionMenuItemView
     if 'ActionMenuItemView' in json_node['class']:
         return Widget.Button
