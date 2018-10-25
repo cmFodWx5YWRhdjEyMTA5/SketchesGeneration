@@ -170,39 +170,39 @@ def infer_widget_type(json_node, args):
     :return: 推断的控件类型结果
     """
     # TODO 在这个函数内编写规则，返回相应的推断类型；注意规则放置的先后顺序对结果有影响。
-    # 次序1：判断class_name是否存在明确的控件类型标识
-    widget_type = infer_widget_from_string(json_node['class'])
 
-    #如果button属性是文字类型，将其统一成textlink
+    # 次序1：ActionMenuItemView
+    if 'ActionMenuItemView' in json_node['class']:
+        return Widget.Button
+
+    # 次序2：判断class_name是否存在明确的控件类型标识
+    widget_type = infer_widget_type_from_string(json_node['class'])
+
+    # 到此为止的Button不区分图形、文字。如果名称中不含Image的图形按钮也会被认为是Button
+    # 如果button属性是文字类型，将其统一成TextLink
     if widget_type == Widget.Button:
         for ancestor in json_node['ancestors']:
             if 'TextView' in ancestor:
                 widget_type = Widget.TextLink
                 break
 
-    # 次序2：ActionMenuItemView
-    if 'ActionMenuItemView' in json_node['class']:
-        return Widget.Button
-
-    # 次序3：判断当前节点的任何一个祖先是否存在明确标识
+    # 次序3：判断未明确分类节点的任何一个祖先是否存在明确标识
     if widget_type == Widget.Unclassified:
         for ancestor in json_node['ancestors']:
-            widget_type = infer_widget_from_string(ancestor)
-            if widget_type != Widget.Unclassified:  # 当找到某个可判断类型的祖先时退出
+            widget_type = infer_widget_type_from_string(ancestor)
+            if widget_type != Widget.Unclassified:
                 break
 
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
-    if widget_type != Widget.Unclassified:
-        if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
-            widget_type = Widget.TextLink
-        elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
-                widget_type = Widget.ImageLink
-        # return widget_type
+    if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+        widget_type = Widget.TextLink
+    elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+        widget_type = Widget.ImageLink  # ImageLink 仅出现在这种情形
 
     return widget_type
 
 
-def infer_widget_from_string(class_name):
+def infer_widget_type_from_string(class_name):
     """
     当控件类型名称明确地出现在字符串中时，返回对应的控件类型；如果均未出现，返回Widget.Unclassified
     :param class_name: 待检查字符串
@@ -217,12 +217,12 @@ def infer_widget_from_string(class_name):
         return Widget.EditText
     # if "ImageButton" in class_name:
     #     return Widget.ImageButton
+    if "Image" in class_name:
+        return Widget.ImageView
     if "Button" in class_name:
         return Widget.Button
     if "TextView" in class_name:
         return Widget.TextView
-    if "Image" in class_name:
-        return Widget.ImageView
 
     return Widget.Unclassified
 
