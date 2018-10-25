@@ -181,10 +181,7 @@ def infer_widget_type(json_node, args):
     if widget_type != Widget.Unclassified:
         if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
             widget_type = Widget.TextLink
-        elif widget_type == Widget.ImageView:
-            if json_node['clickable']:
-                widget_type = Widget.Button
-            elif args[KEY_PARENT_CLICKABLE]:
+        elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
                 widget_type = Widget.ImageLink
         #return widget_type
 
