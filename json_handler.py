@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from pprint import pprint
 from PIL import Image
 from enum import Enum
@@ -21,6 +22,11 @@ im_text_view = Image.open('./drawings/text_view.png')
 im_image_button = Image.open('./drawings/image_button.png')
 im_text_link = Image.open('./drawings/text_link.png')
 im_checkbox = Image.open('./drawings/checkbox.png')
+
+app_layout_dir = "./Top Apps"
+json_output_dir = "./output"
+sketch_output_dir = "./Top Apps"
+layout_sequence_output_path = "./layout_sequence.lst"
 
 
 class Widget(Enum):
@@ -64,21 +70,24 @@ def sketch_generation(layout_json_path, output_img_path):
     :param output_img_path: 生成的草图图片的保存路径
     :return:
     """
+    tokens = []
     with open(layout_json_path, 'r') as f:
         json_obj = json.load(f)
 
     root = json_obj['activity']['root']
-    root_children = root['children']
     img_bounds = root['bounds']
 
     # FIXME 检查Rico数据集中layout是否从root.children[0]开始
-    top_layout = root_children[0]
+    top_framelayout = root['children'][0]
 
+    # 建立空白草图画布，DFS后将绘制的草图保存到文件
     im = Image.new('RGB', (WIDTH, HEIGHT), (255, 255, 255))
     args = {KEY_PARENT_CLICKABLE: False}
-    dfs_draw_widget(top_layout, im, args)
-
+    dfs_draw_widget(top_framelayout, im, args, tokens)
     im.save(output_img_path, "PNG")
+
+    with open(layout_sequence_output_path, "a") as f:
+        f.write(" ".join(tokens) + '\n')
 
 
 def dfs_clean(json_obj):
@@ -89,9 +98,7 @@ def dfs_clean(json_obj):
     """
     remove_unrelated_keys(json_obj)
 
-    if 'children' not in json_obj:
-        return
-    else:
+    if 'children' in json_obj:
         for i in range(len(json_obj['children'])):
             dfs_clean(json_obj['children'][i])
 
@@ -114,12 +121,13 @@ def remove_unrelated_keys(json_node):
         del json_node[k]
 
 
-def dfs_draw_widget(json_obj, im, args):
+def dfs_draw_widget(json_obj, im, args, tokens):
     """
     通过深度优先搜索的方式按节点绘制草图，将其直接绘制在im对象上
     :param json_obj: 待分析的json节点
     :param im: 待绘制的图片对象
     :param args: 其他需要逐层传递的参数
+    :param tokens: 待添加的 token 序列
     :return:
     """
     # 不绘制属性visible-to-user值为真的控件
@@ -130,26 +138,33 @@ def dfs_draw_widget(json_obj, im, args):
 
     widget_type = infer_widget_type(json_obj, args)
 
-    # 如果外层layout的clickable属性为真，则传递该参数用于后续类型判断
+    # 如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
     if widget_type == Widget.Layout and json_obj['clickable']:
         args[KEY_PARENT_CLICKABLE] = True
 
-    # 经过规则推断仍无法判断控件类型的，不绘制
-    if widget_type != Widget.Unclassified and widget_type != Widget.Layout:
-        draw_widget(im, widget_type, json_obj['bounds'])
+    # 在文件中保存 DFS-Tree
+    tokens.append(str(widget_type))
 
+    # 经过规则推断仍无法判断控件类型的，不绘制
+    if widget_type != Widget.Unclassified:
+        # 在草图中绘制除 Layout 以外的控件
+        if widget_type != Widget.Layout:
+            draw_widget(im, widget_type, json_obj['bounds'])
 
     # 当json_obj无children属性时，不再递归执行
     # TODO 是否还有其他不再需要递归访问的情形
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
+        tokens.append("{")
         for i in range(len(json_obj['children'])):
-            dfs_draw_widget(json_obj['children'][i], im, args)
+            dfs_draw_widget(json_obj['children'][i], im, args, tokens)
+        tokens.append("}")
+
     args[KEY_PARENT_CLICKABLE] = False
 
 
 def infer_widget_type(json_node, args):
     """
-    接收json节点，返回根据规则推断的控件类型
+    接收json节点，返回关键词匹配后根据规则推断的控件类型
     :param json_node: 待分析json节点
     :param args: 其他属性
     :return: 推断的控件类型结果
@@ -178,7 +193,7 @@ def infer_widget_type(json_node, args):
                 widget_type = Widget.Button
             elif args[KEY_PARENT_CLICKABLE]:
                 widget_type = Widget.ImageLink
-        #return widget_type
+        # return widget_type
     return widget_type
 
 
@@ -239,38 +254,39 @@ def draw_widget(im, widget_type, bounds):
 
 
 if __name__ == '__main__':
-    app_layout_dir = "./Top Apps"
-    output_path = "./output"
-
+    start_time = time.time()
     # 遍历布局文件访问节点清理结构
     if CLEAN_JSON:
         print("Start cleaning json files ...")
-        for case_dir in os.listdir(app_layout_dir):
-            if not case_dir.startswith("."):  # hidden files
-                if not os.path.exists(os.path.join(output_path, case_dir)):
-                    os.makedirs(os.path.join(output_path, case_dir))
-                for file in os.listdir(os.path.join(app_layout_dir, case_dir)):
+        for case_dir_name in os.listdir(app_layout_dir):
+            if not case_dir_name.startswith("."):  # hidden files
+                if not os.path.exists(os.path.join(json_output_dir, case_dir_name)):
+                    os.makedirs(os.path.join(json_output_dir, case_dir_name))
+                for file in os.listdir(os.path.join(app_layout_dir, case_dir_name)):
                     # print(file)
                     if file.endswith(".json"):
                         file_name = file.split('.')[0]
-                        json_handler(os.path.join(app_layout_dir, case_dir, file),
-                                     os.path.join(output_path, case_dir, file_name + "." + str(LEVEL) + ".json"))
-                print(os.path.join(output_path, case_dir))
-        print("Output cleaned json files saved in " + output_path)
+                        json_handler(os.path.join(app_layout_dir, case_dir_name, file),
+                                     os.path.join(json_output_dir, case_dir_name,
+                                                  "".join([file_name, '.', str(LEVEL), ".json"])))
+                print(os.path.join(json_output_dir, case_dir_name))
+        print("Output cleaned json files saved in " + json_output_dir)
 
     # 根据布局信息生成草图
-    output_path = "./Top Apps"
     if CREATE_SKETCHES:
-        print("Start generating sketches ...")
-        for case_dir in os.listdir(app_layout_dir):
-            if not case_dir.startswith("."):  # hidden files
-                if not os.path.exists(os.path.join(output_path, case_dir)):
-                    os.makedirs(os.path.join(output_path, case_dir))
-                for file in os.listdir(os.path.join(app_layout_dir, case_dir)):
+        print(">>> Start generating sketches ...")
+        open(layout_sequence_output_path, "w")
+        for case_dir_name in os.listdir(app_layout_dir):
+            if not case_dir_name.startswith("."):  # hidden files
+                if not os.path.exists(os.path.join(sketch_output_dir, case_dir_name)):
+                    os.makedirs(os.path.join(sketch_output_dir, case_dir_name))
+                for file in os.listdir(os.path.join(app_layout_dir, case_dir_name)):
                     # print(file)
                     if file.endswith(".json"):
                         file_name = file.split('.')[0]
-                        sketch_generation(os.path.join(app_layout_dir, case_dir, file),
-                                          os.path.join(output_path, case_dir, file_name + '-sketch.png'))
-                print(os.path.join(output_path, case_dir), "finished")
-        print("Output sketches saved in", output_path, "ended in -sketch.png")
+                        sketch_generation(os.path.join(app_layout_dir, case_dir_name, file),
+                                          os.path.join(sketch_output_dir, case_dir_name,
+                                                       "".join([file_name, '-sketch.png'])))
+                print(os.path.join(sketch_output_dir, case_dir_name), ">> OK")
+        print("<<< All generated sketches saved in", sketch_output_dir, "ended with *sketch.png")
+    print('duration: {:.2f} s'.format(time.time() - start_time))
