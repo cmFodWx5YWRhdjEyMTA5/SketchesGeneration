@@ -164,7 +164,7 @@ def infer_widget_type(json_node, args):
             if 'TextView' in ancestor:
                 widget_type = Widget.TextLink
                 break
-    return widget_type
+    #return Widget.Button
 
     # 次序2：ActionMenuItemView
     if 'ActionMenuItemView' in json_node['class']:
@@ -187,6 +187,7 @@ def infer_widget_type(json_node, args):
             elif args[KEY_PARENT_CLICKABLE]:
                 widget_type = Widget.ImageLink
         #return widget_type
+
     return widget_type
 
 
