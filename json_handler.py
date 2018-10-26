@@ -6,16 +6,20 @@ from pprint import pprint
 from PIL import Image
 from enum import Enum
 
+# 程序运行参数
 CLEAN_JSON = False
 LEVEL = 1
-CREATE_SKETCHES = True
+DRAW_SKETCHES = True
 CUT_WIDGET = True
 
+# Layout 默认长宽
 WIDTH = 1440
 HEIGHT = 2560
 
+# 用于 File Hash 的缓存大小
 FILE_READ_BUF_SIZE = 65536
 
+# 用于 layout 层次间传递辅助参数
 KEY_PARENT_CLICKABLE = 'key_parent_clickable'
 
 # 控件对应的图像
@@ -57,76 +61,30 @@ def json_handler(read_json_path, write_json_path):
     with open(read_json_path, 'r') as f:
         json_obj = json.load(f)
 
+    # FIXME 检查 Rico 数据集中 layout 是否从 root.children[0] 开始
     root = json_obj['activity']['root']
-    root_children = root['children']
-
-    # FIXME 检查Rico数据集中layout是否从root.children[0]开始
-    top_layout = root_children[0]
-    dfs_clean(top_layout)
-    # pprint(top_layout)
-
-    with open(write_json_path, 'w') as f:
-        json.dump(top_layout, f, indent=2)
-
-
-def sketch_generation(layout_json_path, output_img_path):
-    """
-    读入布局文件，生成处理后的草图文件并保存到指定路径中
-    :param layout_json_path: 待处理json格式布局文件的路径
-    :param output_img_path: 生成的草图图片的保存路径
-    :return:
-    """
-    with open(layout_json_path, 'r') as f:
-        json_obj = json.load(f)
-
-    root = json_obj['activity']['root']
-    img_bounds = root['bounds']
-
-    # FIXME 检查Rico数据集中layout是否从root.children[0]开始
     top_framelayout = root['children'][0]
 
-    # 准备裁剪控件
-    rico_index = os.path.basename(layout_json_path).split('.')[0]
-    img_path = os.path.splitext(layout_json_path)[0] + ".jpg"
-    im_screenshot = Image.open(img_path)
-    img_sha1 = hash_file_sha1(img_path)
+    dfs_clean_json(top_framelayout)
 
-    # 建立空白草图画布，DFS后将绘制的草图保存到文件
-    tokens = [rico_index]
-    im_sketch = Image.new('RGB', (WIDTH, HEIGHT), (255, 255, 255))
-    args = {KEY_PARENT_CLICKABLE: False}
-    dfs_draw_widget(top_framelayout, im_screenshot, im_sketch, args, tokens, rico_index)
-    im_sketch.save(output_img_path, "PNG")
-
-    with open(LAYOUT_SEQ_OUT_PATH, "a") as f:
-        f.write(" ".join(tokens) + '\n')
+    with open(write_json_path, 'w') as f:
+        json.dump(top_framelayout, f, indent=2)
 
 
-def hash_file_sha1(file_path):
-    sha1 = hashlib.sha1()
-    with open(file_path, 'rb') as f:
-        while True:
-            data = f.read(FILE_READ_BUF_SIZE)
-            if not data:
-                break
-            sha1.update(data)
-    return sha1.hexdigest()
-
-
-def dfs_clean(json_obj):
+def dfs_clean_json(json_obj):
     """
     通过深度优先搜索的方式清理冗余的json属性，保留
     :param json_obj:
     :return:
     """
-    remove_unrelated_keys(json_obj)
+    delete_unrelated_attrs(json_obj)
 
     if 'children' in json_obj:
         for i in range(len(json_obj['children'])):
-            dfs_clean(json_obj['children'][i])
+            dfs_clean_json(json_obj['children'][i])
 
 
-def remove_unrelated_keys(json_node):
+def delete_unrelated_attrs(json_node):
     """
     按LEVEL等级确定对于节点json_dict保留的json属性。
     :param json_node: 待处理的字典格式的json节点
@@ -144,6 +102,50 @@ def remove_unrelated_keys(json_node):
         del json_node[k]
 
 
+def sketch_samples_generation(layout_json_path, output_img_path):
+    """
+    读入布局文件，生成处理后的草图文件并保存到指定路径中
+    :param layout_json_path: 待处理json格式布局文件的路径
+    :param output_img_path: 生成的草图图片的保存路径
+    :return:
+    """
+    with open(layout_json_path, 'r') as f:
+        json_obj = json.load(f)
+
+    # FIXME 检查 Rico 数据集中 layout 是否从 root.children[0] 开始
+    root = json_obj['activity']['root']
+    top_framelayout = root['children'][0]
+
+    # 准备裁剪控件
+    screenshot_path = os.path.splitext(layout_json_path)[0] + ".jpg"
+    im_screenshot = Image.open(screenshot_path)
+    rico_index = os.path.basename(layout_json_path).split('.')[0]
+    img_sha1 = hash_file_sha1(screenshot_path)
+
+    # 新建空白草图画布，DFS后将绘制的草图保存到文件
+    im_sketch = Image.new('RGB', (WIDTH, HEIGHT), (255, 255, 255))
+
+    args = {KEY_PARENT_CLICKABLE: False}
+    tokens = [str(rico_index)]
+    dfs_draw_widget(top_framelayout, im_screenshot, im_sketch, args, tokens, rico_index)
+
+    im_sketch.save(output_img_path)
+
+    with open(LAYOUT_SEQ_OUT_PATH, "a") as f:
+        f.write(" ".join(tokens) + '\n')
+
+
+def hash_file_sha1(file_path):
+    sha1 = hashlib.sha1()
+    with open(file_path, 'rb') as f:
+        while True:
+            data = f.read(FILE_READ_BUF_SIZE)
+            if not data:
+                break
+            sha1.update(data)
+    return sha1.hexdigest()
+
+
 def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index):
     """
     通过深度优先搜索的方式按节点绘制草图，将其直接绘制在im对象上
@@ -159,7 +161,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     if not json_obj['visible-to-user']:
         return
 
-    # TODO 修改或加入更多规则判断并调用 im.paste 绘制相应的图形；修改或增加参数来确定额外属性，如上层传递的 clickable 属性
+    # TODO 修改或加入更多规则判断，调用 im.paste 绘制相应的图形；在 args 中增加其他属性辅助判断，如上层的 clickable 属性
 
     widget_type = infer_widget_type(json_obj, args)
 
@@ -193,7 +195,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
                 im_screenshot.crop(jpg_bounds).save(outfile_name)
 
     # 当json_obj无children属性时，不再递归执行
-    # TODO 是否还有其他不再需要递归访问的情形
+    # TODO 考虑其他不再需要递归访问的情形
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
         tokens.append("{")
         for i in range(len(json_obj['children'])):
@@ -210,7 +212,7 @@ def infer_widget_type(json_node, args):
     :param args: 其他属性
     :return: 推断的控件类型结果
     """
-    # TODO 在这个函数内编写规则，返回相应的推断类型；注意规则放置的先后顺序对结果有影响。
+    # TODO 在这里规则，返回的类型是最终推断类型；规则的先后顺序对结果有影响。
 
     # 次序1：ActionMenuItemView
     if 'ActionMenuItemView' in json_node['class']:
@@ -249,15 +251,13 @@ def infer_widget_type_from_string(class_name):
     :param class_name: 待检查字符串
     :return: 控件类型
     """
-    # TODO 注意这里的判断顺序对结果有影响
+    # TODO 判断顺序对结果有影响
     if "Layout" in class_name:
         return Widget.Layout
     if "CheckBox" in class_name:
         return Widget.CheckBox
     if "EditText" in class_name:
         return Widget.EditText
-    # if "ImageButton" in class_name:
-    #     return Widget.ImageButton
     if "Image" in class_name:
         return Widget.ImageView
     if "Button" in class_name:
@@ -319,7 +319,7 @@ if __name__ == '__main__':
         print("Output cleaned json files saved in " + JSON_OUT_PATH)
 
     # 根据布局信息生成草图
-    if CREATE_SKETCHES:
+    if DRAW_SKETCHES:
         print(">>> Start generating sketches ...")
         open(LAYOUT_SEQ_OUT_PATH, "w")
         for case_dir_name in os.listdir(JSON_LAYOUT_PATH):
@@ -330,9 +330,9 @@ if __name__ == '__main__':
                     # print(file)
                     if file.endswith(".json"):
                         file_name = file.split('.')[0]
-                        sketch_generation(os.path.join(JSON_LAYOUT_PATH, case_dir_name, file),
-                                          os.path.join(SKETCH_OUT_DIR, case_dir_name,
-                                                       "".join([file_name, '-sketch.png'])))
+                        sketch_samples_generation(os.path.join(JSON_LAYOUT_PATH, case_dir_name, file),
+                                                  os.path.join(SKETCH_OUT_DIR, case_dir_name,
+                                                               "".join([file_name, '-sketch.png'])))
                 print(os.path.join(SKETCH_OUT_DIR, case_dir_name), ">> OK")
         print("<<< All generated sketches saved in", SKETCH_OUT_DIR, "ended with *sketch.png")
     print('duration: {:.2f} s'.format(time.time() - start_time))
