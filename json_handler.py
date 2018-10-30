@@ -258,10 +258,10 @@ def infer_widget_type_from_string(class_name):
         return Widget.CheckBox
     if "EditText" in class_name:
         return Widget.EditText
-    if "Image" in class_name:
-        return Widget.ImageView
     if "Button" in class_name:
         return Widget.Button
+    if "Image" in class_name:
+        return Widget.ImageView
     if "TextView" in class_name:
         return Widget.TextView
 
