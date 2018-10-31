@@ -11,11 +11,16 @@ from enum import Enum
 CLEAN_JSON = False
 LEVEL = 1
 DRAW_SKETCHES = True
+COLOR_MODE = False  # True 为色彩模式，False 为草图模式
 CUT_WIDGET = True
 
 # Layout 默认长宽
 WIDTH = 1440
 HEIGHT = 2560
+
+# 画布长宽
+SKETCH_WIDTH = 576
+SKETCH_HEIGHT = 1024
 
 # 用于 File Hash 的缓存大小
 FILE_READ_BUF_SIZE = 65536
@@ -24,13 +29,21 @@ FILE_READ_BUF_SIZE = 65536
 KEY_PARENT_CLICKABLE = 'key_parent_clickable'
 
 # 控件对应的图像
-im_button = Image.open('./drawings/button.png')
-im_edit_text = Image.open('./drawings/edit_text.png')
-im_image_view = Image.open('./drawings/image_view.png')
-im_text_view = Image.open('./drawings/text_view.png')
-im_image_button = Image.open('./drawings/image_button.png')
-im_text_link = Image.open('./drawings/text_link.png')
-im_checkbox = Image.open('./drawings/checkbox.png')
+im_button = Image.open('./drawings/frameless/button.png')
+im_edit_text = Image.open('./drawings/frameless/edit_text.png')
+im_image_view = Image.open('./drawings/frameless/image_view.png')
+im_text_view = Image.open('./drawings/frameless/text_view.png')
+im_image_link = Image.open('./drawings/frameless/image_link.png')
+im_text_link = Image.open('./drawings/frameless/text_link.png')
+im_checkbox = Image.open('./drawings/frameless/checkbox.png')
+
+BLACK_RGB = (0, 0, 0)
+RED_RGB = (255, 0, 0)
+GREEN_RGB = (0, 255, 0)
+BLUE_RGB = (0, 0, 255)
+YELLOW_RGB = (255, 255, 0)
+DARKRED_RGB = (255, 0, 255)
+CYAN_RGB = (0, 255, 255)
 
 # 路径
 JSON_LAYOUT_PATH = "./Top Apps"
@@ -124,7 +137,7 @@ def sketch_samples_generation(layout_json_path, output_img_path):
     img_sha1 = hash_file_sha1(screenshot_path)
 
     # 新建空白草图画布，DFS后将绘制的草图保存到文件
-    im_sketch = Image.new('RGB', (WIDTH, HEIGHT), (255, 255, 255))
+    im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
 
     args = {KEY_PARENT_CLICKABLE: False}
     tokens = [str(rico_index)]
@@ -178,16 +191,17 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
         # 经过规则推断仍无法判断控件类型的，不绘制
         if widget_type != Widget.Unclassified:
             draw_widget(im_sketch, widget_type, json_obj['bounds'])
+        # 裁切其他控件便于分析
         if CUT_WIDGET:
             w = json_obj['bounds'][2] - json_obj['bounds'][0]
             h = json_obj['bounds'][3] - json_obj['bounds'][1]
 
             if w > 5 and h > 5:
                 node_sha1 = hashlib.sha1(str(json_obj).encode("utf-8"))
-                jpg_bounds = [int(json_obj['bounds'][0] / WIDTH * im_screenshot.size[0]),
+                jpg_bounds = (int(json_obj['bounds'][0] / WIDTH * im_screenshot.size[0]),
                               int(json_obj['bounds'][1] / HEIGHT * im_screenshot.size[1]),
                               int(json_obj['bounds'][2] / WIDTH * im_screenshot.size[0]),
-                              int(json_obj['bounds'][3] / HEIGHT * im_screenshot.size[1])]
+                              int(json_obj['bounds'][3] / HEIGHT * im_screenshot.size[1]))
                 class_tokens = json_obj['class'].rsplit('.', 1)
                 outfile_name = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name,
                                             "".join([rico_index, '-',
@@ -282,27 +296,53 @@ def draw_widget(im, widget_type, bounds):
     :param bounds: 待绘制的控件范围
     :return:
     """
-    w = bounds[2] - bounds[0]
-    h = bounds[3] - bounds[1]
+    margin = 1
+    margin_inner = 4
+    bounds = (int((bounds[0]) / WIDTH * SKETCH_WIDTH),
+              int((bounds[1]) / HEIGHT * SKETCH_HEIGHT),
+              int((bounds[2]) / WIDTH * SKETCH_WIDTH),
+              int((bounds[3]) / HEIGHT * SKETCH_HEIGHT))
+    bounds_inner = (bounds[0] + margin_inner, bounds[1] + margin_inner, bounds[2] - margin_inner, bounds[3] - margin_inner)
+
+    w = bounds_inner[2] - bounds_inner[0]
+    h = bounds_inner[3] - bounds_inner[1]
+
     # 不绘制面积过小的控件
     # TODO 确定不需要绘制的面积阈值
-    if w <= 0 or h <= 0:
+    if w <= 1 or h <= 1:
         return
 
-    if widget_type == Widget.Button:
-        im.paste(im_button.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif widget_type == Widget.ImageView:
-        im.paste(im_image_view.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif widget_type == Widget.EditText:
-        im.paste(im_edit_text.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif widget_type == Widget.TextView:
-        im.paste(im_text_view.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif widget_type == Widget.CheckBox:
-        im.paste(im_checkbox.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif widget_type == Widget.ImageLink:
-        im.paste(im_image_button.resize((w, h)), box=(bounds[0], bounds[1]))
-    elif widget_type == Widget.TextLink:
-        im.paste(im_text_link.resize((w, h)), box=(bounds[0], bounds[1]))
+    if COLOR_MODE:
+        if widget_type == Widget.Button:
+            im.paste(im=RED_RGB, box=bounds_inner)
+        elif widget_type == Widget.ImageView:
+            im.paste(im=GREEN_RGB, box=bounds_inner)
+        elif widget_type == Widget.EditText:
+            im.paste(im=BLUE_RGB, box=bounds_inner)
+        elif widget_type == Widget.TextView:
+            im.paste(im=YELLOW_RGB, box=bounds_inner)
+        elif widget_type == Widget.CheckBox:
+            im.paste(im=DARKRED_RGB, box=bounds_inner)
+        elif widget_type == Widget.ImageLink:
+            im.paste(im=CYAN_RGB, box=bounds_inner)
+        elif widget_type == Widget.TextLink:
+            im.paste(im=BLACK_RGB, box=bounds_inner)
+    else:
+        im.paste(im=BLACK_RGB, box=(bounds[0] + margin, bounds[1] + margin, bounds[2] - margin, bounds[3] - margin))
+        if widget_type == Widget.Button:
+            im.paste(im_button.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        elif widget_type == Widget.ImageView:
+            im.paste(im_image_view.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        elif widget_type == Widget.EditText:
+            im.paste(im_edit_text.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        elif widget_type == Widget.TextView:
+            im.paste(im_text_view.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        elif widget_type == Widget.CheckBox:
+            im.paste(im_checkbox.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        elif widget_type == Widget.ImageLink:
+            im.paste(im_image_link.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        elif widget_type == Widget.TextLink:
+            im.paste(im_text_link.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
 
 
 if __name__ == '__main__':
