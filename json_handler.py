@@ -2,6 +2,7 @@ import json
 import os
 import time
 import hashlib
+import shutil
 from pprint import pprint
 from PIL import Image
 from enum import Enum
@@ -214,8 +215,8 @@ def infer_widget_type(json_node, args):
     """
     # TODO 在这里规则，返回的类型是最终推断类型；规则的先后顺序对结果有影响。
 
-    # 次序1：ActionMenuItemView
-    if 'ActionMenuItemView' in json_node['class']:
+    # 次序1：特殊情况
+    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class']:
         return Widget.Button
 
     # 次序2：判断class_name是否存在明确的控件类型标识
@@ -240,7 +241,12 @@ def infer_widget_type(json_node, args):
     if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
         widget_type = Widget.TextLink
     elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
-        widget_type = Widget.ImageLink  # ImageLink 仅出现在这种情形
+        w = json_node['bounds'][2] - json_node['bounds'][0]
+        h = json_node['bounds'][3] - json_node['bounds'][1]
+        if w > 300 and h > 300:
+            widget_type = Widget.ImageLink  # ImageLink 仅出现在这种情形
+        else:
+            widget_type = Widget.Button
 
     return widget_type
 
@@ -258,10 +264,10 @@ def infer_widget_type_from_string(class_name):
         return Widget.CheckBox
     if "EditText" in class_name:
         return Widget.EditText
-    if "Button" in class_name:
-        return Widget.Button
     if "Image" in class_name:
         return Widget.ImageView
+    if "Button" in class_name:
+        return Widget.Button
     if "TextView" in class_name:
         return Widget.TextView
 
@@ -303,7 +309,7 @@ if __name__ == '__main__':
     start_time = time.time()
     # 遍历布局文件访问节点清理结构
     if CLEAN_JSON:
-        print("Start cleaning json files ...")
+        print(">>> Start cleaning json files ...")
         for case_dir_name in os.listdir(JSON_LAYOUT_PATH):
             if not case_dir_name.startswith("."):  # hidden files
                 if not os.path.exists(os.path.join(JSON_OUT_PATH, case_dir_name)):
@@ -316,7 +322,17 @@ if __name__ == '__main__':
                                      os.path.join(JSON_OUT_PATH, case_dir_name,
                                                   "".join([file_name, '.', str(LEVEL), ".json"])))
                 print(os.path.join(JSON_OUT_PATH, case_dir_name))
-        print("Output cleaned json files saved in " + JSON_OUT_PATH)
+        print("<<< Cleaned json files saved in " + JSON_OUT_PATH)
+
+    # 初始化放置控件裁切的位置
+    if CUT_WIDGET:
+        for widget in Widget:
+            if widget != Widget.Layout:
+                dir_path = os.path.join(WIDGET_CUT_OUT_PATH, widget.name)
+                if os.path.exists(dir_path):
+                    shutil.rmtree(dir_path)
+                os.makedirs(dir_path)
+        print("### Preparing directories to save widget crops ... OK")
 
     # 根据布局信息生成草图
     if DRAW_SKETCHES:
@@ -335,4 +351,4 @@ if __name__ == '__main__':
                                                                "".join([file_name, '-sketch.png'])))
                 print(os.path.join(SKETCH_OUT_DIR, case_dir_name), ">> OK")
         print("<<< All generated sketches saved in", SKETCH_OUT_DIR, "ended with *sketch.png")
-    print('duration: {:.2f} s'.format(time.time() - start_time))
+    print('Duration: {:.2f} s'.format(time.time() - start_time))
