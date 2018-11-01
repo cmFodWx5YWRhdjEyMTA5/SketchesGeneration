@@ -195,7 +195,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     widget_type = infer_widget_type(json_obj, args)
 
     # csv 文件中的一行数据
-    # TODO 在这里添加 CSV 文件页眉
+    # TODO 在这里添加 CSV 文件每一行内容
     if ANALYSIS_MODE:
         csv_row = [widget_type, json_obj['ancestors']]
         csv_rows.append(csv_row)
@@ -235,7 +235,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
                 im_screenshot.crop(jpg_bounds).save(outfile_name)
 
     # 当json_obj无children属性时，不再递归执行
-    # TODO 其他不再需要递归访问的情形
+    # 确定其他不再需要递归访问的情形
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
         tokens.append("{")
         for i in range(len(json_obj['children'])):
@@ -338,7 +338,6 @@ def draw_widget(im, widget_type, bounds):
     h = bounds_inner[3] - bounds_inner[1]
 
     # 不绘制面积过小的控件
-    # TODO 确定不需要绘制的面积阈值
     if w <= 1 or h <= 1:
         return
 
@@ -416,7 +415,7 @@ if __name__ == '__main__':
         print(">>> Start generating sketches ...")
         if ANALYSIS_MODE:
             with open(CSV_FILE_PATH, 'w', newline='') as f:
-                # TODO 在这里添加CSV文件页眉
+                # TODO 在这里添加 CSV 文件页眉
                 csv.writer(f).writerow(['type', 'ancestors'])
         for case_dir_name in os.listdir(JSON_LAYOUT_PATH):
             if not case_dir_name.startswith("."):  # hidden files
