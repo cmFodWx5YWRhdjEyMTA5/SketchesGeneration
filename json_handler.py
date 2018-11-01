@@ -22,6 +22,9 @@ HEIGHT = 2560
 SKETCH_WIDTH = 576
 SKETCH_HEIGHT = 1024
 
+WIDGET_MARGIN = 1
+WIDGET_MARGIN_INNER = 2
+
 # 用于 File Hash 的缓存大小
 FILE_READ_BUF_SIZE = 65536
 
@@ -184,7 +187,11 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
         args[KEY_PARENT_CLICKABLE] = True
 
     # 在文件中保存 DFS-Tree
-    tokens.append(widget_type.name)
+    # FIXME 有children节点的Unclassified控件修改为Layout，否则不输出。
+    if widget_type != Widget.Unclassified:
+        tokens.append(widget_type.name)
+    elif 'children' in json_obj:
+        tokens.append("Layout")
 
     # 在草图中绘制除 Layout 以外的控件
     if widget_type != Widget.Layout:
@@ -301,13 +308,13 @@ def draw_widget(im, widget_type, bounds):
     :param bounds: 待绘制的控件范围
     :return:
     """
-    margin = 1
-    margin_inner = 4
+
     bounds = (int((bounds[0]) / WIDTH * SKETCH_WIDTH),
               int((bounds[1]) / HEIGHT * SKETCH_HEIGHT),
               int((bounds[2]) / WIDTH * SKETCH_WIDTH),
               int((bounds[3]) / HEIGHT * SKETCH_HEIGHT))
-    bounds_inner = (bounds[0] + margin_inner, bounds[1] + margin_inner, bounds[2] - margin_inner, bounds[3] - margin_inner)
+    # 将长宽按比例缩小到画布上后确定草图元素缩放范围
+    bounds_inner = (bounds[0] + WIDGET_MARGIN_INNER, bounds[1] + WIDGET_MARGIN_INNER, bounds[2] - WIDGET_MARGIN_INNER, bounds[3] - WIDGET_MARGIN_INNER)
 
     w = bounds_inner[2] - bounds_inner[0]
     h = bounds_inner[3] - bounds_inner[1]
@@ -333,7 +340,7 @@ def draw_widget(im, widget_type, bounds):
         elif widget_type == Widget.TextLink:
             im.paste(im=BLACK_RGB, box=bounds_inner)
     else:
-        im.paste(im=BLACK_RGB, box=(bounds[0] + margin, bounds[1] + margin, bounds[2] - margin, bounds[3] - margin))
+        im.paste(im=BLACK_RGB, box=(bounds[0] + WIDGET_MARGIN, bounds[1] + WIDGET_MARGIN, bounds[2] - WIDGET_MARGIN, bounds[3] - WIDGET_MARGIN))
         if widget_type == Widget.Button:
             im.paste(im_button.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.ImageView:
