@@ -3,6 +3,7 @@ import os
 import time
 import hashlib
 import shutil
+import csv
 from pprint import pprint
 from PIL import Image
 from enum import Enum
@@ -11,8 +12,9 @@ from enum import Enum
 CLEAN_JSON = False
 LEVEL = 1
 DRAW_SKETCHES = True
-COLOR_MODE = False  # True 为色彩模式，False 为草图模式
+COLOR_MODE = True  # True 为色彩模式，False 为草图模式
 CUT_WIDGET = True
+ANALYSIS_MODE = True  # 存储属性分析文件
 
 # Layout 默认长宽
 WIDTH = 1440
@@ -54,6 +56,7 @@ JSON_OUT_PATH = "./output"
 SKETCH_OUT_DIR = "./Top Apps"
 LAYOUT_SEQ_OUT_PATH = "./layout_sequence.lst"
 WIDGET_CUT_OUT_PATH = './widget_cut'
+CSV_FILE_PATH = './analysis_result.csv'
 
 
 class Widget(Enum):
@@ -143,13 +146,21 @@ def sketch_samples_generation(layout_json_path, output_img_path):
     im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
 
     args = {KEY_PARENT_CLICKABLE: False}
+    # layout sequence
     tokens = [str(rico_index)]
-    dfs_draw_widget(top_framelayout, im_screenshot, im_sketch, args, tokens, rico_index)
+    # csv 分析文件
+    csv_rows = []
+    dfs_draw_widget(top_framelayout, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
 
     im_sketch.save(output_img_path)
 
     with open(LAYOUT_SEQ_OUT_PATH, "a") as f:
         f.write(" ".join(tokens) + '\n')
+
+    # 将控件属性保存到文件中便于分析
+    if ANALYSIS_MODE:
+        with open(CSV_FILE_PATH, 'a', newline='') as f:
+            csv.writer(f).writerows(csv_rows)
 
 
 def hash_file_sha1(file_path):
@@ -163,7 +174,7 @@ def hash_file_sha1(file_path):
     return sha1.hexdigest()
 
 
-def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index):
+def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows):
     """
     通过深度优先搜索的方式按节点绘制草图，将其直接绘制在im对象上
     :param json_obj: 待分析的json节点
@@ -172,15 +183,22 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     :param args: 其他需要逐层传递的参数
     :param tokens: 待添加的 token 序列
     :param rico_index: Rico 序号
+    :param csv_rows: 用于将控件属性信息记录到csv分析文件
     :return:
     """
     # 不绘制属性visible-to-user值为真的控件
     if not json_obj['visible-to-user']:
         return
 
-    # TODO 修改或加入更多规则判断，调用 im.paste 绘制相应的图形；在 args 中增加其他属性辅助判断，如上层的 clickable 属性
+    # 修改或加入更多规则判断，调用 im.paste 绘制相应的图形；在 args 中增加其他属性辅助判断，如上层的 clickable 属性
 
     widget_type = infer_widget_type(json_obj, args)
+
+    # csv 文件中的一行数据
+    # TODO 在这里添加 CSV 文件页眉
+    if ANALYSIS_MODE:
+        csv_row = [widget_type, json_obj['ancestors']]
+        csv_rows.append(csv_row)
 
     # 如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
     if widget_type == Widget.Layout and json_obj['clickable']:
@@ -217,11 +235,11 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
                 im_screenshot.crop(jpg_bounds).save(outfile_name)
 
     # 当json_obj无children属性时，不再递归执行
-    # TODO 考虑其他不再需要递归访问的情形
+    # TODO 其他不再需要递归访问的情形
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
         tokens.append("{")
         for i in range(len(json_obj['children'])):
-            dfs_draw_widget(json_obj['children'][i], im_screenshot, im_sketch, args, tokens, rico_index)
+            dfs_draw_widget(json_obj['children'][i], im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
         tokens.append("}")
 
     args[KEY_PARENT_CLICKABLE] = False
@@ -234,7 +252,7 @@ def infer_widget_type(json_node, args):
     :param args: 其他属性
     :return: 推断的控件类型结果
     """
-    # TODO 在这里规则，返回的类型是最终推断类型；规则的先后顺序对结果有影响。
+    # 执行这些规则后，返回最终推断类型；规则的先后顺序对结果有影响。
 
     # 次序1：官方提供的特殊情况
     if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class'] or 'ActionMenuView' in json_node['class']:
@@ -281,7 +299,7 @@ def infer_widget_type_from_string(class_name):
     :param class_name: 待检查字符串
     :return: 控件类型
     """
-    # TODO 判断顺序对结果有影响
+    # 判断顺序对结果有影响
     if "Layout" in class_name:
         return Widget.Layout
     if "CheckBox" in class_name:
@@ -359,6 +377,13 @@ def draw_widget(im, widget_type, bounds):
 
 if __name__ == '__main__':
     start_time = time.time()
+
+    print("# CLEAN_JSON >", CLEAN_JSON)
+    print("# DRAW_SKETCHES >", DRAW_SKETCHES)
+    print("# COLOR_MODE >", COLOR_MODE)
+    print("# CUT_WIDGET >", CUT_WIDGET)
+    print("# ANALYSIS_MODE >", ANALYSIS_MODE)
+
     # 遍历布局文件访问节点清理结构
     if CLEAN_JSON:
         print(">>> Start cleaning json files ...")
@@ -384,12 +409,15 @@ if __name__ == '__main__':
                 if os.path.exists(dir_path):
                     shutil.rmtree(dir_path)
                 os.makedirs(dir_path)
-        print("### Preparing directories to save widget crops ... OK")
+        print(">>> Preparing directories to save widget crops ... OK")
 
     # 根据布局信息生成草图
     if DRAW_SKETCHES:
         print(">>> Start generating sketches ...")
-        open(LAYOUT_SEQ_OUT_PATH, "w")
+        if ANALYSIS_MODE:
+            with open(CSV_FILE_PATH, 'w', newline='') as f:
+                # TODO 在这里添加CSV文件页眉
+                csv.writer(f).writerow(['type', 'ancestors'])
         for case_dir_name in os.listdir(JSON_LAYOUT_PATH):
             if not case_dir_name.startswith("."):  # hidden files
                 if not os.path.exists(os.path.join(SKETCH_OUT_DIR, case_dir_name)):
@@ -402,5 +430,5 @@ if __name__ == '__main__':
                                                   os.path.join(SKETCH_OUT_DIR, case_dir_name,
                                                                "".join([file_name, '-sketch.png'])))
                 print(os.path.join(SKETCH_OUT_DIR, case_dir_name), ">> OK")
-        print("<<< All generated sketches saved in", SKETCH_OUT_DIR, "ended with *sketch.png")
+        print("<<< Generated sketches saved in", SKETCH_OUT_DIR, "ended with *sketch.png")
     print('Duration: {:.2f} s'.format(time.time() - start_time))
