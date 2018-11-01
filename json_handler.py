@@ -187,7 +187,11 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
         args[KEY_PARENT_CLICKABLE] = True
 
     # 在文件中保存 DFS-Tree
-    tokens.append(widget_type.name)
+    # FIXME 有children节点的Unclassified控件修改为Layout，否则不输出。
+    if widget_type != Widget.Unclassified:
+        tokens.append(widget_type.name)
+    elif 'children' in json_obj:
+        tokens.append("Layout")
 
     # 在草图中绘制除 Layout 以外的控件
     if widget_type != Widget.Layout:
