@@ -229,8 +229,11 @@ def infer_widget_type(json_node, args):
     """
     # TODO 在这里规则，返回的类型是最终推断类型；规则的先后顺序对结果有影响。
 
-    # 次序1：特殊情况
-    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class']:
+    # 次序1：官方提供的特殊情况
+    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class'] or 'ActionMenuView' in json_node['class']:
+        return Widget.Button
+    # 次序2：其他特殊情况
+    if 'NavItemView' in json_node['class'] or 'ToolBarItemView' in json_node['class'] or 'DrawerToolBarItemView' in json_node['class']:
         return Widget.Button
 
     # 次序2：判断class_name是否存在明确的控件类型标识
@@ -284,6 +287,8 @@ def infer_widget_type_from_string(class_name):
         return Widget.Button
     if "TextView" in class_name:
         return Widget.TextView
+    if "BadgableGlyphView" in class_name:
+        return Widget.Button
 
     return Widget.Unclassified
 
