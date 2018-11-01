@@ -69,6 +69,7 @@ class Widget(Enum):
     ImageLink = 6
     EditText = 7
     CheckBox = 8
+    Toolbar = 9
 
 
 def json_handler(read_json_path, write_json_path):
@@ -255,6 +256,7 @@ def infer_widget_type(json_node, args):
     # 执行这些规则后，返回最终推断类型；规则的先后顺序对结果有影响。
 
     # 次序1：官方提供的特殊情况
+    # TODO: 温特，这些字符串匹配是否应该放到infer_widget_type_from_string方法中，那样可以在判断祖先类名是也调用？
     if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class'] or 'ActionMenuView' in json_node['class']:
         return Widget.Button
     # 次序2：其他特殊情况
@@ -285,7 +287,7 @@ def infer_widget_type(json_node, args):
     elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
         w = json_node['bounds'][2] - json_node['bounds'][0]
         h = json_node['bounds'][3] - json_node['bounds'][1]
-        if w > 300 and h > 300:
+        if w > 200 and h > 200:
             widget_type = Widget.ImageLink  # ImageLink 仅出现在这种情形
         else:
             widget_type = Widget.Button
@@ -300,8 +302,10 @@ def infer_widget_type_from_string(class_name):
     :return: 控件类型
     """
     # 判断顺序对结果有影响
-    if "Layout" in class_name:
+    if "Layout" in class_name or "ListView" in class_name or "RecyclerView" in class_name:
         return Widget.Layout
+    if "Toolbar" in class_name:
+        return Widget.Toolbar
     if "CheckBox" in class_name:
         return Widget.CheckBox
     if "EditText" in class_name:
@@ -310,10 +314,8 @@ def infer_widget_type_from_string(class_name):
         return Widget.ImageView
     if "Button" in class_name:
         return Widget.Button
-    if "TextView" in class_name:
+    if "TextView" in class_name or "BadgableGlyphView" in class_name:
         return Widget.TextView
-    if "BadgableGlyphView" in class_name:
-        return Widget.Button
 
     return Widget.Unclassified
 
@@ -413,6 +415,7 @@ if __name__ == '__main__':
     # 根据布局信息生成草图
     if DRAW_SKETCHES:
         print(">>> Start generating sketches ...")
+        open(LAYOUT_SEQ_OUT_PATH, 'w', newline='')
         if ANALYSIS_MODE:
             with open(CSV_FILE_PATH, 'w', newline='') as f:
                 # TODO 在这里添加 CSV 文件页眉
