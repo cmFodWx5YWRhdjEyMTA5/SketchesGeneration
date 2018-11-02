@@ -24,8 +24,8 @@ HEIGHT = 2560
 SKETCH_WIDTH = 576
 SKETCH_HEIGHT = 1024
 
-WIDGET_MARGIN = 1
-WIDGET_MARGIN_INNER = 2
+WIDGET_FRAME_MARGIN = 1
+WIDGET_INNER_MARGIN = 2
 
 # 用于 File Hash 的缓存大小
 FILE_READ_BUF_SIZE = 65536
@@ -351,7 +351,7 @@ def draw_widget(im, widget_type, bounds):
               int((bounds[2]) / WIDTH * SKETCH_WIDTH),
               int((bounds[3]) / HEIGHT * SKETCH_HEIGHT))
     # 将长宽按比例缩小到画布上后确定草图元素缩放范围
-    bounds_inner = (bounds[0] + WIDGET_MARGIN_INNER, bounds[1] + WIDGET_MARGIN_INNER, bounds[2] - WIDGET_MARGIN_INNER, bounds[3] - WIDGET_MARGIN_INNER)
+    bounds_inner = (bounds[0] + WIDGET_INNER_MARGIN, bounds[1] + WIDGET_INNER_MARGIN, bounds[2] - WIDGET_INNER_MARGIN, bounds[3] - WIDGET_INNER_MARGIN)
 
     w = bounds_inner[2] - bounds_inner[0]
     h = bounds_inner[3] - bounds_inner[1]
@@ -378,7 +378,7 @@ def draw_widget(im, widget_type, bounds):
         # elif widget_type == Widget.Toolbar:
         #     im.paste(im=GRAY_RGB, box=bounds_inner)
     else:
-        im.paste(im=BLACK_RGB, box=(bounds[0] + WIDGET_MARGIN, bounds[1] + WIDGET_MARGIN, bounds[2] - WIDGET_MARGIN, bounds[3] - WIDGET_MARGIN))
+        im.paste(im=BLACK_RGB, box=(bounds[0] + WIDGET_FRAME_MARGIN, bounds[1] + WIDGET_FRAME_MARGIN, bounds[2] - WIDGET_FRAME_MARGIN, bounds[3] - WIDGET_FRAME_MARGIN))
         if widget_type == Widget.Button:
             im.paste(im_button.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.ImageView:
