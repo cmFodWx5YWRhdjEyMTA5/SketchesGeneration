@@ -13,7 +13,7 @@ CLEAN_JSON = False
 LEVEL = 1
 DRAW_SKETCHES = True
 COLOR_MODE = False  # True 为色彩模式，False 为草图模式
-CUT_WIDGET = True
+CROP_WIDGET = True
 ANALYSIS_MODE = False  # 存储属性分析文件
 
 # Layout 默认长宽
@@ -224,8 +224,8 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
         if widget_type != Widget.Unclassified:
             draw_widget(im_sketch, widget_type, json_obj['bounds'])
         # 裁切控件
-        if CUT_WIDGET:
-            cut_widget(json_obj, im_screenshot, rico_index, widget_type)
+        if CROP_WIDGET:
+            crop_widget(json_obj, im_screenshot, rico_index, widget_type)
 
     # 当json_obj无children属性时，不再递归执行
     # 确定其他不再需要递归访问的情形
@@ -238,7 +238,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     args[KEY_PARENT_CLICKABLE] = False
 
 
-def cut_widget(json_obj, im_screenshot, rico_index, widget_type):
+def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
     """
     裁剪控件并保存到指定路径
     :param json_obj: 控件的json对象
@@ -403,7 +403,7 @@ if __name__ == '__main__':
     print("# CLEAN_JSON >", CLEAN_JSON)
     print("# DRAW_SKETCHES >", DRAW_SKETCHES)
     print("# COLOR_MODE >", COLOR_MODE)
-    print("# CUT_WIDGET >", CUT_WIDGET)
+    print("# CUT_WIDGET >", CROP_WIDGET)
     print("# ANALYSIS_MODE >", ANALYSIS_MODE)
 
     # 遍历布局文件访问节点清理结构
@@ -424,7 +424,7 @@ if __name__ == '__main__':
         print("<<< Cleaned json files saved in " + JSON_OUT_PATH)
 
     # 初始化放置控件裁切的位置
-    if CUT_WIDGET:
+    if CROP_WIDGET:
         for widget in Widget:
             if widget != Widget.Layout:
                 dir_path = os.path.join(WIDGET_CUT_OUT_PATH, widget.name)
