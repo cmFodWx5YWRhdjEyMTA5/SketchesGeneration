@@ -12,9 +12,9 @@ from enum import Enum
 CLEAN_JSON = False
 LEVEL = 1
 DRAW_SKETCHES = True
-COLOR_MODE = True  # True 为色彩模式，False 为草图模式
+COLOR_MODE = False  # True 为色彩模式，False 为草图模式
 CUT_WIDGET = True
-ANALYSIS_MODE = True  # 存储属性分析文件
+ANALYSIS_MODE = False  # 存储属性分析文件
 
 # Layout 默认长宽
 WIDTH = 1440
@@ -41,14 +41,20 @@ im_text_view = Image.open('./drawings/frameless/text_view.png')
 im_image_link = Image.open('./drawings/frameless/image_link.png')
 im_text_link = Image.open('./drawings/frameless/text_link.png')
 im_checkbox = Image.open('./drawings/frameless/checkbox.png')
+im_toolbar = Image.open('./drawings/frameless/toolbar.png')
 
 BLACK_RGB = (0, 0, 0)
+GRAY_RGB = (128, 128, 128)
 RED_RGB = (255, 0, 0)
-GREEN_RGB = (0, 255, 0)
+LIME_RGB = (0, 255, 0)
 BLUE_RGB = (0, 0, 255)
 YELLOW_RGB = (255, 255, 0)
-DARKRED_RGB = (255, 0, 255)
+MAGENTA_RGB = (255, 0, 255)
 CYAN_RGB = (0, 255, 255)
+MAROON_RGB = (128, 0, 0)
+GREEN_RGB = (0, 128, 0)
+NAVY_RGB = (0, 0, 128)
+
 
 # 路径
 JSON_LAYOUT_PATH = "./Top Apps"
@@ -69,7 +75,7 @@ class Widget(Enum):
     ImageLink = 6
     EditText = 7
     CheckBox = 8
-    Toolbar = 9
+    # Toolbar = 9
 
 
 def json_handler(read_json_path, write_json_path):
@@ -217,23 +223,9 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
         # 经过规则推断仍无法判断控件类型的，不绘制
         if widget_type != Widget.Unclassified:
             draw_widget(im_sketch, widget_type, json_obj['bounds'])
-        # 裁切其他控件便于分析
+        # 裁切控件
         if CUT_WIDGET:
-            w = json_obj['bounds'][2] - json_obj['bounds'][0]
-            h = json_obj['bounds'][3] - json_obj['bounds'][1]
-
-            if w > 5 and h > 5:
-                node_sha1 = hashlib.sha1(str(json_obj).encode("utf-8"))
-                jpg_bounds = (int(json_obj['bounds'][0] / WIDTH * im_screenshot.size[0]),
-                              int(json_obj['bounds'][1] / HEIGHT * im_screenshot.size[1]),
-                              int(json_obj['bounds'][2] / WIDTH * im_screenshot.size[0]),
-                              int(json_obj['bounds'][3] / HEIGHT * im_screenshot.size[1]))
-                class_tokens = json_obj['class'].rsplit('.', 1)
-                outfile_name = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name,
-                                            "".join([rico_index, '-',
-                                                     class_tokens[1] if len(class_tokens) > 1 else json_obj['class'],
-                                                     '-', node_sha1.hexdigest()[0:6], '.jpg']))
-                im_screenshot.crop(jpg_bounds).save(outfile_name)
+            cut_widget(json_obj, im_screenshot, rico_index, widget_type)
 
     # 当json_obj无children属性时，不再递归执行
     # 确定其他不再需要递归访问的情形
@@ -244,6 +236,31 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
         tokens.append("}")
 
     args[KEY_PARENT_CLICKABLE] = False
+
+
+def cut_widget(json_obj, im_screenshot, rico_index, widget_type):
+    """
+    裁剪控件并保存到指定路径
+    :param json_obj: 控件的json对象
+    :param im_screenshot: 屏幕截图的Pillow对象
+    :param rico_index: Rico序号
+    :param widget_type: 控件的推断类型
+    """
+    w = json_obj['bounds'][2] - json_obj['bounds'][0]
+    h = json_obj['bounds'][3] - json_obj['bounds'][1]
+
+    if w > 5 and h > 5:
+        node_sha1 = hashlib.sha1(str(json_obj).encode("utf-8"))
+        jpg_bounds = (int(json_obj['bounds'][0] / WIDTH * im_screenshot.size[0]),
+                      int(json_obj['bounds'][1] / HEIGHT * im_screenshot.size[1]),
+                      int(json_obj['bounds'][2] / WIDTH * im_screenshot.size[0]),
+                      int(json_obj['bounds'][3] / HEIGHT * im_screenshot.size[1]))
+        class_tokens = json_obj['class'].rsplit('.', 1)
+        outfile_name = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name,
+                                    "".join([rico_index, '-',
+                                             class_tokens[1] if len(class_tokens) > 1 else json_obj['class'],
+                                             '-', node_sha1.hexdigest()[0:6], '.jpg']))
+        im_screenshot.crop(jpg_bounds).save(outfile_name)
 
 
 def infer_widget_type(json_node, args):
@@ -304,8 +321,8 @@ def infer_widget_type_from_string(class_name):
     # 判断顺序对结果有影响
     if "Layout" in class_name or "ListView" in class_name or "RecyclerView" in class_name:
         return Widget.Layout
-    if "Toolbar" in class_name:
-        return Widget.Toolbar
+    # if "Toolbar" in class_name:
+    #     return Widget.Toolbar
     if "CheckBox" in class_name:
         return Widget.CheckBox
     if "EditText" in class_name:
@@ -346,18 +363,20 @@ def draw_widget(im, widget_type, bounds):
     if COLOR_MODE:
         if widget_type == Widget.Button:
             im.paste(im=RED_RGB, box=bounds_inner)
-        elif widget_type == Widget.ImageView:
-            im.paste(im=GREEN_RGB, box=bounds_inner)
-        elif widget_type == Widget.EditText:
-            im.paste(im=BLUE_RGB, box=bounds_inner)
         elif widget_type == Widget.TextView:
             im.paste(im=YELLOW_RGB, box=bounds_inner)
-        elif widget_type == Widget.CheckBox:
-            im.paste(im=DARKRED_RGB, box=bounds_inner)
-        elif widget_type == Widget.ImageLink:
-            im.paste(im=CYAN_RGB, box=bounds_inner)
         elif widget_type == Widget.TextLink:
             im.paste(im=BLACK_RGB, box=bounds_inner)
+        elif widget_type == Widget.EditText:
+            im.paste(im=BLUE_RGB, box=bounds_inner)
+        elif widget_type == Widget.ImageView:
+            im.paste(im=LIME_RGB, box=bounds_inner)
+        elif widget_type == Widget.ImageLink:
+            im.paste(im=CYAN_RGB, box=bounds_inner)
+        elif widget_type == Widget.CheckBox:
+            im.paste(im=MAGENTA_RGB, box=bounds_inner)
+        # elif widget_type == Widget.Toolbar:
+        #     im.paste(im=GRAY_RGB, box=bounds_inner)
     else:
         im.paste(im=BLACK_RGB, box=(bounds[0] + WIDGET_MARGIN, bounds[1] + WIDGET_MARGIN, bounds[2] - WIDGET_MARGIN, bounds[3] - WIDGET_MARGIN))
         if widget_type == Widget.Button:
@@ -374,6 +393,8 @@ def draw_widget(im, widget_type, bounds):
             im.paste(im_image_link.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.TextLink:
             im.paste(im_text_link.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        # elif widget_type == Widget.Toolbar:
+        #     im.paste(im_toolbar.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
 
 
 if __name__ == '__main__':
