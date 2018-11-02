@@ -10,7 +10,6 @@ from enum import Enum
 
 # 程序运行参数
 CLEAN_JSON = False
-LEVEL = 1
 DRAW_SKETCHES = True
 COLOR_MODE = False  # True 为色彩模式，False 为草图模式
 CROP_WIDGET = True
@@ -54,7 +53,6 @@ CYAN_RGB = (0, 255, 255)
 MAROON_RGB = (128, 0, 0)
 GREEN_RGB = (0, 128, 0)
 NAVY_RGB = (0, 0, 128)
-
 
 # 路径
 JSON_LAYOUT_PATH = "./Top Apps"
@@ -100,7 +98,7 @@ def json_handler(read_json_path, write_json_path):
 
 def dfs_clean_json(json_obj):
     """
-    通过深度优先搜索的方式清理冗余的json属性，保留
+    通过深度优先搜索的方式清理冗余的json属性
     :param json_obj:
     :return:
     """
@@ -113,17 +111,11 @@ def dfs_clean_json(json_obj):
 
 def delete_unrelated_attrs(json_node):
     """
-    按LEVEL等级确定对于节点json_dict保留的json属性。
+    确定节点json_node保留的json属性
     :param json_node: 待处理的字典格式的json节点
     :return:
     """
-    if LEVEL == 1:
-        reserved_list = ['class', 'children', 'visibility']
-    elif LEVEL == 2:
-        reserved_list = ['class', 'children', 'visibility', 'bounds']
-    else:
-        reserved_list = ['class', 'children']
-
+    reserved_list = ['class', 'children', 'visibility']
     key_list = [key for key in json_node.keys() if key not in reserved_list]
     for k in key_list:
         del json_node[k]
@@ -131,7 +123,7 @@ def delete_unrelated_attrs(json_node):
 
 def sketch_samples_generation(layout_json_path, output_img_path):
     """
-    读入布局文件，生成处理后的草图文件并保存到指定路径中
+    读入布局文件，生成处理后的草图文件，保存到指定路径中
     :param layout_json_path: 待处理json格式布局文件的路径
     :param output_img_path: 生成的草图图片的保存路径
     :return:
@@ -147,16 +139,15 @@ def sketch_samples_generation(layout_json_path, output_img_path):
     screenshot_path = os.path.splitext(layout_json_path)[0] + ".jpg"
     im_screenshot = Image.open(screenshot_path)
     rico_index = os.path.basename(layout_json_path).split('.')[0]
-    img_sha1 = hash_file_sha1(screenshot_path)
+    img_sha1 = hash_file_sha1(screenshot_path)  # 生成文件的 sha1 值，暂未使用
 
-    # 新建空白草图画布，DFS后将绘制的草图保存到文件
+    # 新建空白草图画布，DFS 后将绘制的草图保存到文件
     im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
 
     args = {KEY_PARENT_CLICKABLE: False}
-    # layout sequence
-    tokens = [str(rico_index)]
-    # csv 分析文件
-    csv_rows = []
+    tokens = [str(rico_index)]  # 用于 layout sequence
+    csv_rows = []  # 用于生成 csv 分析文件
+
     dfs_draw_widget(top_framelayout, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
 
     im_sketch.save(output_img_path)
@@ -164,7 +155,7 @@ def sketch_samples_generation(layout_json_path, output_img_path):
     with open(LAYOUT_SEQ_OUT_PATH, "a") as f:
         f.write(" ".join(tokens) + '\n')
 
-    # 将控件属性保存到文件中便于分析
+    # 将控件属性保存到文件中
     if ANALYSIS_MODE:
         with open(CSV_FILE_PATH, 'a', newline='') as f:
             csv.writer(f).writerows(csv_rows)
@@ -184,13 +175,13 @@ def hash_file_sha1(file_path):
 def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows):
     """
     通过深度优先搜索的方式按节点绘制草图，将其直接绘制在im对象上
-    :param json_obj: 待分析的json节点
-    :param im_screenshot: 布局对应的截图对象
-    :param im_sketch: 待绘制的草图对象
+    :param json_obj: 待分析的 json 节点
+    :param im_screenshot: 布局对应的截图 Pillow 对象
+    :param im_sketch: 待绘制的草图 Pillow 对象
     :param args: 其他需要逐层传递的参数
     :param tokens: 待添加的 token 序列
     :param rico_index: Rico 序号
-    :param csv_rows: 用于将控件属性信息记录到csv分析文件
+    :param csv_rows: 用于将控件属性信息记录到 csv 分析文件
     :return:
     """
     # 不绘制属性visible-to-user值为真的控件
@@ -207,43 +198,44 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
         csv_row = [widget_type, json_obj['ancestors']]
         csv_rows.append(csv_row)
 
-    # 如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
+    # 传递参数：如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
     if widget_type == Widget.Layout and json_obj['clickable']:
         args[KEY_PARENT_CLICKABLE] = True
 
-    # 在文件中保存 DFS-Tree
-    # FIXME 有children节点的Unclassified控件修改为Layout，否则不输出。
+    # 将 Layout DFS-sequence 保存到文件中
+    # FIXME 有 children 节点的 Unclassified 控件修改为 Layout；若没有，不输出。
     if widget_type != Widget.Unclassified:
         tokens.append(widget_type.name)
     elif 'children' in json_obj:
         tokens.append("Layout")
 
-    # 在草图中绘制除 Layout 以外的控件
+    # DFS 绘制控件
     if widget_type != Widget.Layout:
-        # 经过规则推断仍无法判断控件类型的，不绘制
+
+        # 不绘制仍无法判断类型的控件
         if widget_type != Widget.Unclassified:
             draw_widget(im_sketch, widget_type, json_obj['bounds'])
-        # 裁切控件
+
         if CROP_WIDGET:
             crop_widget(json_obj, im_screenshot, rico_index, widget_type)
 
-    # 当json_obj无children属性时，不再递归执行
-    # 确定其他不再需要递归访问的情形
+    # 当json_obj无children属性时，不再递归执行；确定其他不再需要递归访问的情形
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
         tokens.append("{")
         for i in range(len(json_obj['children'])):
             dfs_draw_widget(json_obj['children'][i], im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
         tokens.append("}")
 
+    # 要在这里清除传递的参数
     args[KEY_PARENT_CLICKABLE] = False
 
 
 def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
     """
     裁剪控件并保存到指定路径
-    :param json_obj: 控件的json对象
-    :param im_screenshot: 屏幕截图的Pillow对象
-    :param rico_index: Rico序号
+    :param json_obj: 控件的 json 对象
+    :param im_screenshot: 屏幕截图的 Pillow 对象
+    :param rico_index: Rico 序号
     :param widget_type: 控件的推断类型
     """
     w = json_obj['bounds'][2] - json_obj['bounds'][0]
@@ -258,8 +250,9 @@ def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
         class_tokens = json_obj['class'].rsplit('.', 1)
         outfile_name = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name,
                                     "".join([rico_index, '-',
-                                             class_tokens[1] if len(class_tokens) > 1 else json_obj['class'],
-                                             '-', node_sha1.hexdigest()[0:6], '.jpg']))
+                                             class_tokens[1] if len(class_tokens) > 1 else json_obj['class'], '-',
+                                             node_sha1.hexdigest()[0:6], '.jpg']))
+
         im_screenshot.crop(jpg_bounds).save(outfile_name)
 
 
@@ -274,10 +267,12 @@ def infer_widget_type(json_node, args):
 
     # 次序1：官方提供的特殊情况
     # TODO: 温特，这些字符串匹配是否应该放到infer_widget_type_from_string方法中，那样可以在判断祖先类名是也调用？
-    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class'] or 'ActionMenuView' in json_node['class']:
+    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class'] or 'ActionMenuView' in \
+            json_node['class']:
         return Widget.Button
     # 次序2：其他特殊情况
-    if 'NavItemView' in json_node['class'] or 'ToolBarItemView' in json_node['class'] or 'DrawerToolBarItemView' in json_node['class']:
+    if 'NavItemView' in json_node['class'] or 'ToolBarItemView' in json_node['class'] or 'DrawerToolBarItemView' in \
+            json_node['class']:
         return Widget.Button
 
     # 次序2：判断class_name是否存在明确的控件类型标识
@@ -304,17 +299,16 @@ def infer_widget_type(json_node, args):
     elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
         w = json_node['bounds'][2] - json_node['bounds'][0]
         h = json_node['bounds'][3] - json_node['bounds'][1]
-        if w > 200 and h > 200:
-            widget_type = Widget.ImageLink  # ImageLink 仅出现在这种情形
-        else:
-            widget_type = Widget.Button
+        # 将面积较大的图转换成 ImageLink
+        # FIXME 确定 ImageLink 面积阈值
+        widget_type = Widget.ImageLink if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
 
     return widget_type
 
 
 def infer_widget_type_from_string(class_name):
     """
-    当控件类型名称明确地出现在字符串中时，返回对应的控件类型；如果均未出现，返回Widget.Unclassified
+    当控件类型名称明确地包括于字符串中时，直接确定该控件类型；否则返回 Unclassified
     :param class_name: 待检查字符串
     :return: 控件类型
     """
@@ -346,12 +340,14 @@ def draw_widget(im, widget_type, bounds):
     :return:
     """
 
-    bounds = (int((bounds[0]) / WIDTH * SKETCH_WIDTH),
-              int((bounds[1]) / HEIGHT * SKETCH_HEIGHT),
-              int((bounds[2]) / WIDTH * SKETCH_WIDTH),
-              int((bounds[3]) / HEIGHT * SKETCH_HEIGHT))
+    bounds_sketch = (int((bounds[0]) / WIDTH * SKETCH_WIDTH),
+                     int((bounds[1]) / HEIGHT * SKETCH_HEIGHT),
+                     int((bounds[2]) / WIDTH * SKETCH_WIDTH),
+                     int((bounds[3]) / HEIGHT * SKETCH_HEIGHT))
+
     # 将长宽按比例缩小到画布上后确定草图元素缩放范围
-    bounds_inner = (bounds[0] + WIDGET_INNER_MARGIN, bounds[1] + WIDGET_INNER_MARGIN, bounds[2] - WIDGET_INNER_MARGIN, bounds[3] - WIDGET_INNER_MARGIN)
+    bounds_inner = (bounds_sketch[0] + WIDGET_INNER_MARGIN, bounds_sketch[1] + WIDGET_INNER_MARGIN,
+                    bounds_sketch[2] - WIDGET_INNER_MARGIN, bounds_sketch[3] - WIDGET_INNER_MARGIN)
 
     w = bounds_inner[2] - bounds_inner[0]
     h = bounds_inner[3] - bounds_inner[1]
@@ -378,7 +374,9 @@ def draw_widget(im, widget_type, bounds):
         # elif widget_type == Widget.Toolbar:
         #     im.paste(im=GRAY_RGB, box=bounds_inner)
     else:
-        im.paste(im=BLACK_RGB, box=(bounds[0] + WIDGET_FRAME_MARGIN, bounds[1] + WIDGET_FRAME_MARGIN, bounds[2] - WIDGET_FRAME_MARGIN, bounds[3] - WIDGET_FRAME_MARGIN))
+        im.paste(im=BLACK_RGB, box=(
+            bounds_sketch[0] + WIDGET_FRAME_MARGIN, bounds_sketch[1] + WIDGET_FRAME_MARGIN,
+            bounds_sketch[2] - WIDGET_FRAME_MARGIN, bounds_sketch[3] - WIDGET_FRAME_MARGIN))
         if widget_type == Widget.Button:
             im.paste(im_button.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.ImageView:
@@ -414,7 +412,6 @@ if __name__ == '__main__':
                 if not os.path.exists(os.path.join(JSON_OUT_PATH, case_dir_name)):
                     os.makedirs(os.path.join(JSON_OUT_PATH, case_dir_name))
                 for file in os.listdir(os.path.join(JSON_LAYOUT_PATH, case_dir_name)):
-                    # print(file)
                     if file.endswith(".json"):
                         file_name = file.split('.')[0]
                         json_handler(os.path.join(JSON_LAYOUT_PATH, case_dir_name, file),
