@@ -11,9 +11,9 @@ from enum import Enum
 # 程序运行参数
 CLEAN_JSON = False
 DRAW_SKETCHES = True
-COLOR_MODE = True  # True 为色彩模式，False 为草图模式
-CROP_WIDGET = False
-LAYOUT_SEQ_GEN_MODE = True
+COLOR_MODE = False  # True 为色彩模式，False 为草图模式
+CROP_WIDGET = True
+LAYOUT_SEQ_GEN_MODE = False
 ANALYSIS_MODE = False  # 存储属性分析文件
 
 # Layout 默认长宽
@@ -21,8 +21,8 @@ WIDTH = 1440
 HEIGHT = 2560
 
 # 画布长宽
-SKETCH_WIDTH = 200
-SKETCH_HEIGHT = 300
+SKETCH_WIDTH = 576
+SKETCH_HEIGHT = 1024
 
 WIDGET_FRAME_MARGIN = 1
 WIDGET_INNER_MARGIN = 2
