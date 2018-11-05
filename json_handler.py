@@ -11,18 +11,18 @@ from enum import Enum
 # 程序运行参数
 CLEAN_JSON = False
 DRAW_SKETCHES = True
-COLOR_MODE = False  # True 为色彩模式，False 为草图模式
-CROP_WIDGET = True
+COLOR_MODE = True  # True 为色彩模式，False 为草图模式
+CROP_WIDGET = False
+LAYOUT_SEQ_GEN_MODE = True
 ANALYSIS_MODE = False  # 存储属性分析文件
-LAYOUT_SEQ_GEN_MODE = False
 
 # Layout 默认长宽
 WIDTH = 1440
 HEIGHT = 2560
 
 # 画布长宽
-SKETCH_WIDTH = 576
-SKETCH_HEIGHT = 1024
+SKETCH_WIDTH = 200
+SKETCH_HEIGHT = 300
 
 WIDGET_FRAME_MARGIN = 1
 WIDGET_INNER_MARGIN = 2
@@ -82,12 +82,12 @@ class Widget(Enum):
 
 
 def json_handler(read_json_path, write_json_path):
-    '''
+    """
     读入json文件，输出清理后的简洁json文件
     :param read_json_path: 待处理json文件路径
     :param write_json_path: 处理后json文件路径
     :return:
-    '''
+    """
     with open(read_json_path, 'r') as f:
         json_obj = json.load(f)
 
@@ -102,11 +102,11 @@ def json_handler(read_json_path, write_json_path):
 
 
 def dfs_clean_json(json_obj):
-    '''
+    """
     通过深度优先搜索的方式清理冗余的json属性
     :param json_obj:
     :return:
-    '''
+    """
     delete_unrelated_attrs(json_obj)
 
     if 'children' in json_obj:
@@ -115,11 +115,11 @@ def dfs_clean_json(json_obj):
 
 
 def delete_unrelated_attrs(json_node):
-    '''
+    """
     确定节点json_node保留的json属性
     :param json_node: 待处理的字典格式的json节点
     :return:
-    '''
+    """
     reserved_list = ['class', 'children', 'visibility']
     key_list = [key for key in json_node.keys() if key not in reserved_list]
     for k in key_list:
@@ -127,12 +127,12 @@ def delete_unrelated_attrs(json_node):
 
 
 def sketch_samples_generation(layout_json_path, output_img_path):
-    '''
+    """
     读入布局文件，生成处理后的草图文件，保存到指定路径中
     :param layout_json_path: 待处理json格式布局文件的路径
     :param output_img_path: 生成的草图图片的保存路径
     :return:
-    '''
+    """
     global SEQ_LINE
     with open(layout_json_path, 'r') as f:
         json_obj = json.load(f)
@@ -185,7 +185,7 @@ def hash_file_sha1(file_path):
 
 
 def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows):
-    '''
+    """
     通过深度优先搜索的方式按节点绘制草图，将其直接绘制在im对象上
     :param json_obj: 待分析的 json 节点
     :param im_screenshot: 布局对应的截图 Pillow 对象
@@ -195,7 +195,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     :param rico_index: Rico 序号
     :param csv_rows: 用于将控件属性信息记录到 csv 分析文件
     :return:
-    '''
+    """
     # 不绘制属性visible-to-user值为真的控件
     if not json_obj['visible-to-user']:
         return
@@ -243,13 +243,13 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
 
 
 def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
-    '''
+    """
     裁剪控件并保存到指定路径
     :param json_obj: 控件的 json 对象
     :param im_screenshot: 屏幕截图的 Pillow 对象
     :param rico_index: Rico 序号
     :param widget_type: 控件的推断类型
-    '''
+    """
     w = json_obj['bounds'][2] - json_obj['bounds'][0]
     h = json_obj['bounds'][3] - json_obj['bounds'][1]
 
@@ -269,12 +269,12 @@ def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
 
 
 def infer_widget_type(json_node, args):
-    '''
+    """
     接收json节点，返回关键词匹配后根据规则推断的控件类型
     :param json_node: 待分析json节点
     :param args: 其他属性
     :return: 推断的控件类型结果
-    '''
+    """
     # 执行这些规则后，返回最终推断类型；规则的先后顺序对结果有影响。
 
     # 次序1：官方提供的特殊情况
@@ -319,11 +319,11 @@ def infer_widget_type(json_node, args):
 
 
 def infer_widget_type_from_string(class_name):
-    '''
+    """
     当控件类型名称明确地包括于字符串中时，直接确定该控件类型；否则返回 Unclassified
     :param class_name: 待检查字符串
     :return: 控件类型
-    '''
+    """
     # 判断顺序对结果有影响
     if 'Layout' in class_name or 'ListView' in class_name or 'RecyclerView' in class_name:
         return Widget.Layout
@@ -344,13 +344,13 @@ def infer_widget_type_from_string(class_name):
 
 
 def draw_widget(im, widget_type, bounds):
-    '''
+    """
     在im对象中绘制范围为bounds的控件草图
     :param im: 待绘制的图片对象
     :param widget_type: 待绘制的控件类型
     :param bounds: 待绘制的控件范围
     :return:
-    '''
+    """
 
     bounds_sketch = (int((bounds[0]) / WIDTH * SKETCH_WIDTH),
                      int((bounds[1]) / HEIGHT * SKETCH_HEIGHT),
