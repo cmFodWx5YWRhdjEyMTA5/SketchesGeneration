@@ -12,7 +12,7 @@ from enum import Enum
 CLEAN_JSON = False
 LEVEL = 1
 DRAW_SKETCHES = True
-COLOR_MODE = True  # True 为色彩模式，False 为草图模式
+COLOR_MODE = False  # True 为色彩模式，False 为草图模式
 CUT_WIDGET = True
 ANALYSIS_MODE = True  # 存储属性分析文件
 
@@ -197,8 +197,9 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     # csv 文件中的一行数据
     # TODO 在这里添加 CSV 文件每一行内容
     if ANALYSIS_MODE:
-        csv_row = [widget_type, json_obj['ancestors']]
-        csv_rows.append(csv_row)
+        if widget_type != Widget.Layout and widget_type != Widget.Unclassified:
+            csv_row = [widget_type, json_obj['clickable'], json_obj['focusable'], json_obj['focused'], json_obj['selected'], json_obj['draw'], json_obj['ancestors']]
+            csv_rows.append(csv_row)
 
     # 如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
     if widget_type == Widget.Layout and json_obj['clickable']:
@@ -255,7 +256,7 @@ def infer_widget_type(json_node, args):
     # 执行这些规则后，返回最终推断类型；规则的先后顺序对结果有影响。
 
     # 次序1：官方提供的特殊情况
-    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class'] or 'ActionMenuView' in json_node['class']:
+    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class']:
         return Widget.Button
     # 次序2：其他特殊情况
     if 'NavItemView' in json_node['class'] or 'ToolBarItemView' in json_node['class'] or 'DrawerToolBarItemView' in json_node['class']:
