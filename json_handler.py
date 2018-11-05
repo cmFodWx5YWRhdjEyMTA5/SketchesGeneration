@@ -11,23 +11,27 @@ from enum import Enum
 # 程序运行参数
 CLEAN_JSON = False
 DRAW_SKETCHES = True
-COLOR_MODE = False  # True 为色彩模式，False 为草图模式
-CROP_WIDGET = True
+COLOR_MODE = True  # True 为色彩模式，False 为草图模式
+CROP_WIDGET = False
 ANALYSIS_MODE = False  # 存储属性分析文件
+LAYOUT_SEQ_GEN_MODE = False
 
 # Layout 默认长宽
 WIDTH = 1440
 HEIGHT = 2560
 
 # 画布长宽
-SKETCH_WIDTH = 576
-SKETCH_HEIGHT = 1024
+SKETCH_WIDTH = 200
+SKETCH_HEIGHT = 300
 
 WIDGET_FRAME_MARGIN = 1
 WIDGET_INNER_MARGIN = 2
 
 # 用于 File Hash 的缓存大小
 FILE_READ_BUF_SIZE = 65536
+
+# xml_sequence 的行号
+SEQ_LINE = 0
 
 # 用于 layout 层次间传递辅助参数
 KEY_PARENT_CLICKABLE = 'key_parent_clickable'
@@ -58,7 +62,8 @@ NAVY_RGB = (0, 0, 128)
 JSON_LAYOUT_PATH = "./Top Apps"
 JSON_OUT_PATH = "./output"
 SKETCH_OUT_DIR = "./Top Apps"
-LAYOUT_SEQ_OUT_PATH = "./layout_sequence.lst"
+LAYOUT_SEQ_OUT_PATH = "./data/layout_sequence.lst"
+INDEX_LINE_MAP_PATH = "./data/index_map.lst"
 WIDGET_CUT_OUT_PATH = './widget_cut'
 CSV_FILE_PATH = './analysis_result.csv'
 
@@ -128,6 +133,7 @@ def sketch_samples_generation(layout_json_path, output_img_path):
     :param output_img_path: 生成的草图图片的保存路径
     :return:
     """
+    global SEQ_LINE
     with open(layout_json_path, 'r') as f:
         json_obj = json.load(f)
 
@@ -150,10 +156,16 @@ def sketch_samples_generation(layout_json_path, output_img_path):
 
     dfs_draw_widget(top_framelayout, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
 
+    # im_sketch.rotate(90, expand=1).save(output_img_path)
     im_sketch.save(output_img_path)
 
-    with open(LAYOUT_SEQ_OUT_PATH, "a") as f:
-        f.write(" ".join(tokens) + '\n')
+    if LAYOUT_SEQ_GEN_MODE:
+        with open(LAYOUT_SEQ_OUT_PATH, "a") as f:
+            f.write(" ".join(tokens) + '\n')
+
+        with open(INDEX_LINE_MAP_PATH, "a") as f:
+            f.write(str(rico_index) + " " + str(SEQ_LINE) + "\n")
+        SEQ_LINE = SEQ_LINE + 1
 
     # 将控件属性保存到文件中
     if ANALYSIS_MODE:
@@ -433,7 +445,11 @@ if __name__ == '__main__':
     # 根据布局信息生成草图
     if DRAW_SKETCHES:
         print(">>> Start generating sketches ...")
-        open(LAYOUT_SEQ_OUT_PATH, 'w', newline='')
+
+        if LAYOUT_SEQ_GEN_MODE:
+            open(LAYOUT_SEQ_OUT_PATH, 'w', newline='')
+            open(INDEX_LINE_MAP_PATH, 'w', newline='')
+
         if ANALYSIS_MODE:
             with open(CSV_FILE_PATH, 'w', newline='') as f:
                 # TODO 在这里添加 CSV 文件页眉
