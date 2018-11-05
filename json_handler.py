@@ -11,8 +11,8 @@ from enum import Enum
 # 程序运行参数
 CLEAN_JSON = False
 DRAW_SKETCHES = True
-COLOR_MODE = True  # True 为色彩模式，False 为草图模式
-CROP_WIDGET = False
+COLOR_MODE = False  # True 为色彩模式，False 为草图模式
+CROP_WIDGET = True
 ANALYSIS_MODE = False  # 存储属性分析文件
 LAYOUT_SEQ_GEN_MODE = False
 
@@ -21,8 +21,8 @@ WIDTH = 1440
 HEIGHT = 2560
 
 # 画布长宽
-SKETCH_WIDTH = 200
-SKETCH_HEIGHT = 300
+SKETCH_WIDTH = 576
+SKETCH_HEIGHT = 1024
 
 WIDGET_FRAME_MARGIN = 1
 WIDGET_INNER_MARGIN = 2
@@ -59,11 +59,11 @@ GREEN_RGB = (0, 128, 0)
 NAVY_RGB = (0, 0, 128)
 
 # 路径
-JSON_LAYOUT_PATH = "./Top Apps"
-JSON_OUT_PATH = "./output"
-SKETCH_OUT_DIR = "./Top Apps"
-LAYOUT_SEQ_OUT_PATH = "./data/layout_sequence.lst"
-INDEX_LINE_MAP_PATH = "./data/index_map.lst"
+JSON_LAYOUT_PATH = './Top Apps'
+JSON_OUT_PATH = './output'
+SKETCH_OUT_DIR = './Top Apps'
+LAYOUT_SEQ_OUT_PATH = './data/layout_sequence.lst'
+INDEX_LINE_MAP_PATH = './data/index_map.lst'
 WIDGET_CUT_OUT_PATH = './widget_cut'
 CSV_FILE_PATH = './analysis_result.csv'
 
@@ -82,12 +82,12 @@ class Widget(Enum):
 
 
 def json_handler(read_json_path, write_json_path):
-    """
+    '''
     读入json文件，输出清理后的简洁json文件
     :param read_json_path: 待处理json文件路径
     :param write_json_path: 处理后json文件路径
     :return:
-    """
+    '''
     with open(read_json_path, 'r') as f:
         json_obj = json.load(f)
 
@@ -102,11 +102,11 @@ def json_handler(read_json_path, write_json_path):
 
 
 def dfs_clean_json(json_obj):
-    """
+    '''
     通过深度优先搜索的方式清理冗余的json属性
     :param json_obj:
     :return:
-    """
+    '''
     delete_unrelated_attrs(json_obj)
 
     if 'children' in json_obj:
@@ -115,11 +115,11 @@ def dfs_clean_json(json_obj):
 
 
 def delete_unrelated_attrs(json_node):
-    """
+    '''
     确定节点json_node保留的json属性
     :param json_node: 待处理的字典格式的json节点
     :return:
-    """
+    '''
     reserved_list = ['class', 'children', 'visibility']
     key_list = [key for key in json_node.keys() if key not in reserved_list]
     for k in key_list:
@@ -127,12 +127,12 @@ def delete_unrelated_attrs(json_node):
 
 
 def sketch_samples_generation(layout_json_path, output_img_path):
-    """
+    '''
     读入布局文件，生成处理后的草图文件，保存到指定路径中
     :param layout_json_path: 待处理json格式布局文件的路径
     :param output_img_path: 生成的草图图片的保存路径
     :return:
-    """
+    '''
     global SEQ_LINE
     with open(layout_json_path, 'r') as f:
         json_obj = json.load(f)
@@ -142,7 +142,7 @@ def sketch_samples_generation(layout_json_path, output_img_path):
     top_framelayout = root['children'][0]
 
     # 准备裁剪控件
-    screenshot_path = os.path.splitext(layout_json_path)[0] + ".jpg"
+    screenshot_path = os.path.splitext(layout_json_path)[0] + '.jpg'
     im_screenshot = Image.open(screenshot_path)
     rico_index = os.path.basename(layout_json_path).split('.')[0]
     img_sha1 = hash_file_sha1(screenshot_path)  # 生成文件的 sha1 值，暂未使用
@@ -160,11 +160,11 @@ def sketch_samples_generation(layout_json_path, output_img_path):
     im_sketch.save(output_img_path)
 
     if LAYOUT_SEQ_GEN_MODE:
-        with open(LAYOUT_SEQ_OUT_PATH, "a") as f:
-            f.write(" ".join(tokens) + '\n')
+        with open(LAYOUT_SEQ_OUT_PATH, 'a') as f:
+            f.write(' '.join(tokens) + '\n')
 
-        with open(INDEX_LINE_MAP_PATH, "a") as f:
-            f.write(str(rico_index) + " " + str(SEQ_LINE) + "\n")
+        with open(INDEX_LINE_MAP_PATH, 'a') as f:
+            f.write(str(rico_index) + ' ' + str(SEQ_LINE) + '\n')
         SEQ_LINE = SEQ_LINE + 1
 
     # 将控件属性保存到文件中
@@ -185,7 +185,7 @@ def hash_file_sha1(file_path):
 
 
 def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows):
-    """
+    '''
     通过深度优先搜索的方式按节点绘制草图，将其直接绘制在im对象上
     :param json_obj: 待分析的 json 节点
     :param im_screenshot: 布局对应的截图 Pillow 对象
@@ -195,7 +195,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     :param rico_index: Rico 序号
     :param csv_rows: 用于将控件属性信息记录到 csv 分析文件
     :return:
-    """
+    '''
     # 不绘制属性visible-to-user值为真的控件
     if not json_obj['visible-to-user']:
         return
@@ -219,7 +219,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     if widget_type != Widget.Unclassified:
         tokens.append(widget_type.name)
     elif 'children' in json_obj:
-        tokens.append("Layout")
+        tokens.append('Layout')
 
     # DFS 绘制控件
     if widget_type != Widget.Layout:
@@ -233,35 +233,35 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
 
     # 当json_obj无children属性时，不再递归执行；确定其他不再需要递归访问的情形
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
-        tokens.append("{")
+        tokens.append('{')
         for i in range(len(json_obj['children'])):
             dfs_draw_widget(json_obj['children'][i], im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
-        tokens.append("}")
+        tokens.append('}')
 
     # 要在这里清除传递的参数
     args[KEY_PARENT_CLICKABLE] = False
 
 
 def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
-    """
+    '''
     裁剪控件并保存到指定路径
     :param json_obj: 控件的 json 对象
     :param im_screenshot: 屏幕截图的 Pillow 对象
     :param rico_index: Rico 序号
     :param widget_type: 控件的推断类型
-    """
+    '''
     w = json_obj['bounds'][2] - json_obj['bounds'][0]
     h = json_obj['bounds'][3] - json_obj['bounds'][1]
 
     if w > 5 and h > 5:
-        node_sha1 = hashlib.sha1(str(json_obj).encode("utf-8"))
+        node_sha1 = hashlib.sha1(str(json_obj).encode('utf-8'))
         jpg_bounds = (int(json_obj['bounds'][0] / WIDTH * im_screenshot.size[0]),
                       int(json_obj['bounds'][1] / HEIGHT * im_screenshot.size[1]),
                       int(json_obj['bounds'][2] / WIDTH * im_screenshot.size[0]),
                       int(json_obj['bounds'][3] / HEIGHT * im_screenshot.size[1]))
         class_tokens = json_obj['class'].rsplit('.', 1)
         outfile_name = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name,
-                                    "".join([rico_index, '-',
+                                    ''.join([rico_index, '-',
                                              class_tokens[1] if len(class_tokens) > 1 else json_obj['class'], '-',
                                              node_sha1.hexdigest()[0:6], '.jpg']))
 
@@ -269,12 +269,12 @@ def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
 
 
 def infer_widget_type(json_node, args):
-    """
+    '''
     接收json节点，返回关键词匹配后根据规则推断的控件类型
     :param json_node: 待分析json节点
     :param args: 其他属性
     :return: 推断的控件类型结果
-    """
+    '''
     # 执行这些规则后，返回最终推断类型；规则的先后顺序对结果有影响。
 
     # 次序1：官方提供的特殊情况
@@ -319,38 +319,38 @@ def infer_widget_type(json_node, args):
 
 
 def infer_widget_type_from_string(class_name):
-    """
+    '''
     当控件类型名称明确地包括于字符串中时，直接确定该控件类型；否则返回 Unclassified
     :param class_name: 待检查字符串
     :return: 控件类型
-    """
+    '''
     # 判断顺序对结果有影响
-    if "Layout" in class_name or "ListView" in class_name or "RecyclerView" in class_name:
+    if 'Layout' in class_name or 'ListView' in class_name or 'RecyclerView' in class_name:
         return Widget.Layout
-    # if "Toolbar" in class_name:
+    # if 'Toolbar' in class_name:
     #     return Widget.Toolbar
-    if "CheckBox" in class_name:
+    if 'CheckBox' in class_name:
         return Widget.CheckBox
-    if "EditText" in class_name:
+    if 'EditText' in class_name:
         return Widget.EditText
-    if "Image" in class_name:
+    if 'Image' in class_name:
         return Widget.ImageView
-    if "Button" in class_name:
+    if 'Button' in class_name:
         return Widget.Button
-    if "TextView" in class_name or "BadgableGlyphView" in class_name:
+    if 'TextView' in class_name or 'BadgableGlyphView' in class_name:
         return Widget.TextView
 
     return Widget.Unclassified
 
 
 def draw_widget(im, widget_type, bounds):
-    """
+    '''
     在im对象中绘制范围为bounds的控件草图
     :param im: 待绘制的图片对象
     :param widget_type: 待绘制的控件类型
     :param bounds: 待绘制的控件范围
     :return:
-    """
+    '''
 
     bounds_sketch = (int((bounds[0]) / WIDTH * SKETCH_WIDTH),
                      int((bounds[1]) / HEIGHT * SKETCH_HEIGHT),
@@ -410,27 +410,27 @@ def draw_widget(im, widget_type, bounds):
 if __name__ == '__main__':
     start_time = time.time()
 
-    print("# CLEAN_JSON >", CLEAN_JSON)
-    print("# DRAW_SKETCHES >", DRAW_SKETCHES)
-    print("# COLOR_MODE >", COLOR_MODE)
-    print("# CUT_WIDGET >", CROP_WIDGET)
-    print("# ANALYSIS_MODE >", ANALYSIS_MODE)
+    print('# CLEAN_JSON >', CLEAN_JSON)
+    print('# DRAW_SKETCHES >', DRAW_SKETCHES)
+    print('# COLOR_MODE >', COLOR_MODE)
+    print('# CUT_WIDGET >', CROP_WIDGET)
+    print('# ANALYSIS_MODE >', ANALYSIS_MODE)
 
     # 遍历布局文件访问节点清理结构
     if CLEAN_JSON:
-        print(">>> Start cleaning json files ...")
+        print('>>> Start cleaning json files ...')
         for case_dir_name in os.listdir(JSON_LAYOUT_PATH):
-            if not case_dir_name.startswith("."):  # hidden files
+            if not case_dir_name.startswith('.'):  # hidden files
                 if not os.path.exists(os.path.join(JSON_OUT_PATH, case_dir_name)):
                     os.makedirs(os.path.join(JSON_OUT_PATH, case_dir_name))
                 for file in os.listdir(os.path.join(JSON_LAYOUT_PATH, case_dir_name)):
-                    if file.endswith(".json"):
+                    if file.endswith('.json'):
                         file_name = file.split('.')[0]
                         json_handler(os.path.join(JSON_LAYOUT_PATH, case_dir_name, file),
                                      os.path.join(JSON_OUT_PATH, case_dir_name,
-                                                  "".join([file_name, '.', str(LEVEL), ".json"])))
+                                                  ''.join([file_name, '.', str(LEVEL), '.json'])))
                 print(os.path.join(JSON_OUT_PATH, case_dir_name))
-        print("<<< Cleaned json files saved in " + JSON_OUT_PATH)
+        print('<<< Cleaned json files saved in ' + JSON_OUT_PATH)
 
     # 初始化放置控件裁切的位置
     if CROP_WIDGET:
@@ -440,11 +440,11 @@ if __name__ == '__main__':
                 if os.path.exists(dir_path):
                     shutil.rmtree(dir_path)
                 os.makedirs(dir_path)
-        print(">>> Preparing directories to save widget crops ... OK")
+        print('>>> Preparing directories to save widget crops ... OK')
 
     # 根据布局信息生成草图
     if DRAW_SKETCHES:
-        print(">>> Start generating sketches ...")
+        print('>>> Start generating sketches ...')
 
         if LAYOUT_SEQ_GEN_MODE:
             open(LAYOUT_SEQ_OUT_PATH, 'w', newline='')
@@ -455,16 +455,16 @@ if __name__ == '__main__':
                 # TODO 在这里添加 CSV 文件页眉
                 csv.writer(f).writerow(['type', 'ancestors'])
         for case_dir_name in os.listdir(JSON_LAYOUT_PATH):
-            if not case_dir_name.startswith("."):  # hidden files
+            if not case_dir_name.startswith('.'):  # hidden files
                 if not os.path.exists(os.path.join(SKETCH_OUT_DIR, case_dir_name)):
                     os.makedirs(os.path.join(SKETCH_OUT_DIR, case_dir_name))
                 for file in os.listdir(os.path.join(JSON_LAYOUT_PATH, case_dir_name)):
                     # print(file)
-                    if file.endswith(".json"):
+                    if file.endswith('.json'):
                         file_name = file.split('.')[0]
                         sketch_samples_generation(os.path.join(JSON_LAYOUT_PATH, case_dir_name, file),
                                                   os.path.join(SKETCH_OUT_DIR, case_dir_name,
-                                                               "".join([file_name, '-sketch.png'])))
-                print(os.path.join(SKETCH_OUT_DIR, case_dir_name), ">> OK")
-        print("<<< Generated sketches saved in", SKETCH_OUT_DIR, "ended with *sketch.png")
+                                                               ''.join([file_name, '-sketch.png'])))
+                print(os.path.join(SKETCH_OUT_DIR, case_dir_name), '>> OK')
+        print('<<< Generated sketches saved in', SKETCH_OUT_DIR, 'ended with *sketch.png')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
