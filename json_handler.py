@@ -4,16 +4,16 @@ import time
 import hashlib
 import shutil
 import csv
-from pprint import pprint
 from PIL import Image
 from enum import Enum
 
 # 程序运行参数
-CLEAN_JSON = False
+CLEAN_JSON = True
 DRAW_SKETCHES = True
-COLOR_MODE = False  # True 为色彩模式，False 为草图模式
-CROP_WIDGET = True
-LAYOUT_SEQ_GEN_MODE = False
+
+COLOR_MODE = True  # True 为色彩模式，False 为草图模式
+CROP_WIDGET = False
+LAYOUT_SEQ_GEN_MODE = True
 ANALYSIS_MODE = False  # 存储属性分析文件
 
 # Layout 默认长宽
@@ -27,11 +27,8 @@ SKETCH_HEIGHT = 1024
 WIDGET_FRAME_MARGIN = 1
 WIDGET_INNER_MARGIN = 2
 
-# 用于 File Hash 的缓存大小
-FILE_READ_BUF_SIZE = 65536
-
-# xml_sequence 的行号
-SEQ_LINE = 0
+FILE_READ_BUF_SIZE = 65536  # 用于 File Hash 的缓存大小
+SEQ_LINE = 0  # xml_sequence 的行号
 
 # 用于 layout 层次间传递辅助参数
 KEY_PARENT_CLICKABLE = 'key_parent_clickable'
@@ -59,9 +56,9 @@ GREEN_RGB = (0, 128, 0)
 NAVY_RGB = (0, 0, 128)
 
 # 路径
-JSON_LAYOUT_PATH = './Top Apps'
-JSON_OUT_PATH = './output'
-SKETCH_OUT_DIR = './Top Apps'
+RICO_DIR = './Top Apps'
+CLEANED_JSON_DIR = './output'
+SKETCH_OUT_DIR = './output'
 LAYOUT_SEQ_OUT_PATH = './data/layout_sequence.lst'
 INDEX_LINE_MAP_PATH = './data/index_map.lst'
 WIDGET_CUT_OUT_PATH = './widget_cut'
@@ -81,43 +78,47 @@ class Widget(Enum):
     # Toolbar = 9
 
 
-def json_handler(read_json_path, write_json_path):
+def json_handler(dir_name, rico_index):
     """
-    读入json文件，输出清理后的简洁json文件
-    :param read_json_path: 待处理json文件路径
-    :param write_json_path: 处理后json文件路径
+    将 RICO_DIR/dir_name 文件夹中的 json 文件清理后输出全包含可见控件的 json 文件保存到 CLEANED_JSON_DIR/dir_name 中
+    :param dir_name: RICO_DIR 中子文件夹名称
+    :param rico_index: Rico 序号
     :return:
     """
-    with open(read_json_path, 'r') as f:
+    with open(os.path.join(RICO_DIR, dir_name, rico_index + '.json'), 'r') as f:
         json_obj = json.load(f)
 
-    # FIXME 检查 Rico 数据集中 layout 是否从 root.children[0] 开始
-    root = json_obj['activity']['root']
-    top_framelayout = root['children'][0]
+    root = json_obj['activity']['root']['children'][0]
 
-    dfs_clean_json(top_framelayout)
+    new_root = {k: root[k] for k, v in root.items() if k != 'children'}
 
-    with open(write_json_path, 'w') as f:
-        json.dump(top_framelayout, f, indent=2)
+    dfs_clean_json(root, new_root)
+
+    with open(os.path.join(CLEANED_JSON_DIR, dir_name, rico_index + '.json'), 'w') as f:
+        json.dump(new_root, f, indent=2)
 
 
-def dfs_clean_json(json_obj):
+def dfs_clean_json(json_obj, new_root):
     """
-    通过深度优先搜索的方式清理冗余的json属性
-    :param json_obj:
+    通过深度优先搜索的方式清理 visible-to-user 值为 false 的控件
+    :param json_obj: 原始 json 节点
+    :param new_root: 已清理的 json_obj 副本
     :return:
     """
-    delete_unrelated_attrs(json_obj)
-
+    # delete_unrelated_attrs(json_obj)
     if 'children' in json_obj:
-        for i in range(len(json_obj['children'])):
-            dfs_clean_json(json_obj['children'][i])
+        new_root['children'] = []
+        for child in json_obj['children']:
+            if child['visible-to-user']:
+                child_copy = {k: child[k] for k, v in child.items() if k != 'children'}
+                new_root['children'].append(child_copy)
+                dfs_clean_json(child, child_copy)
 
 
 def delete_unrelated_attrs(json_node):
     """
-    确定节点json_node保留的json属性
-    :param json_node: 待处理的字典格式的json节点
+    确定节点 json_node 保留的 json 属性
+    :param json_node: 待处理的字典格式的 json 节点
     :return:
     """
     reserved_list = ['class', 'children', 'visibility']
@@ -126,25 +127,25 @@ def delete_unrelated_attrs(json_node):
         del json_node[k]
 
 
-def sketch_samples_generation(layout_json_path, output_img_path):
+def sketch_samples_generation(dir_name, rico_index):
     """
-    读入布局文件，生成处理后的草图文件，保存到指定路径中
-    :param layout_json_path: 待处理json格式布局文件的路径
-    :param output_img_path: 生成的草图图片的保存路径
+    读入 CLEANED_JSON_DIR/dir_name 文件夹中的 json 布局文件，生成处理后的草图文件，保存到 SKETCH_OUT_DIR/dir_name 中
+    :param dir_name: 子文件夹名称
+    :param rico_index: Rico 序号
     :return:
     """
     global SEQ_LINE
-    with open(layout_json_path, 'r') as f:
-        json_obj = json.load(f)
+    with open(os.path.join(CLEANED_JSON_DIR, dir_name, rico_index + '.json'), 'r') as f:
+        root = json.load(f)
 
-    # FIXME 检查 Rico 数据集中 layout 是否从 root.children[0] 开始
-    root = json_obj['activity']['root']
-    top_framelayout = root['children'][0]
+    # 去除冗余的外层嵌套
+    # TODO 检查正确性
+    while 'children' in root and len(root['children']) == 1:
+        root = root['children'][0]
 
     # 准备裁剪控件
-    screenshot_path = os.path.splitext(layout_json_path)[0] + '.jpg'
+    screenshot_path = os.path.join(RICO_DIR, dir_name, rico_index + '.jpg')
     im_screenshot = Image.open(screenshot_path)
-    rico_index = os.path.basename(layout_json_path).split('.')[0]
     img_sha1 = hash_file_sha1(screenshot_path)  # 生成文件的 sha1 值，暂未使用
 
     # 新建空白草图画布，DFS 后将绘制的草图保存到文件
@@ -154,10 +155,10 @@ def sketch_samples_generation(layout_json_path, output_img_path):
     tokens = [str(rico_index)]  # 用于 layout sequence
     csv_rows = []  # 用于生成 csv 分析文件
 
-    dfs_draw_widget(top_framelayout, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
+    dfs_draw_widget(root, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
 
     # im_sketch.rotate(90, expand=1).save(output_img_path)
-    im_sketch.save(output_img_path)
+    im_sketch.save(os.path.join(SKETCH_OUT_DIR, dir_name, rico_index + '-sketch.png'))
 
     if LAYOUT_SEQ_GEN_MODE:
         with open(LAYOUT_SEQ_OUT_PATH, 'a') as f:
@@ -174,6 +175,11 @@ def sketch_samples_generation(layout_json_path, output_img_path):
 
 
 def hash_file_sha1(file_path):
+    """
+    将路径为 file_path 的文件转换成其 sha1 值
+    :param file_path:
+    :return:
+    """
     sha1 = hashlib.sha1()
     with open(file_path, 'rb') as f:
         while True:
@@ -186,7 +192,7 @@ def hash_file_sha1(file_path):
 
 def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows):
     """
-    通过深度优先搜索的方式按节点绘制草图，将其直接绘制在im对象上
+    通过深度优先搜索的方式按节点绘制草图，将其直接绘制在 Pillow 对象上
     :param json_obj: 待分析的 json 节点
     :param im_screenshot: 布局对应的截图 Pillow 对象
     :param im_sketch: 待绘制的草图 Pillow 对象
@@ -197,8 +203,8 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     :return:
     """
     # 不绘制属性visible-to-user值为真的控件
-    if not json_obj['visible-to-user']:
-        return
+    # if not json_obj['visible-to-user']:
+    #     return
 
     # 修改或加入更多规则判断，调用 im.paste 绘制相应的图形；在 args 中增加其他属性辅助判断，如上层的 clickable 属性
 
@@ -419,18 +425,18 @@ if __name__ == '__main__':
     # 遍历布局文件访问节点清理结构
     if CLEAN_JSON:
         print('>>> Start cleaning json files ...')
-        for case_dir_name in os.listdir(JSON_LAYOUT_PATH):
-            if not case_dir_name.startswith('.'):  # hidden files
-                if not os.path.exists(os.path.join(JSON_OUT_PATH, case_dir_name)):
-                    os.makedirs(os.path.join(JSON_OUT_PATH, case_dir_name))
-                for file in os.listdir(os.path.join(JSON_LAYOUT_PATH, case_dir_name)):
+        for case_name in os.listdir(RICO_DIR):
+            if not case_name.startswith('.'):  # hidden files
+                input_case_dir = os.path.join(RICO_DIR, case_name)
+                output_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
+                if not os.path.exists(output_case_dir):
+                    os.makedirs(output_case_dir)
+                for file in os.listdir(input_case_dir):
                     if file.endswith('.json'):
-                        file_name = file.split('.')[0]
-                        json_handler(os.path.join(JSON_LAYOUT_PATH, case_dir_name, file),
-                                     os.path.join(JSON_OUT_PATH, case_dir_name,
-                                                  ''.join([file_name, '.', str(LEVEL), '.json'])))
-                print(os.path.join(JSON_OUT_PATH, case_dir_name))
-        print('<<< Cleaned json files saved in ' + JSON_OUT_PATH)
+                        json_handler(case_name, file.split('.')[0])
+                print(output_case_dir, '>> OK')
+
+        print('<<< Cleaned json files saved in ' + CLEANED_JSON_DIR)
 
     # 初始化放置控件裁切的位置
     if CROP_WIDGET:
@@ -440,13 +446,14 @@ if __name__ == '__main__':
                 if os.path.exists(dir_path):
                     shutil.rmtree(dir_path)
                 os.makedirs(dir_path)
-        print('>>> Preparing directories to save widget crops ... OK')
+        print('<<< Checking/Making directories to save widget crops ... OK')
 
     # 根据布局信息生成草图
     if DRAW_SKETCHES:
         print('>>> Start generating sketches ...')
 
         if LAYOUT_SEQ_GEN_MODE:
+            # 先创建/覆盖文件用于添加内容
             open(LAYOUT_SEQ_OUT_PATH, 'w', newline='')
             open(INDEX_LINE_MAP_PATH, 'w', newline='')
 
@@ -454,17 +461,18 @@ if __name__ == '__main__':
             with open(CSV_FILE_PATH, 'w', newline='') as f:
                 # TODO 在这里添加 CSV 文件页眉
                 csv.writer(f).writerow(['type', 'ancestors'])
-        for case_dir_name in os.listdir(JSON_LAYOUT_PATH):
-            if not case_dir_name.startswith('.'):  # hidden files
-                if not os.path.exists(os.path.join(SKETCH_OUT_DIR, case_dir_name)):
-                    os.makedirs(os.path.join(SKETCH_OUT_DIR, case_dir_name))
-                for file in os.listdir(os.path.join(JSON_LAYOUT_PATH, case_dir_name)):
-                    # print(file)
+
+        for case_name in os.listdir(RICO_DIR):
+            if not case_name.startswith('.'):  # hidden files
+                input_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
+                output_case_dir = os.path.join(SKETCH_OUT_DIR, case_name)
+                if not os.path.exists(output_case_dir):
+                    os.makedirs(output_case_dir)
+                for file in os.listdir(input_case_dir):
                     if file.endswith('.json'):
-                        file_name = file.split('.')[0]
-                        sketch_samples_generation(os.path.join(JSON_LAYOUT_PATH, case_dir_name, file),
-                                                  os.path.join(SKETCH_OUT_DIR, case_dir_name,
-                                                               ''.join([file_name, '-sketch.png'])))
-                print(os.path.join(SKETCH_OUT_DIR, case_dir_name), '>> OK')
+                        sketch_samples_generation(case_name, file.split('.')[0])
+                print(output_case_dir, '>> OK')
+
         print('<<< Generated sketches saved in', SKETCH_OUT_DIR, 'ended with *sketch.png')
+
     print('Duration: {:.2f} s'.format(time.time() - start_time))
