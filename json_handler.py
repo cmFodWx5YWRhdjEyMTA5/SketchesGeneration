@@ -8,7 +8,7 @@ from PIL import Image
 from enum import Enum
 
 # 程序运行参数
-CLEAN_JSON = True
+CLEAN_JSON = False
 DRAW_SKETCHES = True
 
 COLOR_MODE = True  # True 为色彩模式，False 为草图模式
@@ -41,7 +41,7 @@ im_text_view = Image.open('./drawings/frameless/text_view.png')
 im_image_link = Image.open('./drawings/frameless/image_link.png')
 im_text_link = Image.open('./drawings/frameless/text_link.png')
 im_checkbox = Image.open('./drawings/frameless/checkbox.png')
-im_toolbar = Image.open('./drawings/frameless/toolbar.png')
+# im_toolbar = Image.open('./drawings/frameless/toolbar.png')
 
 BLACK_RGB = (0, 0, 0)
 GRAY_RGB = (128, 128, 128)
@@ -287,8 +287,7 @@ def infer_widget_type(json_node, args):
 
     # 次序1：官方提供的特殊情况
     # TODO: 温特，这些字符串匹配是否应该放到infer_widget_type_from_string方法中，那样可以在判断祖先类名是也调用？
-    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class'] or 'ActionMenuView' in \
-            json_node['class']:
+    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class']:
         return Widget.Button
     # 次序2：其他特殊情况
     if 'NavItemView' in json_node['class'] or 'ToolBarItemView' in json_node['class'] or 'DrawerToolBarItemView' in \
@@ -343,9 +342,9 @@ def infer_widget_type_from_string(class_name):
         return Widget.EditText
     if 'Image' in class_name:
         return Widget.ImageView
-    if 'Button' in class_name:
+    if 'Button' in class_name or 'BadgableGlyphView' in class_name:
         return Widget.Button
-    if 'TextView' in class_name or 'BadgableGlyphView' in class_name:
+    if 'TextView' in class_name:
         return Widget.TextView
 
     return Widget.Unclassified
@@ -462,7 +461,7 @@ if __name__ == '__main__':
         if ANALYSIS_MODE:
             with open(CSV_FILE_PATH, 'w', newline='') as f:
                 # TODO 在这里添加 CSV 文件页眉
-                csv.writer(f).writerow(['type', 'ancestors'])
+                csv.writer(f).writerow(['type', 'rico-index', 'clickable', 'focusable', 'focused', 'selected', 'draw', 'ancestors'])
 
         for case_name in os.listdir(RICO_DIR):
             if not case_name.startswith('.'):  # hidden files
