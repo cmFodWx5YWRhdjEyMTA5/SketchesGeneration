@@ -27,11 +27,12 @@ FILE_READ_BUF_SIZE = 65536  # 用于 File Hash 的缓存大小
 SEQ_LINE = 0  # xml_sequence 的行号
 
 # 路径
-RICO_DIR = './Top Apps'
-CLEANED_JSON_DIR = './output'
-SKETCH_OUT_DIR = './output'
-LAYOUT_SEQ_OUT_PATH = './data/layout_sequence.lst'
-INDEX_LINE_MAP_PATH = './data/index_map.lst'
+RICO_DIR = 'E:\\sketches-test\\rico-data'
+CLEANED_JSON_DIR = 'E:\\sketches-test\\data\\cleaned-json'
+SKETCH_OUT_DIR = 'E:\\sketches-test\\sketches'
+DATA_DIR = 'E:\\sketches-test\\data'
+LAYOUT_SEQ_FILE_NAME = 'layout_sequence.lst'
+INDEX_LINE_MAP_FILE_NAME = 'index_map.lst'
 WIDGET_CUT_OUT_PATH = './widget_cut'
 CSV_FILE_PATH = './analysis_result.csv'
 
@@ -161,11 +162,12 @@ def sketch_samples_generation(dir_name, rico_index):
     im_sketch.save(os.path.join(SKETCH_OUT_DIR, dir_name, rico_index + '-sketch.png'))
 
     if TRAINING_DATA_MODE:
-        with open(LAYOUT_SEQ_OUT_PATH, 'a') as f:
+        with open(os.path.join(DATA_DIR, LAYOUT_SEQ_FILE_NAME), 'a') as f:
             f.write(' '.join(tokens) + '\n')
 
-        with open(INDEX_LINE_MAP_PATH, 'a') as f:
+        with open(os.path.join(DATA_DIR, INDEX_LINE_MAP_FILE_NAME), 'a') as f:
             f.write(str(rico_index) + ' ' + str(SEQ_LINE) + '\n')
+
         SEQ_LINE = SEQ_LINE + 1
 
     # 将控件属性保存到文件中
@@ -286,7 +288,6 @@ def infer_widget_type(json_node, args):
     # 执行这些规则后，返回最终推断类型；规则的先后顺序对结果有影响。
 
     # 次序1：官方提供的特殊情况
-    # TODO: 温特，这些字符串匹配是否应该放到infer_widget_type_from_string方法中，那样可以在判断祖先类名是也调用？
     if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class']:
         return Widget.Button
     # 次序2：其他特殊情况
@@ -477,8 +478,8 @@ if __name__ == '__main__':
                 print('### Making data directory to save training related files ... OK')
                 os.makedirs(DATA_DIR)
             print('### Checking data directory to save training related files:', DATA_DIR, '... OK')
-            open(LAYOUT_SEQ_OUT_PATH, 'w', newline='')
-            open(INDEX_LINE_MAP_PATH, 'w', newline='')
+            open(os.path.join(DATA_DIR, LAYOUT_SEQ_FILE_NAME), 'w', newline='')
+            open(os.path.join(DATA_DIR, INDEX_LINE_MAP_FILE_NAME), 'w', newline='')
             print('### Creating raining related files ... OK')
 
         if ANALYSIS_MODE:

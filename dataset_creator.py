@@ -3,7 +3,7 @@ import random
 DATASET_SIZE = 72219
 TEST_SET_SIZE = 7222
 
-TEST_SHUFFLE_PATH = "./data/test_shuffle.lst"
+TEST_SHUFFLE_OUT_PATH = "./data/test_shuffle.lst"
 INDEX_LINE_MAP_PATH = "./data/index_map.lst"
 
 if __name__ == '__main__':
@@ -14,7 +14,7 @@ if __name__ == '__main__':
             index, line_no = [int(x) for x in line.split()]
             index_map[index] = line_no
 
-    with open(TEST_SHUFFLE_PATH, 'w') as f:
+    with open(TEST_SHUFFLE_OUT_PATH, 'w') as f:
         for index in test_indexes:
             # f.write(str(index) + ".png " + str(index_map[index]) + "\n")
             f.write(str(index) + ".png " + str(index) + "\n")
