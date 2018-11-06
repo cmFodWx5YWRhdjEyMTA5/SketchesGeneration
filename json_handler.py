@@ -213,8 +213,10 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     # csv 文件中的一行数据
     # TODO 在这里添加 CSV 文件每一行内容
     if ANALYSIS_MODE:
-        csv_row = [widget_type, json_obj['ancestors']]
-        csv_rows.append(csv_row)
+        if widget_type != Widget.Layout:
+            csv_row = [widget_type, rico_index, json_obj['clickable'], json_obj['focusable'], json_obj['focused'],
+                       json_obj['selected'], json_obj['draw'], json_obj['ancestors']]
+            csv_rows.append(csv_row)
 
     # 传递参数：如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
     if widget_type == Widget.Layout and json_obj['clickable']:
