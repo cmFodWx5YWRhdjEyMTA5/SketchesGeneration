@@ -13,12 +13,8 @@ DRAW_SKETCHES = True
 
 COLOR_MODE = True  # True 为色彩模式，False 为草图模式
 CROP_WIDGET = False
-LAYOUT_SEQ_GEN_MODE = True
+TRAINING_DATA_MODE = True  # 构造训练集支持文件
 ANALYSIS_MODE = False  # 存储属性分析文件
-
-# Layout 默认长宽
-WIDTH = 1440
-HEIGHT = 2560
 
 # 画布长宽
 SKETCH_WIDTH = 576
@@ -29,6 +25,19 @@ WIDGET_INNER_MARGIN = 2
 
 FILE_READ_BUF_SIZE = 65536  # 用于 File Hash 的缓存大小
 SEQ_LINE = 0  # xml_sequence 的行号
+
+# 路径
+RICO_DIR = './Top Apps'
+CLEANED_JSON_DIR = './output'
+SKETCH_OUT_DIR = './output'
+LAYOUT_SEQ_OUT_PATH = './data/layout_sequence.lst'
+INDEX_LINE_MAP_PATH = './data/index_map.lst'
+WIDGET_CUT_OUT_PATH = './widget_cut'
+CSV_FILE_PATH = './analysis_result.csv'
+
+# Layout 默认长宽
+WIDTH = 1440
+HEIGHT = 2560
 
 # 用于 layout 层次间传递辅助参数
 KEY_PARENT_CLICKABLE = 'key_parent_clickable'
@@ -54,15 +63,6 @@ CYAN_RGB = (0, 255, 255)
 MAROON_RGB = (128, 0, 0)
 GREEN_RGB = (0, 128, 0)
 NAVY_RGB = (0, 0, 128)
-
-# 路径
-RICO_DIR = './Top Apps'
-CLEANED_JSON_DIR = './output'
-SKETCH_OUT_DIR = './output'
-LAYOUT_SEQ_OUT_PATH = './data/layout_sequence.lst'
-INDEX_LINE_MAP_PATH = './data/index_map.lst'
-WIDGET_CUT_OUT_PATH = './widget_cut'
-CSV_FILE_PATH = './analysis_result.csv'
 
 
 class Widget(Enum):
@@ -160,7 +160,7 @@ def sketch_samples_generation(dir_name, rico_index):
     # im_sketch.rotate(90, expand=1).save(output_img_path)
     im_sketch.save(os.path.join(SKETCH_OUT_DIR, dir_name, rico_index + '-sketch.png'))
 
-    if LAYOUT_SEQ_GEN_MODE:
+    if TRAINING_DATA_MODE:
         with open(LAYOUT_SEQ_OUT_PATH, 'a') as f:
             f.write(' '.join(tokens) + '\n')
 
@@ -418,6 +418,7 @@ def draw_widget(im, widget_type, bounds):
 if __name__ == '__main__':
     start_time = time.time()
 
+    print('## Program configuration ##')
     print('# CLEAN_JSON >', CLEAN_JSON)
     print('# DRAW_SKETCHES >', DRAW_SKETCHES)
     print('# COLOR_MODE >', COLOR_MODE)
@@ -426,17 +427,27 @@ if __name__ == '__main__':
 
     # 遍历布局文件访问节点清理结构
     if CLEAN_JSON:
-        print('>>> Start cleaning json files ...')
+        print('---------------------------------')
+        print('>>> Start cleaning json files in', RICO_DIR, '...')
+
+        # 检查输出文件夹状态
+        if not os.path.exists(CLEANED_JSON_DIR):
+            print('### Making directories to save cleaned json files ... OK')
+            os.makedirs(CLEANED_JSON_DIR)
+        print('### Checking directories to save cleaned json files:', CLEANED_JSON_DIR, '... OK')
+
         for case_name in os.listdir(RICO_DIR):
             if not case_name.startswith('.'):  # hidden files
                 input_case_dir = os.path.join(RICO_DIR, case_name)
                 output_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
+                print('>>> Processing', output_case_dir, '...', end=' ')
+
                 if not os.path.exists(output_case_dir):
                     os.makedirs(output_case_dir)
                 for file in os.listdir(input_case_dir):
                     if file.endswith('.json'):
                         json_handler(case_name, file.split('.')[0])
-                print(output_case_dir, '>> OK')
+                print('OK')
 
         print('<<< Cleaned json files saved in ' + CLEANED_JSON_DIR)
 
@@ -448,16 +459,28 @@ if __name__ == '__main__':
                 if os.path.exists(dir_path):
                     shutil.rmtree(dir_path)
                 os.makedirs(dir_path)
-        print('<<< Checking/Making directories to save widget crops ... OK')
+        print('### Checking/Making directories to save widget crops ... OK')
 
     # 根据布局信息生成草图
     if DRAW_SKETCHES:
-        print('>>> Start generating sketches ...')
+        print('---------------------------------')
+        print('>>> Start generating sketches based on cleaned json files in', CLEANED_JSON_DIR, '...')
 
-        if LAYOUT_SEQ_GEN_MODE:
+        # 检查输出文件夹状态
+        if not os.path.exists(SKETCH_OUT_DIR):
+            print('### Making directories to save generated sketches ... OK')
+            os.makedirs(SKETCH_OUT_DIR)
+        print('### Checking directories to save generated sketches:', SKETCH_OUT_DIR, '... OK')
+
+        if TRAINING_DATA_MODE:
             # 先创建/覆盖文件用于添加内容
+            if not os.path.exists(DATA_DIR):
+                print('### Making data directory to save training related files ... OK')
+                os.makedirs(DATA_DIR)
+            print('### Checking data directory to save training related files:', DATA_DIR, '... OK')
             open(LAYOUT_SEQ_OUT_PATH, 'w', newline='')
             open(INDEX_LINE_MAP_PATH, 'w', newline='')
+            print('### Creating raining related files ... OK')
 
         if ANALYSIS_MODE:
             with open(CSV_FILE_PATH, 'w', newline='') as f:
@@ -468,13 +491,16 @@ if __name__ == '__main__':
             if not case_name.startswith('.'):  # hidden files
                 input_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
                 output_case_dir = os.path.join(SKETCH_OUT_DIR, case_name)
+                print('>>> Processing', output_case_dir, '...', end=' ')
+
                 if not os.path.exists(output_case_dir):
                     os.makedirs(output_case_dir)
                 for file in os.listdir(input_case_dir):
                     if file.endswith('.json'):
                         sketch_samples_generation(case_name, file.split('.')[0])
-                print(output_case_dir, '>> OK')
+                print('OK')
 
-        print('<<< Generated sketches saved in', SKETCH_OUT_DIR, 'ended with *sketch.png')
+        print('<<< Generated sketches saved in', SKETCH_OUT_DIR)
 
+    print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
