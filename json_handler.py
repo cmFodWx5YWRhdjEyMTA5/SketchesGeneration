@@ -28,7 +28,7 @@ SEQ_LINE = 0  # xml_sequence 的行号
 
 # 路径
 RICO_DIR = 'E:\\sketches-test\\rico-data'
-CLEANED_JSON_DIR = 'E:\\sketches-test\\data\\cleaned-json'
+CLEANED_JSON_DIR = 'E:\\sketches-test\\cleaned-json'
 SKETCH_OUT_DIR = 'E:\\sketches-test\\sketches'
 DATA_DIR = 'E:\\sketches-test\\data'
 LAYOUT_SEQ_FILE_NAME = 'layout_sequence.lst'
@@ -110,7 +110,7 @@ def dfs_clean_json(json_obj, new_root):
     if 'children' in json_obj:
         new_root['children'] = []
         for child in json_obj['children']:
-            if child['visible-to-user']:
+            if child is not None and child['visible-to-user']:
                 child_copy = {k: child[k] for k, v in child.items() if k != 'children'}
                 new_root['children'].append(child_copy)
                 dfs_clean_json(child, child_copy)
@@ -153,7 +153,8 @@ def sketch_samples_generation(dir_name, rico_index):
     im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
 
     args = {KEY_PARENT_CLICKABLE: False}
-    tokens = [str(rico_index)]  # 用于 layout sequence
+    tokens = []  # 用于 layout sequence
+    # tokens = [str(rico_index)]  # 用于 layout sequence
     csv_rows = []  # 用于生成 csv 分析文件
 
     dfs_draw_widget(root, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
@@ -162,6 +163,11 @@ def sketch_samples_generation(dir_name, rico_index):
     im_sketch.save(os.path.join(SKETCH_OUT_DIR, dir_name, rico_index + '-sketch.png'))
 
     if TRAINING_DATA_MODE:
+
+        # FIXME 处理空白画布情况
+        if len(tokens) == 1:
+            tokens.append(Widget.Layout.name)
+
         with open(os.path.join(DATA_DIR, LAYOUT_SEQ_FILE_NAME), 'a') as f:
             f.write(' '.join(tokens) + '\n')
 
@@ -226,10 +232,14 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
 
     # 将 Layout DFS-sequence 保存到文件中
     # FIXME 有 children 节点的 Unclassified 控件修改为 Layout；若没有，不输出。
-    if widget_type != Widget.Unclassified:
+    if 'children' in json_obj:
+        tokens.append(Widget.Layout.name)
+    else:
         tokens.append(widget_type.name)
-    elif 'children' in json_obj:
-        tokens.append('Layout')
+    # if widget_type != Widget.Unclassified:
+    #     tokens.append(widget_type.name)
+    # elif 'children' in json_obj:
+    #     tokens.append(Widget.Layout.name)
 
     # DFS 绘制控件
     if widget_type != Widget.Layout:
