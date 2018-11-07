@@ -89,7 +89,7 @@ def json_handler(dir_name, rico_index):
     with open(os.path.join(RICO_DIR, dir_name, rico_index + '.json'), 'r') as f:
         json_obj = json.load(f)
 
-    root = json_obj['activity']['root']['children'][0]
+    root = json_obj['activity']['root']
 
     new_root = {k: root[k] for k, v in root.items() if k != 'children'}
 
@@ -450,14 +450,14 @@ if __name__ == '__main__':
             if not case_name.startswith('.'):  # hidden files
                 input_case_dir = os.path.join(RICO_DIR, case_name)
                 output_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
-                print('>>> Processing', output_case_dir, '...', end=' ')
+                print(datetime.now().strftime('%m-%d %H:%M:%S'), '>>> Processing', output_case_dir, '...', end=' ')
 
                 if not os.path.exists(output_case_dir):
                     os.makedirs(output_case_dir)
                 for file in os.listdir(input_case_dir):
                     if file.endswith('.json'):
                         json_handler(case_name, file.split('.')[0])
-                print('OK')
+                print('OK', time.time())
 
         print('<<< Cleaned json files saved in ' + CLEANED_JSON_DIR)
 
@@ -502,14 +502,14 @@ if __name__ == '__main__':
             if not case_name.startswith('.'):  # hidden files
                 input_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
                 output_case_dir = os.path.join(SKETCH_OUT_DIR, case_name)
-                print('>>> Processing', output_case_dir, '...', end=' ')
+                print(datetime.now().strftime('%m-%d %H:%M:%S'), '>>> Processing', output_case_dir, '...', end=' ')
 
                 if not os.path.exists(output_case_dir):
                     os.makedirs(output_case_dir)
                 for file in os.listdir(input_case_dir):
                     if file.endswith('.json'):
                         sketch_samples_generation(case_name, file.split('.')[0])
-                print('OK')
+                print('OK', time.time())
 
         print('<<< Generated sketches saved in', SKETCH_OUT_DIR)
 
