@@ -4,6 +4,7 @@ import time
 import hashlib
 import shutil
 import csv
+from datetime import datetime
 from PIL import Image
 from enum import Enum
 
@@ -509,7 +510,7 @@ if __name__ == '__main__':
                 for file in os.listdir(input_case_dir):
                     if file.endswith('.json'):
                         sketch_samples_generation(case_name, file.split('.')[0])
-                print('OK', time.time())
+                print('OK')
 
         print('<<< Generated sketches saved in', SKETCH_OUT_DIR)
 
