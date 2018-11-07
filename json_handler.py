@@ -14,7 +14,7 @@ DRAW_SKETCHES = True
 COLOR_MODE = True  # True 为色彩模式，False 为草图模式
 CROP_WIDGET = False
 LAYOUT_SEQ_GEN_MODE = True
-ANALYSIS_MODE = False  # 存储属性分析文件
+ANALYSIS_MODE = True  # 存储属性分析文件
 
 # Layout 默认长宽
 WIDTH = 1440
@@ -213,8 +213,8 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     # csv 文件中的一行数据
     # TODO 在这里添加 CSV 文件每一行内容
     if ANALYSIS_MODE:
-        if widget_type != Widget.Layout:
-            csv_row = [widget_type, rico_index, json_obj['clickable'], json_obj['focusable'], json_obj['focused'],
+        if widget_type != Widget.Layout and widget_type != Widget.Unclassified:
+            csv_row = [widget_type, json_obj['class'], rico_index, json_obj['clickable'], args[KEY_PARENT_CLICKABLE], json_obj['focusable'], json_obj['focused'],
                        json_obj['selected'], json_obj['draw'], json_obj['ancestors']]
             csv_rows.append(csv_row)
 
@@ -461,7 +461,7 @@ if __name__ == '__main__':
         if ANALYSIS_MODE:
             with open(CSV_FILE_PATH, 'w', newline='') as f:
                 # TODO 在这里添加 CSV 文件页眉
-                csv.writer(f).writerow(['type', 'rico-index', 'clickable', 'focusable', 'focused', 'selected', 'draw', 'ancestors'])
+                csv.writer(f).writerow(['type', 'class', 'rico-index', 'clickable', 'parent_clickable', 'focusable', 'focused', 'selected', 'draw', 'ancestors'])
 
         for case_name in os.listdir(RICO_DIR):
             if not case_name.startswith('.'):  # hidden files
