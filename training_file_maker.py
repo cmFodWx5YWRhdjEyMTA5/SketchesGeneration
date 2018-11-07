@@ -21,8 +21,10 @@ if __name__ == '__main__':
     start_time = time.time()
 
     print('## DATASET_SIZE = ' + str(DATASET_SIZE))
-    print('## TEST_SET_SIZE = ' + str(TEST_SET_SIZE), str(round(TEST_SET_SIZE / DATASET_SIZE * 100, 2)) + '%')
+    print('## TRAIN_SET_SIZE = ' + str(DATASET_SIZE - VAL_SET_SIZE - TEST_SET_SIZE),
+          str(round((DATASET_SIZE - VAL_SET_SIZE - TEST_SET_SIZE) / DATASET_SIZE * 100, 2)) + '%')
     print('## VAL_SET_SIZE = ' + str(VAL_SET_SIZE), str(round(VAL_SET_SIZE / DATASET_SIZE * 100, 2)) + '%')
+    print('## TEST_SET_SIZE = ' + str(TEST_SET_SIZE), str(round(TEST_SET_SIZE / DATASET_SIZE * 100, 2)) + '%')
 
     # 生成词汇表
     vocab_file_path = os.path.join(DATA_DIR, VOCAB_FILE_NAME)
@@ -37,7 +39,8 @@ if __name__ == '__main__':
     total_indexes = range(DATASET_SIZE)
     test_indexes = random.sample(total_indexes, TEST_SET_SIZE)
     non_test_indexes = [x for x in total_indexes if x not in test_indexes]
-    val_indexes = random.sample(non_test_indexes, VAL_SET_SIZE).sort()
+    val_indexes = random.sample(non_test_indexes, VAL_SET_SIZE)
+    val_indexes.sort()
     train_indexes = [x for x in non_test_indexes if x not in val_indexes]
     print('OK')
 
