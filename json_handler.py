@@ -458,7 +458,7 @@ if __name__ == '__main__':
                 for file in os.listdir(input_case_dir):
                     if file.endswith('.json'):
                         json_handler(case_name, file.split('.')[0])
-                print('OK', time.time())
+                print('OK')
 
         print('<<< Cleaned json files saved in ' + CLEANED_JSON_DIR)
 
