@@ -43,6 +43,10 @@ HEIGHT = 2560
 
 # 用于 layout 层次间传递辅助参数
 KEY_PARENT_CLICKABLE = 'key_parent_clickable'
+KEY_PARENT_FIRST_APPEAR = 'key_parent_first_appear'
+KEY_PARENT_SECOND_APPEAR = 'key_parent_second_appear'
+KEY_PARENT_THIRD_APPEAR = 'key_parent_third_appear'
+KEY_PARENT_FORTH_APPEAR = 'key_parent_forth_appear'
 
 # 控件对应的图像
 im_button = Image.open('./drawings/frameless/button.png')
@@ -153,7 +157,10 @@ def sketch_samples_generation(dir_name, rico_index):
     # 新建空白草图画布，DFS 后将绘制的草图保存到文件
     im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
 
-    args = {KEY_PARENT_CLICKABLE: False}
+    args = {KEY_PARENT_CLICKABLE: False, KEY_PARENT_FIRST_APPEAR: False, KEY_PARENT_SECOND_APPEAR: False,
+            KEY_PARENT_THIRD_APPEAR: False, KEY_PARENT_FORTH_APPEAR: False}
+
+
     tokens = []  # 用于 layout sequence
     # tokens = [str(rico_index)]  # 用于 layout sequence
     csv_rows = []  # 用于生成 csv 分析文件
@@ -223,8 +230,9 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     # TODO 在这里添加 CSV 文件每一行内容
     if ANALYSIS_MODE:
         if widget_type != Widget.Layout and widget_type != Widget.Unclassified:
-            csv_row = [widget_type, json_obj['class'], rico_index, json_obj['clickable'], args[KEY_PARENT_CLICKABLE], json_obj['focusable'], json_obj['focused'],
-                       json_obj['selected'], json_obj['draw'], json_obj['ancestors']]
+            csv_row = [widget_type, json_obj['class'], rico_index, json_obj['clickable'], args[KEY_PARENT_CLICKABLE],
+                        json_obj['ancestors'], args[KEY_PARENT_FIRST_APPEAR], args[KEY_PARENT_SECOND_APPEAR],
+                       args[KEY_PARENT_THIRD_APPEAR], args[KEY_PARENT_FORTH_APPEAR]]
             csv_rows.append(csv_row)
 
     # 传递参数：如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
@@ -317,12 +325,43 @@ def infer_widget_type(json_node, args):
                 widget_type = Widget.TextLink
                 break
 
-    # 次序3：判断未明确分类节点的任何一个祖先是否存在明确标识
+    # 次序3：判断未明确分类节点的任何一个祖先是否存在明确标识(解决祖先内的判断问题)
     if widget_type == Widget.Unclassified:
         for ancestor in json_node['ancestors']:
             widget_type = infer_widget_type_from_string(ancestor)
             if widget_type != Widget.Unclassified:
                 break
+
+        #判断android,widget官方控件在ancestors中出现的次序
+        if len(json_node['ancestors']) >= 4:
+            if json_node['ancestors'][0].startswith('android.widget'):
+                args[KEY_PARENT_FIRST_APPEAR] = True
+            if json_node['ancestors'][1].startswith('android.widget'):
+                args[KEY_PARENT_SECOND_APPEAR] = True
+            if json_node['ancestors'][2].startswith('android.widget'):
+                args[KEY_PARENT_THIRD_APPEAR] = True
+            if json_node['ancestors'][3].startswith('android.widget'):
+                args[KEY_PARENT_FORTH_APPEAR] = True
+
+        if len(json_node['ancestors']) == 3:
+            if json_node['ancestors'][0].startswith('android.widget'):
+                args[KEY_PARENT_FIRST_APPEAR] = True
+            if json_node['ancestors'][1].startswith('android.widget'):
+                args[KEY_PARENT_SECOND_APPEAR] = True
+            if json_node['ancestors'][2].startswith('android.widget'):
+                args[KEY_PARENT_THIRD_APPEAR] = True
+
+        if len(json_node['ancestors']) == 2:
+            if json_node['ancestors'][0].startswith('android.widget'):
+                args[KEY_PARENT_FIRST_APPEAR] = True
+            if json_node['ancestors'][1].startswith('android.widget'):
+                args[KEY_PARENT_SECOND_APPEAR] = True
+
+        else:
+            if json_node['ancestors'][0].startswith('android.widget'):
+                args[KEY_PARENT_FIRST_APPEAR] = True
+
+
 
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
     if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
@@ -497,7 +536,8 @@ if __name__ == '__main__':
         if ANALYSIS_MODE:
             with open(CSV_FILE_PATH, 'w', newline='') as f:
                 # TODO 在这里添加 CSV 文件页眉
-                csv.writer(f).writerow(['type', 'class', 'rico-index', 'clickable', 'parent_clickable', 'focusable', 'focused', 'selected', 'draw', 'ancestors'])
+                csv.writer(f).writerow(['type', 'class', 'rico-index', 'clickable', 'parent_clickable', 'ancestors'
+                                        , 'parent_first_appear', 'parent_second_appear', 'parent_third_appear', 'parent_forth_appear'])
 
         for case_name in os.listdir(RICO_DIR):
             if not case_name.startswith('.'):  # hidden files
