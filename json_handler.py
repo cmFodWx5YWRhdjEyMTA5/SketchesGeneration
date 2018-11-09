@@ -151,8 +151,8 @@ def sketch_samples_generation(dir_name, rico_index):
 
     # 准备裁剪控件
     screenshot_path = os.path.join(RICO_DIR, dir_name, rico_index + '.jpg')
-    im_screenshot = Image.open(screenshot_path)
-    img_sha1 = hash_file_sha1(screenshot_path)  # 生成文件的 sha1 值，暂未使用
+    im_screenshot = Image.open(screenshot_path) if CROP_WIDGET else None  # 如果不需裁剪，则不传递
+    # img_sha1 = hash_file_sha1(screenshot_path)  # 生成文件的 sha1 值，暂未使用
 
     # 新建空白草图画布，DFS 后将绘制的草图保存到文件
     im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
@@ -167,8 +167,9 @@ def sketch_samples_generation(dir_name, rico_index):
 
     dfs_draw_widget(root, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
 
-    # im_sketch.rotate(90, expand=1).save(output_img_path)
-    im_sketch.save(os.path.join(SKETCH_OUT_DIR, dir_name, rico_index + '-sketch.png'))
+    output_img_path = os.path.join(SKETCH_OUT_DIR, dir_name, rico_index + '.png')
+    im_sketch.rotate(90, expand=1).save(output_img_path)
+    # im_sketch.save(output_img_path)
 
     if TRAINING_DATA_MODE:
 
@@ -210,7 +211,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     """
     通过深度优先搜索的方式按节点绘制草图，将其直接绘制在 Pillow 对象上
     :param json_obj: 待分析的 json 节点
-    :param im_screenshot: 布局对应的截图 Pillow 对象
+    :param im_screenshot: 布局对应的截图 Pillow 对象（可能为空）
     :param im_sketch: 待绘制的草图 Pillow 对象
     :param args: 其他需要逐层传递的参数
     :param tokens: 待添加的 token 序列
@@ -478,7 +479,8 @@ if __name__ == '__main__':
     # 遍历布局文件访问节点清理结构
     if CLEAN_JSON:
         print('---------------------------------')
-        print('>>> Start cleaning json files in', RICO_DIR, '...')
+        print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
+              '>>> Start cleaning json files in', RICO_DIR, '...')
 
         # 检查输出文件夹状态
         if not os.path.exists(CLEANED_JSON_DIR):
@@ -490,7 +492,8 @@ if __name__ == '__main__':
             if not case_name.startswith('.'):  # hidden files
                 input_case_dir = os.path.join(RICO_DIR, case_name)
                 output_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
-                print(datetime.now().strftime('%m-%d %H:%M:%S'), '>>> Processing', output_case_dir, '...', end=' ')
+                print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
+                      '>>> Processing', output_case_dir, '...', end=' ')
 
                 if not os.path.exists(output_case_dir):
                     os.makedirs(output_case_dir)
@@ -499,7 +502,8 @@ if __name__ == '__main__':
                         json_handler(case_name, file.split('.')[0])
                 print('OK')
 
-        print('<<< Cleaned json files saved in ' + CLEANED_JSON_DIR)
+        print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
+              '<<< Cleaned json files saved in ' + CLEANED_JSON_DIR)
 
     # 初始化放置控件裁切的位置
     if CROP_WIDGET:
@@ -514,7 +518,8 @@ if __name__ == '__main__':
     # 根据布局信息生成草图
     if DRAW_SKETCHES:
         print('---------------------------------')
-        print('>>> Start generating sketches based on cleaned json files in', CLEANED_JSON_DIR, '...')
+        print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
+              '>>> Start generating sketches based on cleaned json files in', CLEANED_JSON_DIR, '...')
 
         # 检查输出文件夹状态
         if not os.path.exists(SKETCH_OUT_DIR):
@@ -543,7 +548,8 @@ if __name__ == '__main__':
             if not case_name.startswith('.'):  # hidden files
                 input_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
                 output_case_dir = os.path.join(SKETCH_OUT_DIR, case_name)
-                print(datetime.now().strftime('%m-%d %H:%M:%S'), '>>> Processing', output_case_dir, '...', end=' ')
+                print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
+                      '>>> Processing', output_case_dir, '...', end=' ')
 
                 if not os.path.exists(output_case_dir):
                     os.makedirs(output_case_dir)
@@ -552,7 +558,8 @@ if __name__ == '__main__':
                         sketch_samples_generation(case_name, file.split('.')[0])
                 print('OK')
 
-        print('<<< Generated sketches saved in', SKETCH_OUT_DIR)
+        print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
+              '<<< Generated sketches saved in', SKETCH_OUT_DIR)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
