@@ -3,14 +3,15 @@ import os
 import time
 from datetime import datetime
 from json_handler import Widget
+from layout_compressor import get_optimized_seq
 
 DATASET_SIZE = 72219
-TEST_PROP = 0.1
+TEST_PROP = 0.05
 VAL_PROP = 0.05
 
-MAX_NUM_TOKENS = 200
+MAX_NUM_TOKENS = 150
 
-DATA_DIR = 'E:\\sketches-test\\data'
+DATA_DIR = 'data'
 LAYOUT_SEQ_FILE_NAME = 'layout_sequence.lst'
 NEW_LAYOUT_SEQ_FILE_NAME = 'new_layout_sequence.lst'
 INDEX_LINE_MAP_FILE_NAME = 'index_map.lst'
@@ -85,29 +86,22 @@ def gen_i2l_dict():
 
 def get_invalid_line_nos(seq_file_path, new_seq_file_path):
     # 去除 sequence 中长度超出阈值的项
-    print('>>> Cleaning', seq_file_path, '...', end=' ')
+    print('>>> Cleaning', seq_file_path, end=' ')
     with open(seq_file_path, 'r') as f:
         new_lines = []
-        line_no = 0
         lines = f.readlines()
         inv_line_nos = []
-        cnt = 0
+        line_no = 0
         for line in lines:
-            while 'Layout { } ' in line:
-                line = line.replace('Layout { } ', '')
-                cnt += 1
-            while ' { Layout }' in line:
-                line = line.replace(' { Layout }', '')
-                cnt += 1
-            while 'Layout Layout' in line:
-                line = line.replace('Layout Layout', 'Layout')
-                cnt += 1
-            new_lines.append(line)
-            if len(line.split()) > MAX_NUM_TOKENS:
+            new_line = get_optimized_seq(line)
+            new_lines.append(new_line + '\n')
+            if len(new_line.split()) > MAX_NUM_TOKENS:
                 inv_line_nos.append(line_no)
             line_no += 1
+            if line_no % 3000 == 0:
+                print('.', end='')
     print('OK')
-    print('<<<', cnt, 'patterns removed.')
+    print(inv_line_nos[:20])
     print('### After cleaning,', len(inv_line_nos), 'lines have more than', MAX_NUM_TOKENS,
           'tokens. They will not be included in training samples set.')
 
