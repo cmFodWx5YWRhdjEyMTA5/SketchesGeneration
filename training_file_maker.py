@@ -10,6 +10,7 @@ TEST_PROP = 0.05
 VAL_PROP = 0.05
 
 MAX_NUM_TOKENS = 150
+MIN_NUM_TOKENS = 5
 
 DATA_DIR = 'data'
 LAYOUT_SEQ_FILE_NAME = 'layout_sequence.lst'
@@ -73,7 +74,11 @@ def gen_training_lists(i2l_dict, long_tokens_lines, train_file_path, val_file_pa
 
 
 def gen_i2l_dict():
-    # 构造 index seq_line_no 字典
+    """
+    构造 index seq_line_no 字典
+    :return: 字典 {rico_index: line_number}
+    """
+    #
     index_map = {}
     index_map_file_path = os.path.join(DATA_DIR, INDEX_LINE_MAP_FILE_NAME)
     with open(index_map_file_path, 'r') as f:
@@ -85,7 +90,12 @@ def gen_i2l_dict():
 
 
 def get_invalid_line_nos(seq_file_path, new_seq_file_path):
-    # 去除 sequence 中长度超出阈值的项
+    """
+    去除 sequence 中长度超出阈值的项、无效项，并调用优化、压缩算法后生成新 sequence
+    :param seq_file_path: 保存 sequences 的文件路径
+    :param new_seq_file_path: 生成有效 sequences 的文件路径
+    :return: 无效项的行号
+    """
     print('>>> Cleaning', seq_file_path, end=' ')
     with open(seq_file_path, 'r') as f:
         new_lines = []
@@ -95,7 +105,8 @@ def get_invalid_line_nos(seq_file_path, new_seq_file_path):
         for line in lines:
             new_line = get_optimized_seq(line)
             new_lines.append(new_line + '\n')
-            if len(new_line.split()) > MAX_NUM_TOKENS:
+            len_tokens = new_line.split()
+            if len_tokens > MAX_NUM_TOKENS or len_tokens < MIN_NUM_TOKENS:
                 inv_line_nos.append(line_no)
             line_no += 1
             if line_no % 3000 == 0:
@@ -115,16 +126,15 @@ def get_invalid_line_nos(seq_file_path, new_seq_file_path):
 
 
 if __name__ == '__main__':
-
     start_time = time.time()
 
     gen_vocab_file(os.path.join(DATA_DIR, VOCAB_FILE_NAME))
 
     i2l_dict = gen_i2l_dict()
-    long_lines = get_invalid_line_nos(os.path.join(DATA_DIR, LAYOUT_SEQ_FILE_NAME),
-                                      os.path.join(DATA_DIR, NEW_LAYOUT_SEQ_FILE_NAME))
+    invalid_lines = get_invalid_line_nos(os.path.join(DATA_DIR, LAYOUT_SEQ_FILE_NAME),
+                                         os.path.join(DATA_DIR, NEW_LAYOUT_SEQ_FILE_NAME))
 
-    gen_training_lists(i2l_dict, long_lines,
+    gen_training_lists(i2l_dict, invalid_lines,
                        os.path.join(DATA_DIR, TRAIN_FILE_NAME),
                        os.path.join(DATA_DIR, VAL_FILE_NAME),
                        os.path.join(DATA_DIR, TEST_SHUFFLE_FILE_NAME))

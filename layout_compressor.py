@@ -5,11 +5,18 @@ from anytree.exporter import DotExporter
 def print_tree(tree_node, pic_name):
     for pre, fill, node in RenderTree(tree_node):
         print("%s%s" % (pre, node.name))
+
     if pic_name is not None:
         DotExporter(tree_node).to_picture(pic_name)
 
 
 def get_layout_tree(sequence, analyze_mode):
+    """
+    解析 DFS 序列 sequence 为树，返回根节点
+    :param sequence: 待读取 DFS 序列
+    :param analyze_mode: true 为分析模式（便于打印） false 为生成模式
+    :return: DFS-tree 根节点
+    """
     tokens = sequence.split()
 
     root = Node("Root")
@@ -54,6 +61,13 @@ def dfs_compress_tree(tree_node, idx):
             child_idx += 1
 
 
+def dfs_remove_leaf_layout(tree_node):
+    if tree_node.name.startswith('Layout') and len(tree_node.children) == 0:
+        tree_node.parent = None
+    for child in tree_node.children:
+        dfs_remove_leaf_layout(child)
+
+
 def dfs_make_tokens(tree_node, new_tokens):
     new_tokens.append(tree_node.name)
     if len(tree_node.children) > 0:
@@ -74,16 +88,21 @@ def get_optimized_seq(seq):
     return " ".join(new_tokens)
 
 
-def analyze(seq, file1, file2):
-    root = get_layout_tree(seq, True)
+def analyze(sequence, file1, file2, print_mode):
+    root = get_layout_tree(sequence, analyze_mode=print_mode)
 
-    print_tree(root, file1)
-    dfs_compress_tree(root, None)
-    print_tree(root, file2)
+    if print_mode:
+        print_tree(root, file1)
+
+    dfs_compress_tree(root, idx=None)
+    dfs_remove_leaf_layout(root)
+    dfs_compress_tree(root, idx=None)
+
+    if print_mode:
+        print_tree(root, file2)
 
 
 if __name__ == '__main__':
     seq = \
-'Layout { Layout { Layout { Layout { Layout { Layout { Layout { Layout { Layout { TextView TextView Button Layout { Button Button Button } } Layout { Layout { Layout { TextLink } Layout { TextLink } } } } Layout { Layout { Layout { Layout { Layout { Button ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } } } } } Button } } Layout { } } Layout { Layout { Layout { Layout { ImageLink Layout { TextView TextView } } } Layout { TextLink } Layout { TextLink } Layout { TextLink } Layout { Unclassified } Layout { TextLink } Layout { TextLink } Layout { TextLink } Layout { TextLink } Layout { Unclassified } Layout { TextLink } } } } } } } } Unclassified Unclassified }'
-    analyze(seq, './data/layout1.png', './data/layout2.png')
-
+        'Layout { Layout { Layout { Layout { Layout { Layout { Layout { Layout { Layout { TextView TextView Button Layout { Button Button Button } } Layout { Layout { Layout { TextLink } Layout { TextLink } } } } Layout { Layout { Layout { Layout { Layout { Button ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } } } } } Button } } Layout { } } Layout { Layout { Layout { Layout { ImageLink Layout { TextView TextView } } } Layout { TextLink } Layout { TextLink } Layout { TextLink } Layout { Unclassified } Layout { TextLink } Layout { TextLink } Layout { TextLink } Layout { TextLink } Layout { Unclassified } Layout { TextLink } } } } } } } } Unclassified Unclassified }'
+    analyze(seq, './data/layout1.png', './data/layout2.png', print_mode=True)

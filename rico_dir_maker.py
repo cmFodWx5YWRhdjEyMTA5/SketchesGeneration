@@ -41,7 +41,6 @@ def move_file(src_path, dst_path):
 
 
 def make_sub_dir(src_dir, output_dir):
-
     check_make_dir(output_dir)
     print('### Checking/Making root directory to save divided directories ... OK')
 
@@ -72,7 +71,6 @@ def make_sub_dir(src_dir, output_dir):
 
 
 def merge_dirs(src_dir, dst_dir):
-
     check_make_dir(dst_dir)
     print('### Checking/Making directory to save store images ... OK')
 
