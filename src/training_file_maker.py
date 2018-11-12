@@ -1,7 +1,7 @@
 import random
 import os
 import time
-from json_cleaner import Widget
+from widget import Widget
 from layout_compressor import get_optimized_seq
 import yaml
 
@@ -111,7 +111,7 @@ def get_invalid_line_nos(seq_file_path, new_seq_file_path, max_num_tokens, min_n
 if __name__ == '__main__':
     start_time = time.time()
 
-    training_config = yaml.safe_load(open('src/config.yaml'))['training']
+    training_config = yaml.safe_load(open('config.yaml'))['training']
     data_dir = training_config['data_dir']
 
     gen_vocab_file(os.path.join(data_dir, training_config['vocab_file_name']))

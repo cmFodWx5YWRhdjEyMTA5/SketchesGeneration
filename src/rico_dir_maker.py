@@ -73,7 +73,7 @@ def merge_dirs(src_dir, dst_dir):
     for (_, subdir_names, _) in walk(src_dir):
         for subdir_name in subdir_names:
             subdir_path = os.path.join(src_dir, subdir_name)
-            print('>>> Moving files from directory', subdir_path, '...', end=' ')
+            print('>>> Copying files from directory', subdir_path, '...', end=' ')
             for (_, _, file_names) in walk(subdir_path):
                 for file_name in file_names:
                     ext = os.path.splitext(file_name)[-1].lower()
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    dirs_config = yaml.safe_load(open('src/config.yaml'))['directories']
+    dirs_config = yaml.safe_load(open('config.yaml'))['directories']
 
     if DIVIDE_OR_MERGE:
         make_sub_dir(dirs_config['rico_combined_dir'], dirs_config['rico_dirs_dir'])

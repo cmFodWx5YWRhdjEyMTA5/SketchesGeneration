@@ -1,9 +1,6 @@
 import json
 import os
 import time
-import hashlib
-import shutil
-import csv
 from datetime import datetime
 import yaml
 
@@ -63,7 +60,7 @@ def delete_unrelated_attrs(json_node):
 if __name__ == '__main__':
     start_time = time.time()
 
-    dir_config = yaml.safe_load(open('src/config.yaml'))['directories']
+    dir_config = yaml.safe_load(open('config.yaml'))['directories']
     rico_dirs_dir = dir_config['rico_dirs_dir']
     cleaned_json_dir = dir_config['cleaned_json_dir']
 
