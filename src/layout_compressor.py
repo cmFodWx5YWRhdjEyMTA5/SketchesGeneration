@@ -61,11 +61,11 @@ def dfs_compress_tree(tree_node, idx):
             child_idx += 1
 
 
-def dfs_remove_leaf_layout(tree_node):
-    if tree_node.name.startswith('Layout') and len(tree_node.children) == 0:
+def dfs_remove_invalid_leaf(tree_node):
+    if tree_node.name.startswith('Layout') and len(tree_node.children) == 0 or tree_node.name.startswith("Unclassified"):
         tree_node.parent = None
     for child in tree_node.children:
-        dfs_remove_leaf_layout(child)
+        dfs_remove_invalid_leaf(child)
 
 
 def dfs_make_tokens(tree_node, new_tokens):
@@ -94,8 +94,9 @@ def analyze(sequence, file1, file2, print_mode):
     if print_mode:
         print_tree(root, file1)
 
+    dfs_remove_invalid_leaf(root)
     dfs_compress_tree(root, idx=None)
-    dfs_remove_leaf_layout(root)
+    dfs_remove_invalid_leaf(root)
     dfs_compress_tree(root, idx=None)
 
     if print_mode:

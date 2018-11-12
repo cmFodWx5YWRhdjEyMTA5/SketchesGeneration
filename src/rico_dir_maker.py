@@ -2,12 +2,7 @@ import shutil
 import os
 import time
 from os import walk
-
-RICO_DIR = 'E:\\rico-dataset\\combined'
-DIVIDED_RICO_DIR = 'E:\\sketches-test\\rico-data'
-
-SKETCHES_DIR = 'E:\\sketches-test\\sketches'
-MERGE_DIR = 'E:\\sketches-test\\data\\processedImage'
+import yaml
 
 NUM_PER_DIR = 1000
 
@@ -67,7 +62,7 @@ def make_sub_dir(src_dir, output_dir):
                 copy_file(os.path.join(src_dir, str(i) + '.jpg'),
                           os.path.join(dir_path, str(i) + '.jpg'))
             print('OK')
-    print('<<< All rico files copied to sub directories in', DIVIDED_RICO_DIR)
+    print('<<< All rico files copied to sub directories in', output_dir)
 
 
 def merge_dirs(src_dir, dst_dir):
@@ -84,20 +79,22 @@ def merge_dirs(src_dir, dst_dir):
                     ext = os.path.splitext(file_name)[-1].lower()
                     if ext == '.png':
                         file_path = os.path.join(subdir_path, file_name)
-                        copy_file(file_path, os.path.join(MERGE_DIR, file_name))
+                        copy_file(file_path, os.path.join(dst_dir, file_name))
                         file_cnt += 1
             print('OK')
-    print('<<<', str(file_cnt), 'PNGs in sub directories copied to', MERGE_DIR)
+    print('<<<', str(file_cnt), 'PNGs in sub directories copied to', dst_dir)
 
 
 if __name__ == '__main__':
 
     start_time = time.time()
 
+    dirs_config = yaml.safe_load(open('src/config.yaml'))['directories']
+
     if DIVIDE_OR_MERGE:
-        make_sub_dir(RICO_DIR, DIVIDED_RICO_DIR)
+        make_sub_dir(dirs_config['rico_combined_dir'], dirs_config['rico_dirs_dir'])
     else:
-        merge_dirs(SKETCHES_DIR, MERGE_DIR)
+        merge_dirs(dirs_config['sketches_dirs_dir'], dirs_config['sketches_combined_dir'])
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))

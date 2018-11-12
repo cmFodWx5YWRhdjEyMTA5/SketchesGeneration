@@ -6,11 +6,8 @@ import shutil
 import csv
 from datetime import datetime
 from PIL import Image
-from enum import Enum
-
-# 程序运行参数
-CLEAN_JSON = False
-DRAW_SKETCHES = True
+from widget import Widget
+import yaml
 
 COLOR_MODE = True  # True 为色彩模式，False 为草图模式
 CROP_WIDGET = False
@@ -28,12 +25,6 @@ FILE_READ_BUF_SIZE = 65536  # 用于 File Hash 的缓存大小
 SEQ_LINE = 0  # xml_sequence 的行号
 
 # 路径
-RICO_DIR = 'E:\\sketches-test\\rico-data'
-CLEANED_JSON_DIR = 'E:\\sketches-test\\cleaned-json'
-SKETCH_OUT_DIR = 'E:\\sketches-test\\sketches'
-DATA_DIR = 'E:\\sketches-test\\data'
-LAYOUT_SEQ_FILE_NAME = 'layout_sequence.lst'
-INDEX_LINE_MAP_FILE_NAME = 'index_map.lst'
 WIDGET_CUT_OUT_PATH = './widget_cut'
 CSV_FILE_PATH = './analysis_result.csv'
 
@@ -49,13 +40,13 @@ KEY_PARENT_THIRD_APPEAR = 'key_parent_third_appear'
 KEY_PARENT_FORTH_APPEAR = 'key_parent_forth_appear'
 
 # 控件对应的图像
-im_button = Image.open('./drawings/frameless/button.png')
-im_edit_text = Image.open('./drawings/frameless/edit_text.png')
-im_image_view = Image.open('./drawings/frameless/image_view.png')
-im_text_view = Image.open('./drawings/frameless/text_view.png')
-im_image_link = Image.open('./drawings/frameless/image_link.png')
-im_text_link = Image.open('./drawings/frameless/text_link.png')
-im_checkbox = Image.open('./drawings/frameless/checkbox.png')
+im_button = Image.open('../drawings/frameless/button.png')
+im_edit_text = Image.open('../drawings/frameless/edit_text.png')
+im_image_view = Image.open('../drawings/frameless/image_view.png')
+im_text_view = Image.open('../drawings/frameless/text_view.png')
+im_image_link = Image.open('../drawings/frameless/image_link.png')
+im_text_link = Image.open('../drawings/frameless/text_link.png')
+im_checkbox = Image.open('../drawings/frameless/checkbox.png')
 # im_toolbar = Image.open('./drawings/frameless/toolbar.png')
 
 BLACK_RGB = (0, 0, 0)
@@ -71,69 +62,8 @@ GREEN_RGB = (0, 128, 0)
 NAVY_RGB = (0, 0, 128)
 
 
-class Widget(Enum):
-    Layout = 0
-    Unclassified = 1
-    Button = 2
-    TextView = 3
-    TextLink = 4
-    ImageView = 5
-    ImageLink = 6
-    EditText = 7
-    CheckBox = 8
-    # Toolbar = 9
-
-
-def json_handler(dir_name, rico_index):
-    """
-    将 RICO_DIR/dir_name 文件夹中的 json 文件清理后输出全包含可见控件的 json 文件保存到 CLEANED_JSON_DIR/dir_name 中
-    :param dir_name: RICO_DIR 中子文件夹名称
-    :param rico_index: Rico 序号
-    :return:
-    """
-    with open(os.path.join(RICO_DIR, dir_name, rico_index + '.json'), 'r') as f:
-        json_obj = json.load(f)
-
-    root = json_obj['activity']['root']
-
-    new_root = {k: root[k] for k, v in root.items() if k != 'children'}
-
-    dfs_clean_json(root, new_root)
-
-    with open(os.path.join(CLEANED_JSON_DIR, dir_name, rico_index + '.json'), 'w') as f:
-        json.dump(new_root, f, indent=2)
-
-
-def dfs_clean_json(json_obj, new_root):
-    """
-    通过深度优先搜索的方式清理 visible-to-user 值为 false 的控件
-    :param json_obj: 原始 json 节点
-    :param new_root: 已清理的 json_obj 副本
-    :return:
-    """
-    # delete_unrelated_attrs(json_obj)
-    if 'children' in json_obj:
-        new_root['children'] = []
-        for child in json_obj['children']:
-            if child is not None and child['visible-to-user']:
-                child_copy = {k: child[k] for k, v in child.items() if k != 'children'}
-                new_root['children'].append(child_copy)
-                dfs_clean_json(child, child_copy)
-
-
-def delete_unrelated_attrs(json_node):
-    """
-    确定节点 json_node 保留的 json 属性
-    :param json_node: 待处理的字典格式的 json 节点
-    :return:
-    """
-    reserved_list = ['class', 'children', 'visibility']
-    key_list = [key for key in json_node.keys() if key not in reserved_list]
-    for k in key_list:
-        del json_node[k]
-
-
-def sketch_samples_generation(dir_name, rico_index):
+def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico_index, layout_seq_file_path,
+                              index_map_file_path):
     """
     读入 CLEANED_JSON_DIR/dir_name 文件夹中的 json 布局文件，生成处理后的草图文件，保存到 SKETCH_OUT_DIR/dir_name 中
     :param dir_name: 子文件夹名称
@@ -141,7 +71,7 @@ def sketch_samples_generation(dir_name, rico_index):
     :return:
     """
     global SEQ_LINE
-    with open(os.path.join(CLEANED_JSON_DIR, dir_name, rico_index + '.json'), 'r') as f:
+    with open(os.path.join(cleaned_json_dir, rico_index + '.json'), 'r') as f:
         root = json.load(f)
 
     # 去除冗余的外层嵌套
@@ -150,7 +80,7 @@ def sketch_samples_generation(dir_name, rico_index):
         root = root['children'][0]
 
     # 准备裁剪控件
-    screenshot_path = os.path.join(RICO_DIR, dir_name, rico_index + '.jpg')
+    screenshot_path = os.path.join(rico_dir, rico_index + '.jpg')
     im_screenshot = Image.open(screenshot_path) if CROP_WIDGET else None  # 如果不需裁剪，则不传递
     # img_sha1 = hash_file_sha1(screenshot_path)  # 生成文件的 sha1 值，暂未使用
 
@@ -160,14 +90,13 @@ def sketch_samples_generation(dir_name, rico_index):
     args = {KEY_PARENT_CLICKABLE: False, KEY_PARENT_FIRST_APPEAR: False, KEY_PARENT_SECOND_APPEAR: False,
             KEY_PARENT_THIRD_APPEAR: False, KEY_PARENT_FORTH_APPEAR: False}
 
-
     tokens = []  # 用于 layout sequence
     # tokens = [str(rico_index)]  # 用于 layout sequence
     csv_rows = []  # 用于生成 csv 分析文件
 
     dfs_draw_widget(root, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
 
-    output_img_path = os.path.join(SKETCH_OUT_DIR, dir_name, rico_index + '.png')
+    output_img_path = os.path.join(sketches_out_dir, rico_index + '.png')
     im_sketch.rotate(90, expand=1).save(output_img_path)
     # im_sketch.save(output_img_path)
 
@@ -177,10 +106,10 @@ def sketch_samples_generation(dir_name, rico_index):
         if len(tokens) == 1:
             tokens.append(Widget.Layout.name)
 
-        with open(os.path.join(DATA_DIR, LAYOUT_SEQ_FILE_NAME), 'a') as f:
+        with open(layout_seq_file_path, 'a') as f:
             f.write(' '.join(tokens) + '\n')
 
-        with open(os.path.join(DATA_DIR, INDEX_LINE_MAP_FILE_NAME), 'a') as f:
+        with open(index_map_file_path, 'a') as f:
             f.write(str(rico_index) + ' ' + str(SEQ_LINE) + '\n')
 
         SEQ_LINE = SEQ_LINE + 1
@@ -232,7 +161,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     if ANALYSIS_MODE:
         if widget_type != Widget.Layout and widget_type != Widget.Unclassified:
             csv_row = [widget_type, json_obj['class'], rico_index, json_obj['clickable'], args[KEY_PARENT_CLICKABLE],
-                        json_obj['ancestors'], args[KEY_PARENT_FIRST_APPEAR], args[KEY_PARENT_SECOND_APPEAR],
+                       json_obj['ancestors'], args[KEY_PARENT_FIRST_APPEAR], args[KEY_PARENT_SECOND_APPEAR],
                        args[KEY_PARENT_THIRD_APPEAR], args[KEY_PARENT_FORTH_APPEAR]]
             csv_rows.append(csv_row)
 
@@ -333,7 +262,7 @@ def infer_widget_type(json_node, args):
             if widget_type != Widget.Unclassified:
                 break
 
-        #判断android,widget官方控件在ancestors中出现的次序
+        # 判断android,widget官方控件在ancestors中出现的次序
         if len(json_node['ancestors']) >= 4:
             if json_node['ancestors'][0].startswith('android.widget'):
                 args[KEY_PARENT_FIRST_APPEAR] = True
@@ -361,8 +290,6 @@ def infer_widget_type(json_node, args):
         else:
             if json_node['ancestors'][0].startswith('android.widget'):
                 args[KEY_PARENT_FIRST_APPEAR] = True
-
-
 
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
     if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
@@ -467,43 +394,19 @@ def draw_widget(im, widget_type, bounds):
 
 
 if __name__ == '__main__':
+
     start_time = time.time()
 
-    print('## Program configuration ##')
-    print('# CLEAN_JSON >', CLEAN_JSON)
-    print('# DRAW_SKETCHES >', DRAW_SKETCHES)
-    print('# COLOR_MODE >', COLOR_MODE)
-    print('# CUT_WIDGET >', CROP_WIDGET)
-    print('# ANALYSIS_MODE >', ANALYSIS_MODE)
+    training_config = yaml.safe_load(open('config.yaml'))['training']
+    dir_config = yaml.safe_load(open('config.yaml'))['directories']
 
-    # 遍历布局文件访问节点清理结构
-    if CLEAN_JSON:
-        print('---------------------------------')
-        print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-              '>>> Start cleaning json files in', RICO_DIR, '...')
+    data_dir = training_config['data_dir']
+    layout_seq_file_path = os.path.join(data_dir, training_config['layout_seq_file_name'])
+    index_map_file_path = os.path.join(data_dir, training_config['index_map_file_name'])
 
-        # 检查输出文件夹状态
-        if not os.path.exists(CLEANED_JSON_DIR):
-            print('### Making directories to save cleaned json files ... OK')
-            os.makedirs(CLEANED_JSON_DIR)
-        print('### Checking directories to save cleaned json files:', CLEANED_JSON_DIR, '... OK')
-
-        for case_name in os.listdir(RICO_DIR):
-            if not case_name.startswith('.'):  # hidden files
-                input_case_dir = os.path.join(RICO_DIR, case_name)
-                output_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
-                print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-                      '>>> Processing', output_case_dir, '...', end=' ')
-
-                if not os.path.exists(output_case_dir):
-                    os.makedirs(output_case_dir)
-                for file in os.listdir(input_case_dir):
-                    if file.endswith('.json'):
-                        json_handler(case_name, file.split('.')[0])
-                print('OK')
-
-        print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-              '<<< Cleaned json files saved in ' + CLEANED_JSON_DIR)
+    rico_dirs_dir = dir_config['rico_dirs_dir']
+    cleaned_json_dir = dir_config['cleaned_json_dir']
+    sketches_dir = dir_config['sketches_dir']
 
     # 初始化放置控件裁切的位置
     if CROP_WIDGET:
@@ -516,50 +419,53 @@ if __name__ == '__main__':
         print('### Checking/Making directories to save widget crops ... OK')
 
     # 根据布局信息生成草图
-    if DRAW_SKETCHES:
-        print('---------------------------------')
-        print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-              '>>> Start generating sketches based on cleaned json files in', CLEANED_JSON_DIR, '...')
+    print('---------------------------------')
+    print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
+          '>>> Start generating sketches based on cleaned json files in', cleaned_json_dir, '...')
 
-        # 检查输出文件夹状态
-        if not os.path.exists(SKETCH_OUT_DIR):
-            print('### Making directories to save generated sketches ... OK')
-            os.makedirs(SKETCH_OUT_DIR)
-        print('### Checking directories to save generated sketches:', SKETCH_OUT_DIR, '... OK')
+    # 检查输出文件夹状态
+    if not os.path.exists(sketches_dir):
+        print('### Making directories to save generated sketches ... OK')
+        os.makedirs(sketches_dir)
+    print('### Checking directories to save generated sketches:', sketches_dir, '... OK')
 
-        if TRAINING_DATA_MODE:
-            # 先创建/覆盖文件用于添加内容
-            if not os.path.exists(DATA_DIR):
-                print('### Making data directory to save training related files ... OK')
-                os.makedirs(DATA_DIR)
+    if TRAINING_DATA_MODE:
+        # 先创建/覆盖文件用于添加内容
+        if not os.path.exists(data_dir):
+            print('### Making data directory to save training related files ... OK')
+            os.makedirs(data_dir)
+        print('### Checking data directory to save training related files:', data_dir, '... OK')
 
-            print('### Checking data directory to save training related files:', DATA_DIR, '... OK')
-            open(os.path.join(DATA_DIR, LAYOUT_SEQ_FILE_NAME), 'w', newline='')
-            open(os.path.join(DATA_DIR, INDEX_LINE_MAP_FILE_NAME), 'w', newline='')
-            print('### Creating raining related files ... OK')
+        open(layout_seq_file_path, 'w', newline='')
+        open(index_map_file_path, 'w', newline='')
+        print('### Creating raining related files ... OK')
 
-        if ANALYSIS_MODE:
-            with open(CSV_FILE_PATH, 'w', newline='') as f:
-                # TODO 在这里添加 CSV 文件页眉
-                csv.writer(f).writerow(['type', 'class', 'rico-index', 'clickable', 'parent_clickable', 'ancestors'
-                                        , 'parent_first_appear', 'parent_second_appear', 'parent_third_appear', 'parent_forth_appear'])
+    if ANALYSIS_MODE:
+        with open(CSV_FILE_PATH, 'w', newline='') as f:
+            # TODO 在这里添加 CSV 文件页眉
+            csv.writer(f).writerow(['type', 'class', 'rico-index', 'clickable', 'parent_clickable', 'ancestors'
+                                       , 'parent_first_appear', 'parent_second_appear', 'parent_third_appear',
+                                    'parent_forth_appear'])
 
-        for case_name in os.listdir(RICO_DIR):
-            if not case_name.startswith('.'):  # hidden files
-                input_case_dir = os.path.join(CLEANED_JSON_DIR, case_name)
-                output_case_dir = os.path.join(SKETCH_OUT_DIR, case_name)
-                print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-                      '>>> Processing', output_case_dir, '...', end=' ')
+    for case_name in os.listdir(rico_dirs_dir):
+        if not case_name.startswith('.'):  # hidden files
+            input_case_dir = os.path.join(cleaned_json_dir, case_name)
+            output_case_dir = os.path.join(sketches_dir, case_name)
+            print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
+                  '>>> Processing', output_case_dir, '...', end=' ')
 
-                if not os.path.exists(output_case_dir):
-                    os.makedirs(output_case_dir)
-                for file in os.listdir(input_case_dir):
-                    if file.endswith('.json'):
-                        sketch_samples_generation(case_name, file.split('.')[0])
-                print('OK')
+            if not os.path.exists(output_case_dir):
+                os.makedirs(output_case_dir)
+            for file in os.listdir(input_case_dir):
+                if file.endswith('.json'):
+                    sketch_samples_generation(os.path.join(rico_dirs_dir, case_name),
+                                              os.path.join(cleaned_json_dir, case_name),
+                                              os.path.join(sketches_dir, case_name),
+                                              file.split('.')[0], layout_seq_file_path, index_map_file_path)
+            print('OK')
 
-        print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-              '<<< Generated sketches saved in', SKETCH_OUT_DIR)
+    print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
+          '<<< Generated sketches saved in', sketches_dir)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
