@@ -7,7 +7,7 @@ import csv
 from datetime import datetime
 from PIL import Image
 from widget import Widget
-import yaml
+import config
 
 COLOR_MODE = True  # True 为色彩模式，False 为草图模式
 CROP_WIDGET = False
@@ -25,8 +25,8 @@ FILE_READ_BUF_SIZE = 65536  # 用于 File Hash 的缓存大小
 SEQ_LINE = 0  # xml_sequence 的行号
 
 # 路径
-WIDGET_CUT_OUT_PATH = './widget_cut'
-CSV_FILE_PATH = './analysis_result.csv'
+WIDGET_CUT_OUT_PATH = config.SKETCHES_CONFIG['widget_cut_dir']
+CSV_FILE_PATH = config.SKETCHES_CONFIG['csv_file_path']
 
 # Layout 默认长宽
 WIDTH = 1440
@@ -65,9 +65,13 @@ NAVY_RGB = (0, 0, 128)
 def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico_index, layout_seq_file_path,
                               index_map_file_path):
     """
-    读入 CLEANED_JSON_DIR/dir_name 文件夹中的 json 布局文件，生成处理后的草图文件，保存到 SKETCH_OUT_DIR/dir_name 中
-    :param dir_name: 子文件夹名称
+    读入 cleaned_json_dir 文件夹中的 json 布局文件，生成处理后的草图文件，保存到 sketches_out_dir 中
+    :param rico_dir: 用于裁剪控件模式
+    :param cleaned_json_dir: 清洗后的 json 文件夹路径
+    :param sketches_out_dir: 输出的草图存放路径
     :param rico_index: Rico 序号
+    :param layout_seq_file_path: layout sequence 文件路径
+    :param index_map_file_path: index-line_number 字典文件路径
     :return:
     """
     global SEQ_LINE
@@ -80,38 +84,32 @@ def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico
         root = root['children'][0]
 
     # 准备裁剪控件
-    screenshot_path = os.path.join(rico_dir, rico_index + '.jpg')
-    im_screenshot = Image.open(screenshot_path) if CROP_WIDGET else None  # 如果不需裁剪，则不传递
+    im_screenshot = Image.open(os.path.join(rico_dir, rico_index + '.jpg')) if CROP_WIDGET else None  # 如果不需裁剪，则不传递
     # img_sha1 = hash_file_sha1(screenshot_path)  # 生成文件的 sha1 值，暂未使用
 
     # 新建空白草图画布，DFS 后将绘制的草图保存到文件
     im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
 
-    args = {KEY_PARENT_CLICKABLE: False, KEY_PARENT_FIRST_APPEAR: False, KEY_PARENT_SECOND_APPEAR: False,
-            KEY_PARENT_THIRD_APPEAR: False, KEY_PARENT_FORTH_APPEAR: False}
+    # args = {KEY_PARENT_CLICKABLE: False, KEY_PARENT_FIRST_APPEAR: False, KEY_PARENT_SECOND_APPEAR: False,
+    #         KEY_PARENT_THIRD_APPEAR: False, KEY_PARENT_FORTH_APPEAR: False}
+    args = {KEY_PARENT_CLICKABLE: False}
+    parent_clickable_stack = [False]  # 用于逐层存放 parent-clickable 属性
 
-    tokens = []  # 用于 layout sequence
-    # tokens = [str(rico_index)]  # 用于 layout sequence
+    tokens = []
+    # tokens = [str(rico_index)]
     csv_rows = []  # 用于生成 csv 分析文件
 
-    dfs_draw_widget(root, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
+    dfs_draw_widget(root, im_screenshot, im_sketch, args, parent_clickable_stack, tokens, rico_index, csv_rows)
 
     output_img_path = os.path.join(sketches_out_dir, rico_index + '.png')
     im_sketch.rotate(90, expand=1).save(output_img_path)
     # im_sketch.save(output_img_path)
 
     if TRAINING_DATA_MODE:
-
-        # FIXME 处理空白画布情况
-        if len(tokens) == 1:
-            tokens.append(Widget.Layout.name)
-
         with open(layout_seq_file_path, 'a') as f:
             f.write(' '.join(tokens) + '\n')
-
         with open(index_map_file_path, 'a') as f:
             f.write(str(rico_index) + ' ' + str(SEQ_LINE) + '\n')
-
         SEQ_LINE = SEQ_LINE + 1
 
     # 将控件属性保存到文件中
@@ -136,13 +134,14 @@ def hash_file_sha1(file_path):
     return sha1.hexdigest()
 
 
-def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index, csv_rows):
+def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_stack, tokens, rico_index, csv_rows):
     """
     通过深度优先搜索的方式按节点绘制草图，将其直接绘制在 Pillow 对象上
     :param json_obj: 待分析的 json 节点
     :param im_screenshot: 布局对应的截图 Pillow 对象（可能为空）
     :param im_sketch: 待绘制的草图 Pillow 对象
     :param args: 其他需要逐层传递的参数
+    :param parent_clickable_stack: 栈保存 layout 的 clickable 属性
     :param tokens: 待添加的 token 序列
     :param rico_index: Rico 序号
     :param csv_rows: 用于将控件属性信息记录到 csv 分析文件
@@ -160,25 +159,32 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     # TODO 在这里添加 CSV 文件每一行内容
     if ANALYSIS_MODE:
         if widget_type != Widget.Layout and widget_type != Widget.Unclassified:
+
+            # TODO 温特，只在这里判断控件 class、祖先 class 是否满足 android.widget 的格式，而不需传递 args
+            if 'android.widget' in json_obj['class']:
+                pass
+            else:
+                level = 1  # level 标志了第一次出现 ancestor 的位置
+                for ancestor in json_obj['ancestors']:
+                    if 'android.widget' in ancestor:
+                        break
+                    level += 1
+                if level == len(json_obj['ancestor']) + 1:
+                    # ancestors 中未出现
+                    pass
+
             csv_row = [widget_type, json_obj['class'], rico_index, json_obj['clickable'], args[KEY_PARENT_CLICKABLE],
-                       json_obj['ancestors'], args[KEY_PARENT_FIRST_APPEAR], args[KEY_PARENT_SECOND_APPEAR],
-                       args[KEY_PARENT_THIRD_APPEAR], args[KEY_PARENT_FORTH_APPEAR]]
+                       json_obj['ancestors']]
             csv_rows.append(csv_row)
 
     # 传递参数：如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
     if widget_type == Widget.Layout and json_obj['clickable']:
+        parent_clickable_stack.append(True)
         args[KEY_PARENT_CLICKABLE] = True
 
     # 将 Layout DFS-sequence 保存到文件中
-    # FIXME 有 children 节点的 Unclassified 控件修改为 Layout；若没有，不输出。
-    if 'children' in json_obj:
-        tokens.append(Widget.Layout.name)
-    else:
-        tokens.append(widget_type.name)
-    # if widget_type != Widget.Unclassified:
-    #     tokens.append(widget_type.name)
-    # elif 'children' in json_obj:
-    #     tokens.append(Widget.Layout.name)
+    # FIXME 有 children 节点的 Unclassified 控件修改为 Layout。
+    tokens.append(Widget.Layout.name if 'children' in json_obj else widget_type.name)
 
     # DFS 绘制控件
     if widget_type != Widget.Layout:
@@ -194,11 +200,14 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, tokens, rico_index
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
         tokens.append('{')
         for i in range(len(json_obj['children'])):
-            dfs_draw_widget(json_obj['children'][i], im_screenshot, im_sketch, args, tokens, rico_index, csv_rows)
+            dfs_draw_widget(json_obj['children'][i], im_screenshot, im_sketch, args, parent_clickable_stack, tokens,
+                            rico_index, csv_rows)
         tokens.append('}')
 
     # 要在这里清除传递的参数
-    args[KEY_PARENT_CLICKABLE] = False
+    if widget_type == Widget.Layout and json_obj['clickable']:
+        parent_clickable_stack.pop()
+        args[KEY_PARENT_CLICKABLE] = parent_clickable_stack[-1]
 
 
 def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
@@ -219,12 +228,12 @@ def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
                       int(json_obj['bounds'][2] / WIDTH * im_screenshot.size[0]),
                       int(json_obj['bounds'][3] / HEIGHT * im_screenshot.size[1]))
         class_tokens = json_obj['class'].rsplit('.', 1)
-        outfile_name = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name,
+        outfile_path = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name,
                                     ''.join([rico_index, '-',
                                              class_tokens[1] if len(class_tokens) > 1 else json_obj['class'], '-',
                                              node_sha1.hexdigest()[0:6], '.jpg']))
 
-        im_screenshot.crop(jpg_bounds).save(outfile_name)
+        im_screenshot.crop(jpg_bounds).save(outfile_path)
 
 
 def infer_widget_type(json_node, args):
@@ -262,34 +271,33 @@ def infer_widget_type(json_node, args):
             if widget_type != Widget.Unclassified:
                 break
 
-        # 判断android,widget官方控件在ancestors中出现的次序
-        if len(json_node['ancestors']) >= 4:
-            if json_node['ancestors'][0].startswith('android.widget'):
-                args[KEY_PARENT_FIRST_APPEAR] = True
-            if json_node['ancestors'][1].startswith('android.widget'):
-                args[KEY_PARENT_SECOND_APPEAR] = True
-            if json_node['ancestors'][2].startswith('android.widget'):
-                args[KEY_PARENT_THIRD_APPEAR] = True
-            if json_node['ancestors'][3].startswith('android.widget'):
-                args[KEY_PARENT_FORTH_APPEAR] = True
-
-        if len(json_node['ancestors']) == 3:
-            if json_node['ancestors'][0].startswith('android.widget'):
-                args[KEY_PARENT_FIRST_APPEAR] = True
-            if json_node['ancestors'][1].startswith('android.widget'):
-                args[KEY_PARENT_SECOND_APPEAR] = True
-            if json_node['ancestors'][2].startswith('android.widget'):
-                args[KEY_PARENT_THIRD_APPEAR] = True
-
-        if len(json_node['ancestors']) == 2:
-            if json_node['ancestors'][0].startswith('android.widget'):
-                args[KEY_PARENT_FIRST_APPEAR] = True
-            if json_node['ancestors'][1].startswith('android.widget'):
-                args[KEY_PARENT_SECOND_APPEAR] = True
-
-        else:
-            if json_node['ancestors'][0].startswith('android.widget'):
-                args[KEY_PARENT_FIRST_APPEAR] = True
+        # # 判断android,widget官方控件在ancestors中出现的次序
+        # if len(json_node['ancestors']) >= 4:
+        #     if json_node['ancestors'][0].startswith('android.widget'):
+        #         args[KEY_PARENT_FIRST_APPEAR] = True
+        #     if json_node['ancestors'][1].startswith('android.widget'):
+        #         args[KEY_PARENT_SECOND_APPEAR] = True
+        #     if json_node['ancestors'][2].startswith('android.widget'):
+        #         args[KEY_PARENT_THIRD_APPEAR] = True
+        #     if json_node['ancestors'][3].startswith('android.widget'):
+        #         args[KEY_PARENT_FORTH_APPEAR] = True
+        #
+        # if len(json_node['ancestors']) == 3:
+        #     if json_node['ancestors'][0].startswith('android.widget'):
+        #         args[KEY_PARENT_FIRST_APPEAR] = True
+        #     if json_node['ancestors'][1].startswith('android.widget'):
+        #         args[KEY_PARENT_SECOND_APPEAR] = True
+        #     if json_node['ancestors'][2].startswith('android.widget'):
+        #         args[KEY_PARENT_THIRD_APPEAR] = True
+        #
+        # if len(json_node['ancestors']) == 2:
+        #     if json_node['ancestors'][0].startswith('android.widget'):
+        #         args[KEY_PARENT_FIRST_APPEAR] = True
+        #     if json_node['ancestors'][1].startswith('android.widget'):
+        #         args[KEY_PARENT_SECOND_APPEAR] = True
+        # else:
+        #     if json_node['ancestors'][0].startswith('android.widget'):
+        #         args[KEY_PARENT_FIRST_APPEAR] = True
 
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
     if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
@@ -313,8 +321,6 @@ def infer_widget_type_from_string(class_name):
     # 判断顺序对结果有影响
     if 'Layout' in class_name or 'ListView' in class_name or 'RecyclerView' in class_name:
         return Widget.Layout
-    # if 'Toolbar' in class_name:
-    #     return Widget.Toolbar
     if 'CheckBox' in class_name:
         return Widget.CheckBox
     if 'EditText' in class_name:
@@ -397,8 +403,8 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    training_config = yaml.safe_load(open('config.yaml'))['training']
-    dir_config = yaml.safe_load(open('config.yaml'))['directories']
+    training_config = config.TRAINING_CONFIG
+    dir_config = config.DIRECTORY_CONFIG
 
     data_dir = training_config['data_dir']
     layout_seq_file_path = os.path.join(data_dir, training_config['layout_seq_file_name'])
@@ -406,7 +412,7 @@ if __name__ == '__main__':
 
     rico_dirs_dir = dir_config['rico_dirs_dir']
     cleaned_json_dir = dir_config['cleaned_json_dir']
-    sketches_dir = dir_config['sketches_dir']
+    sketches_dir = dir_config['sketches_dirs_dir']
 
     # 初始化放置控件裁切的位置
     if CROP_WIDGET:
@@ -419,7 +425,6 @@ if __name__ == '__main__':
         print('### Checking/Making directories to save widget crops ... OK')
 
     # 根据布局信息生成草图
-    print('---------------------------------')
     print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
           '>>> Start generating sketches based on cleaned json files in', cleaned_json_dir, '...')
 

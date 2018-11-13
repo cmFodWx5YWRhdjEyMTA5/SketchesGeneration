@@ -2,9 +2,7 @@ import json
 import os
 import time
 from datetime import datetime
-import yaml
-
-WIDGET_CUT_OUT_PATH = './widget_cut'
+import config
 
 
 def json_handler(subdir_path, cleaned_subdir_path, rico_index):
@@ -60,7 +58,7 @@ def delete_unrelated_attrs(json_node):
 if __name__ == '__main__':
     start_time = time.time()
 
-    dir_config = yaml.safe_load(open('config.yaml'))['directories']
+    dir_config = config.DIRECTORY_CONFIG
     rico_dirs_dir = dir_config['rico_dirs_dir']
     cleaned_json_dir = dir_config['cleaned_json_dir']
 

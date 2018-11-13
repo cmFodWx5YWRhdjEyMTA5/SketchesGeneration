@@ -2,7 +2,7 @@ import shutil
 import os
 import time
 from os import walk
-import yaml
+import config
 
 NUM_PER_DIR = 1000
 
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    dirs_config = yaml.safe_load(open('config.yaml'))['directories']
+    dirs_config = config.DIRECTORY_CONFIG
 
     if DIVIDE_OR_MERGE:
         make_sub_dir(dirs_config['rico_combined_dir'], dirs_config['rico_dirs_dir'])

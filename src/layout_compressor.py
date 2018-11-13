@@ -79,8 +79,13 @@ def dfs_make_tokens(tree_node, new_tokens):
 
 def get_optimized_seq(seq):
     root = get_layout_tree(seq, False)
-    dfs_compress_tree(root, None)
 
+    dfs_remove_invalid_leaf(root)
+    dfs_compress_tree(root, idx=None)
+    dfs_remove_invalid_leaf(root)
+    dfs_compress_tree(root, idx=None)
+
+    # 为压缩后的 layout-tree 生成序列
     new_tokens = []
     for child in root.children:
         dfs_make_tokens(child, new_tokens)
@@ -104,6 +109,5 @@ def analyze(sequence, file1, file2, print_mode):
 
 
 if __name__ == '__main__':
-    seq = \
-        'Layout { Layout { Layout { Layout { Layout { Layout { Layout { Layout { Layout { TextView TextView Button Layout { Button Button Button } } Layout { Layout { Layout { TextLink } Layout { TextLink } } } } Layout { Layout { Layout { Layout { Layout { Button ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView } } } } Layout { Layout { ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } } } } } Button } } Layout { } } Layout { Layout { Layout { Layout { ImageLink Layout { TextView TextView } } } Layout { TextLink } Layout { TextLink } Layout { TextLink } Layout { Unclassified } Layout { TextLink } Layout { TextLink } Layout { TextLink } Layout { TextLink } Layout { Unclassified } Layout { TextLink } } } } } } } } Unclassified Unclassified }'
+    seq = 'Layout { Layout { Layout { Layout { Layout { Layout { Layout { Layout { Button Layout { TextView } Layout { TextLink } } } } } Layout { TextLink Layout { Layout { TextLink TextLink } TextLink } TextView Layout { Layout { TextLink TextLink } TextLink } } Layout { TextLink } } } } Unclassified Unclassified }'
     analyze(seq, './data/layout1.png', './data/layout2.png', print_mode=True)
