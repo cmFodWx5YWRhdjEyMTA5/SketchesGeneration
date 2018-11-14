@@ -109,5 +109,5 @@ def analyze(sequence, file1, file2, print_mode):
 
 
 if __name__ == '__main__':
-    seq = 'Layout { Layout { Layout { Layout { Layout { Layout { Layout { Layout { Button Layout { TextView } Layout { TextLink } } } } } Layout { TextLink Layout { Layout { TextLink TextLink } TextLink } TextView Layout { Layout { TextLink TextLink } TextLink } } Layout { TextLink } } } } Unclassified Unclassified }'
-    analyze(seq, './data/layout1.png', './data/layout2.png', print_mode=True)
+    seq = 'Layout { Layout { Layout { Button Button } Button TextLink } Layout { Layout { TextLink TextLink } Layout { Layout { Layout { Layout { TextView TextLink } Layout { TextLink TextLink TextLink TextLink TextLink } } Layout { Layout { TextView TextLink } Layout { TextLink TextLink TextLink TextLink TextLink } } Layout { Layout { TextView TextLink } Layout { TextLink TextLink TextLink TextLink TextLink } } } Layout { TextView TextLink } Layout { TextLink TextLink } } } }'
+    analyze(seq, '../layout1.png', '../layout2.png', print_mode=True)

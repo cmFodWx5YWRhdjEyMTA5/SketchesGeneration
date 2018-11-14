@@ -40,13 +40,13 @@ KEY_PARENT_THIRD_APPEAR = 'key_parent_third_appear'
 KEY_PARENT_FORTH_APPEAR = 'key_parent_forth_appear'
 
 # 控件对应的图像
-im_button = Image.open('../drawings/frameless/button.png')
-im_edit_text = Image.open('../drawings/frameless/edit_text.png')
-im_image_view = Image.open('../drawings/frameless/image_view.png')
-im_text_view = Image.open('../drawings/frameless/text_view.png')
-im_image_link = Image.open('../drawings/frameless/image_link.png')
-im_text_link = Image.open('../drawings/frameless/text_link.png')
-im_checkbox = Image.open('../drawings/frameless/checkbox.png')
+im_button = Image.open('../data-sketches/drawings/frameless/button.png')
+im_edit_text = Image.open('../data-sketches/drawings/frameless/edit_text.png')
+im_image_view = Image.open('../data-sketches/drawings/frameless/image_view.png')
+im_text_view = Image.open('../data-sketches/drawings/frameless/text_view.png')
+im_image_link = Image.open('../data-sketches/drawings/frameless/image_link.png')
+im_text_link = Image.open('../data-sketches/drawings/frameless/text_link.png')
+im_checkbox = Image.open('../data-sketches/drawings/frameless/checkbox.png')
 # im_toolbar = Image.open('./drawings/frameless/toolbar.png')
 
 BLACK_RGB = (0, 0, 0)
@@ -102,8 +102,8 @@ def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico
     dfs_draw_widget(root, im_screenshot, im_sketch, args, parent_clickable_stack, tokens, rico_index, csv_rows)
 
     output_img_path = os.path.join(sketches_out_dir, rico_index + '.png')
-    im_sketch.rotate(90, expand=1).save(output_img_path)
-    # im_sketch.save(output_img_path)
+    # im_sketch.rotate(90, expand=1).save(output_img_path)
+    im_sketch.save(output_img_path)
 
     if TRAINING_DATA_MODE:
         with open(layout_seq_file_path, 'a') as f:
@@ -178,9 +178,10 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
             csv_rows.append(csv_row)
 
     # 传递参数：如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
-    if widget_type == Widget.Layout and json_obj['clickable']:
-        parent_clickable_stack.append(True)
-        args[KEY_PARENT_CLICKABLE] = True
+    if widget_type == Widget.Layout:
+        # TODO 确定是否需要"隔层"传递 clickable 属性
+        parent_clickable_stack.append(json_obj['clickable'] or args[KEY_PARENT_CLICKABLE])
+        args[KEY_PARENT_CLICKABLE] = parent_clickable_stack[-1]
 
     # 将 Layout DFS-sequence 保存到文件中
     # FIXME 有 children 节点的 Unclassified 控件修改为 Layout。
@@ -197,6 +198,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
             crop_widget(json_obj, im_screenshot, rico_index, widget_type)
 
     # 当json_obj无children属性时，不再递归执行；确定其他不再需要递归访问的情形
+    # FIXME 确定正确性
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
         tokens.append('{')
         for i in range(len(json_obj['children'])):
@@ -205,9 +207,8 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
         tokens.append('}')
 
     # 要在这里清除传递的参数
-    if widget_type == Widget.Layout and json_obj['clickable']:
-        parent_clickable_stack.pop()
-        args[KEY_PARENT_CLICKABLE] = parent_clickable_stack[-1]
+    if widget_type == Widget.Layout:
+        args[KEY_PARENT_CLICKABLE] = parent_clickable_stack.pop()
 
 
 def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
@@ -228,12 +229,18 @@ def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
                       int(json_obj['bounds'][2] / WIDTH * im_screenshot.size[0]),
                       int(json_obj['bounds'][3] / HEIGHT * im_screenshot.size[1]))
         class_tokens = json_obj['class'].rsplit('.', 1)
-        outfile_path = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name,
-                                    ''.join([rico_index, '-',
-                                             class_tokens[1] if len(class_tokens) > 1 else json_obj['class'], '-',
-                                             node_sha1.hexdigest()[0:6], '.jpg']))
+        file_name = [rico_index, '-', class_tokens[1] if len(class_tokens) > 1 else json_obj['class'],
+                     '-', node_sha1.hexdigest()[0:7]]
+        if 'resource-id' in json_obj:
+            file_name.append('-')
+            file_name.append(json_obj['resource-id'].split('/')[-1])
+        file_name.append('.jpg')
 
+        outfile_path = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name, ''.join(file_name))
         im_screenshot.crop(jpg_bounds).save(outfile_path)
+
+        # if not json_obj['visible-to-user']:
+        #     im_screenshot.crop(jpg_bounds).save(outfile_path)
 
 
 def infer_widget_type(json_node, args):
@@ -251,6 +258,8 @@ def infer_widget_type(json_node, args):
     # 次序2：其他特殊情况
     if 'NavItemView' in json_node['class'] or 'ToolBarItemView' in json_node['class'] or 'DrawerToolBarItemView' in \
             json_node['class']:
+        return Widget.Button
+    if 'children' not in json_node and 'resource-id' in json_node and ('btn' in json_node['resource-id'] or 'button' in json_node['resource-id']):
         return Widget.Button
 
     # 次序2：判断class_name是否存在明确的控件类型标识
@@ -271,65 +280,42 @@ def infer_widget_type(json_node, args):
             if widget_type != Widget.Unclassified:
                 break
 
-        # # 判断android,widget官方控件在ancestors中出现的次序
-        # if len(json_node['ancestors']) >= 4:
-        #     if json_node['ancestors'][0].startswith('android.widget'):
-        #         args[KEY_PARENT_FIRST_APPEAR] = True
-        #     if json_node['ancestors'][1].startswith('android.widget'):
-        #         args[KEY_PARENT_SECOND_APPEAR] = True
-        #     if json_node['ancestors'][2].startswith('android.widget'):
-        #         args[KEY_PARENT_THIRD_APPEAR] = True
-        #     if json_node['ancestors'][3].startswith('android.widget'):
-        #         args[KEY_PARENT_FORTH_APPEAR] = True
-        #
-        # if len(json_node['ancestors']) == 3:
-        #     if json_node['ancestors'][0].startswith('android.widget'):
-        #         args[KEY_PARENT_FIRST_APPEAR] = True
-        #     if json_node['ancestors'][1].startswith('android.widget'):
-        #         args[KEY_PARENT_SECOND_APPEAR] = True
-        #     if json_node['ancestors'][2].startswith('android.widget'):
-        #         args[KEY_PARENT_THIRD_APPEAR] = True
-        #
-        # if len(json_node['ancestors']) == 2:
-        #     if json_node['ancestors'][0].startswith('android.widget'):
-        #         args[KEY_PARENT_FIRST_APPEAR] = True
-        #     if json_node['ancestors'][1].startswith('android.widget'):
-        #         args[KEY_PARENT_SECOND_APPEAR] = True
-        # else:
-        #     if json_node['ancestors'][0].startswith('android.widget'):
-        #         args[KEY_PARENT_FIRST_APPEAR] = True
-
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
-    if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+    # FIXME 这里做了较多修改：不再判断 TextLink 的 ancestor-clickable；取消 ImageLink；需要确定面积阈值
+    # if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+    if widget_type == Widget.TextView and (json_node['clickable']):
         widget_type = Widget.TextLink
-    elif widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+
+    if widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
         w = json_node['bounds'][2] - json_node['bounds'][0]
         h = json_node['bounds'][3] - json_node['bounds'][1]
         # 将面积较大的图转换成 ImageLink
-        # FIXME 确定 ImageLink 面积阈值
-        widget_type = Widget.ImageLink if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
+        # widget_type = Widget.ImageLink if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
+        if w < 200 and h < 200:
+            widget_type = Widget.Button
 
     return widget_type
 
 
-def infer_widget_type_from_string(class_name):
+def infer_widget_type_from_string(str):
     """
     当控件类型名称明确地包括于字符串中时，直接确定该控件类型；否则返回 Unclassified
-    :param class_name: 待检查字符串
+    :param str: 待检查字符串
     :return: 控件类型
     """
     # 判断顺序对结果有影响
-    if 'Layout' in class_name or 'ListView' in class_name or 'RecyclerView' in class_name:
+    str_lower = str.lower()
+    if 'layout' in str_lower or 'listview' in str_lower or 'recyclerview' in str_lower:
         return Widget.Layout
-    if 'CheckBox' in class_name:
+    if 'checkbox' in str_lower:
         return Widget.CheckBox
-    if 'EditText' in class_name:
+    if 'edittext' in str_lower or 'autocomplete' in str_lower:
         return Widget.EditText
-    if 'Image' in class_name:
+    if 'image' in str_lower:
         return Widget.ImageView
-    if 'Button' in class_name or 'BadgableGlyphView' in class_name:
+    if 'button' in str_lower or 'glyph' in str_lower:
         return Widget.Button
-    if 'TextView' in class_name:
+    if 'textview' in str_lower:
         return Widget.TextView
 
     return Widget.Unclassified
@@ -422,11 +408,9 @@ if __name__ == '__main__':
                 if os.path.exists(dir_path):
                     shutil.rmtree(dir_path)
                 os.makedirs(dir_path)
-        print('### Checking/Making directories to save widget crops ... OK')
+        print('### Directories to save widget crops:', WIDGET_CUT_OUT_PATH)
 
-    # 根据布局信息生成草图
-    print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-          '>>> Start generating sketches based on cleaned json files in', cleaned_json_dir, '...')
+    print('### Cleaned json files location:', cleaned_json_dir)
 
     # 检查输出文件夹状态
     if not os.path.exists(sketches_dir):
@@ -471,6 +455,9 @@ if __name__ == '__main__':
 
     print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
           '<<< Generated sketches saved in', sketches_dir)
+
+    if CROP_WIDGET:
+        print('<<< Cropped widget images saved in', WIDGET_CUT_OUT_PATH)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
