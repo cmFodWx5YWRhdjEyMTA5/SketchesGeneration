@@ -219,6 +219,9 @@ def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
     :param rico_index: Rico 序号
     :param widget_type: 控件的推断类型
     """
+    if widget_type == Widget.Unclassified and 'children' in json_obj:
+        return
+
     w = json_obj['bounds'][2] - json_obj['bounds'][0]
     h = json_obj['bounds'][3] - json_obj['bounds'][1]
 
@@ -283,28 +286,28 @@ def infer_widget_type(json_node, args):
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
     # FIXME 这里做了较多修改：不再判断 TextLink 的 ancestor-clickable；取消 ImageLink；需要确定面积阈值
     # if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
-    if widget_type == Widget.TextView and (json_node['clickable']):
+    if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
         widget_type = Widget.TextLink
 
     if widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
         w = json_node['bounds'][2] - json_node['bounds'][0]
         h = json_node['bounds'][3] - json_node['bounds'][1]
         # 将面积较大的图转换成 ImageLink
-        # widget_type = Widget.ImageLink if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
-        if w < 200 and h < 200:
-            widget_type = Widget.Button
+        widget_type = Widget.ImageLink if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
+        # if w < 200 and h < 200:
+        #     widget_type = Widget.Button
 
     return widget_type
 
 
-def infer_widget_type_from_string(str):
+def infer_widget_type_from_string(string):
     """
     当控件类型名称明确地包括于字符串中时，直接确定该控件类型；否则返回 Unclassified
-    :param str: 待检查字符串
+    :param string: 待检查字符串
     :return: 控件类型
     """
     # 判断顺序对结果有影响
-    str_lower = str.lower()
+    str_lower = string.lower()
     if 'layout' in str_lower or 'listview' in str_lower or 'recyclerview' in str_lower:
         return Widget.Layout
     if 'checkbox' in str_lower:
