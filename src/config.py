@@ -31,6 +31,9 @@ DIRECTORY_CONFIG = {
 }
 
 SKETCHES_CONFIG = {
-    'widget_cut_dir': '/Users/gexiaofei/PycharmProjects/json_handler/widget-cut',
-    'csv_file_path': 'analysis_result.csv'
+    'widget_cut_dir': '..\\widget-cut',
+    'csv_file_path': '..\\analysis_result.csv',
+
+    'sketch-width': 200,
+    'sketch-height': 300,
 }
