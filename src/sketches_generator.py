@@ -9,35 +9,32 @@ from PIL import Image
 from widget import Widget
 import config
 
-COLOR_MODE = True  # True 为色彩模式，False 为草图模式
-CROP_WIDGET = False
+IMG_MODE = 'sketch'  # color 为色彩模式，sketch 为草图模式
 TRAINING_DATA_MODE = True  # 构造训练集支持文件
+CROP_WIDGET = False
 ANALYSIS_MODE = False  # 存储属性分析文件
-
-# 画布长宽
-SKETCH_WIDTH = 576
-SKETCH_HEIGHT = 1024
-
-WIDGET_FRAME_MARGIN = 1
-WIDGET_INNER_MARGIN = 2
-
-FILE_READ_BUF_SIZE = 65536  # 用于 File Hash 的缓存大小
-SEQ_LINE = 0  # xml_sequence 的行号
 
 # 路径
 WIDGET_CUT_OUT_PATH = config.SKETCHES_CONFIG['widget_cut_dir']
 CSV_FILE_PATH = config.SKETCHES_CONFIG['csv_file_path']
 
+# 画布长宽
+SKETCH_WIDTH = config.SKETCHES_CONFIG['sketch-width']
+SKETCH_HEIGHT = config.SKETCHES_CONFIG['sketch-height']
+
+WIDGET_FRAME_MARGIN = 1
+WIDGET_INNER_MARGIN = 2
+
 # Layout 默认长宽
 WIDTH = 1440
 HEIGHT = 2560
 
+FILE_READ_BUF_SIZE = 65536  # 用于 File Hash 的缓存大小
+
+SEQ_LINE = 0  # xml_sequence 的行号
+
 # 用于 layout 层次间传递辅助参数
 KEY_PARENT_CLICKABLE = 'key_parent_clickable'
-KEY_PARENT_FIRST_APPEAR = 'key_parent_first_appear'
-KEY_PARENT_SECOND_APPEAR = 'key_parent_second_appear'
-KEY_PARENT_THIRD_APPEAR = 'key_parent_third_appear'
-KEY_PARENT_FORTH_APPEAR = 'key_parent_forth_appear'
 
 # 控件对应的图像
 im_button = Image.open('../data-sketches/drawings/frameless/button.png')
@@ -47,7 +44,6 @@ im_text_view = Image.open('../data-sketches/drawings/frameless/text_view.png')
 im_image_link = Image.open('../data-sketches/drawings/frameless/image_link.png')
 im_text_link = Image.open('../data-sketches/drawings/frameless/text_link.png')
 im_checkbox = Image.open('../data-sketches/drawings/frameless/checkbox.png')
-# im_toolbar = Image.open('./drawings/frameless/toolbar.png')
 
 BLACK_RGB = (0, 0, 0)
 GRAY_RGB = (128, 128, 128)
@@ -102,8 +98,8 @@ def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico
     dfs_draw_widget(root, im_screenshot, im_sketch, args, parent_clickable_stack, tokens, rico_index, csv_rows)
 
     output_img_path = os.path.join(sketches_out_dir, rico_index + '.png')
-    # im_sketch.rotate(90, expand=1).save(output_img_path)
-    im_sketch.save(output_img_path)
+    im_sketch.rotate(90, expand=1).save(output_img_path)
+    # im_sketch.save(output_img_path)
 
     if TRAINING_DATA_MODE:
         with open(layout_seq_file_path, 'a') as f:
@@ -262,7 +258,8 @@ def infer_widget_type(json_node, args):
     if 'NavItemView' in json_node['class'] or 'ToolBarItemView' in json_node['class'] or 'DrawerToolBarItemView' in \
             json_node['class']:
         return Widget.Button
-    if 'children' not in json_node and 'resource-id' in json_node and ('btn' in json_node['resource-id'] or 'button' in json_node['resource-id']):
+    if 'children' not in json_node and 'resource-id' in json_node and (
+            'btn' in json_node['resource-id'] or 'button' in json_node['resource-id']):
         return Widget.Button
 
     # 次序2：判断class_name是否存在明确的控件类型标识
@@ -349,7 +346,7 @@ def draw_widget(im, widget_type, bounds):
     if w <= 1 or h <= 1:
         return
 
-    if COLOR_MODE:
+    if IMG_MODE == 'color':
         if widget_type == Widget.Button:
             im.paste(im=RED_RGB, box=bounds_inner)
         elif widget_type == Widget.TextView:
@@ -364,9 +361,8 @@ def draw_widget(im, widget_type, bounds):
             im.paste(im=CYAN_RGB, box=bounds_inner)
         elif widget_type == Widget.CheckBox:
             im.paste(im=MAGENTA_RGB, box=bounds_inner)
-        # elif widget_type == Widget.Toolbar:
-        #     im.paste(im=GRAY_RGB, box=bounds_inner)
-    else:
+
+    if IMG_MODE == 'sketch':
         im.paste(im=BLACK_RGB, box=(
             bounds_sketch[0] + WIDGET_FRAME_MARGIN, bounds_sketch[1] + WIDGET_FRAME_MARGIN,
             bounds_sketch[2] - WIDGET_FRAME_MARGIN, bounds_sketch[3] - WIDGET_FRAME_MARGIN))
@@ -384,8 +380,6 @@ def draw_widget(im, widget_type, bounds):
             im.paste(im_image_link.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.TextLink:
             im.paste(im_text_link.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
-        # elif widget_type == Widget.Toolbar:
-        #     im.paste(im_toolbar.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
 
 
 if __name__ == '__main__':
@@ -402,6 +396,8 @@ if __name__ == '__main__':
     rico_dirs_dir = dir_config['rico_dirs_dir']
     cleaned_json_dir = dir_config['cleaned_json_dir']
     sketches_dir = dir_config['sketches_dirs_dir']
+
+    print('----------------------')
 
     # 初始化放置控件裁切的位置
     if CROP_WIDGET:
@@ -430,7 +426,7 @@ if __name__ == '__main__':
 
         open(layout_seq_file_path, 'w', newline='')
         open(index_map_file_path, 'w', newline='')
-        print('### Creating raining related files ... OK')
+        print('### Creating training related files ... OK')
 
     if ANALYSIS_MODE:
         with open(CSV_FILE_PATH, 'w', newline='') as f:

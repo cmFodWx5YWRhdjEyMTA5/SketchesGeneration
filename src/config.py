@@ -3,7 +3,7 @@ import os
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 TRAINING_CONFIG = {
-    'data_dir': '/Users/gexiaofei/PycharmProjects/json_handler/data',
+    'data_dir': 'E:\\rico-dataset\\data',
 
     'layout_seq_file_name': 'layout_sequence.lst',
     'new_layout_seq_file_name': 'new_layout_sequence.lst',
@@ -25,9 +25,9 @@ DIRECTORY_CONFIG = {
     'rico_combined_dir': 'E:\\rico-dataset\\combined',
     'sketches_combined_dir': 'E:\\sketches-test\\data\\processedImage',
 
-    'rico_dirs_dir': '/Users/gexiaofei/PycharmProjects/json_handler/rico-selected',
-    'sketches_dirs_dir': '/Users/gexiaofei/PycharmProjects/json_handler/output',
-    'cleaned_json_dir': '/Users/gexiaofei/PycharmProjects/json_handler/cleaned-json',
+    'rico_dirs_dir': 'E:\\sketches-test\\rico-data',
+    'sketches_dirs_dir': 'E:\\sketches-test\\sketches',
+    'cleaned_json_dir': 'E:\\sketches-test\\cleaned-json',
 }
 
 SKETCHES_CONFIG = {
