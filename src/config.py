@@ -9,7 +9,7 @@ TRAINING_CONFIG = {
     'new_layout_seq_file_name': 'new_layout_sequence.lst',
     'index_map_file_name': 'index_map.lst',
 
-    'vocab_file_name': 'xml_vocab.txt',
+    'vocab_file_name': 'vocab.txt',
     'train_lst_name': 'train.lst',
     'val_lst_name': 'validate.lst',
     'test_lst_name': 'test_shuffle.lst',

@@ -181,7 +181,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
 
     # 将 Layout DFS-sequence 保存到文件中
     # FIXME 有 children 节点的 Unclassified 控件修改为 Layout。
-    tokens.append(Widget.Layout.name if 'children' in json_obj else widget_type.name)
+    tokens.append(Widget.Layout.name if widget_type == Widget.Unclassified and 'children' in json_obj else widget_type.name)
 
     # DFS 绘制控件
     if widget_type != Widget.Layout:

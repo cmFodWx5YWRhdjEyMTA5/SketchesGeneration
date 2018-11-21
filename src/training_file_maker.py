@@ -94,31 +94,30 @@ def get_invalid_line_nos(seq_file_path, new_seq_file_path, max_num_tokens, min_n
     :param min_num_tokens: 最小认可 token 长度
     :return: 无效项的行号列表
     """
-    print('>>> Cleaning', seq_file_path, end=' ')
+    print('>>> Reading and Cleaning', seq_file_path, end=' ')
     with open(seq_file_path, 'r') as f:
         new_lines = []
         lines = f.readlines()
         inv_line_nos = []
         line_no = 0
-        with open('./inv_tokens.txt', 'w') as inv_f:
-            for line in lines:
-                new_line = get_optimized_seq(line)
-                new_lines.append(new_line + '\n')
-                len_tokens = len(new_line.split())
-                if len_tokens > max_num_tokens or len_tokens < min_num_tokens and not (
-                        len_tokens == 1 and new_line != 'Layout'):
-                    inv_line_nos.append(line_no)
-                    if 0 < len_tokens < min_num_tokens:
-                        inv_f.write(new_line + '\n')
-                line_no += 1
-                if line_no % 3000 == 0:
-                    print('.', end='')
+        for line in lines:
+            new_line = get_optimized_seq(line)
+            new_lines.append(new_line + '\n')
+            len_tokens = len(new_line.split())
+            if len_tokens > max_num_tokens or len_tokens < min_num_tokens and not (
+                    len_tokens == 1 and new_line != 'Layout'):
+                inv_line_nos.append(line_no)
+                # if 0 < len_tokens < min_num_tokens:
+                #     inv_f.write(new_line + '\n')
+            line_no += 1
+            if line_no % 3000 == 0:
+                print('.', end='')
     print(' OK')
     print(inv_line_nos[:20])
-    print('### After cleaning,', len(inv_line_nos), 'lines have more than', max_num_tokens,
-          'or less than', min_num_tokens, 'tokens. They will not be included in training samples set.')
+    print('### Cleaning ended.', len(inv_line_nos), 'lines have more than', max_num_tokens,
+          'or less than', min_num_tokens, 'tokens which are excluded from training samples set.')
 
-    print('>>> Writing', new_seq_file_path, '...', end=' ')
+    print('>>> Writing cleaned sequence file:', new_seq_file_path, '...', end=' ')
     with open(new_seq_file_path, 'w') as f:
         for line in new_lines:
             f.writelines(line)

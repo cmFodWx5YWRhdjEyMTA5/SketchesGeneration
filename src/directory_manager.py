@@ -6,7 +6,8 @@ import config
 
 NUM_PER_DIR = 1000
 
-DIVIDE_OR_MERGE = False
+MODE = 'test_analysis'
+# MODE = 'divide'
 
 
 def check_make_dir(dir_path):
@@ -85,16 +86,36 @@ def merge_dirs(src_dir, dst_dir):
     print('<<<', str(file_cnt), 'PNGs in sub directories copied to', dst_dir)
 
 
+def make_test_sketches_dir(test_result_path, sketches_dir, output_dir):
+    check_make_dir(output_dir)
+    print('### Checking/Making directory to save all test sketches ... OK')
+
+    with open(test_result_path, 'r') as f:
+        lines = f.readlines()
+        print('>>> Copying files to directory', output_dir, '...', end=' ')
+        for line in lines:
+            sketch_file = line.split('\t')[0]
+            copy_file(os.path.join(sketches_dir, sketch_file), os.path.join(output_dir, sketch_file))
+        print('OK')
+
+
 if __name__ == '__main__':
 
     start_time = time.time()
 
     dirs_config = config.DIRECTORY_CONFIG
+    training_config = config.TRAINING_CONFIG
 
-    if DIVIDE_OR_MERGE:
+    data_dir = training_config['data_dir']
+
+    if MODE == 'divide':
         make_sub_dir(dirs_config['rico_combined_dir'], dirs_config['rico_dirs_dir'])
-    else:
+    if MODE == 'merge':
         merge_dirs(dirs_config['sketches_dirs_dir'], dirs_config['sketches_combined_dir'])
+    if MODE == 'test_analysis':
+        make_test_sketches_dir(test_result_path='C:\\Users\\Xiaofei\\Desktop\\results.txt',
+                               sketches_dir=dirs_config['sketches_combined_dir'],
+                               output_dir='C:\\Users\\Xiaofei\\Desktop\\test-sketches')
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
