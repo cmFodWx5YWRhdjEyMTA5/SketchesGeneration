@@ -1,15 +1,16 @@
+import csv
+import hashlib
 import json
 import os
-import time
-import hashlib
+import operator
 import shutil
-import csv
+import time
 from datetime import datetime
 from PIL import Image
 from widget import Widget
 import config
 
-IMG_MODE = 'sketch'  # color 为色彩模式，sketch 为草图模式
+IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
 TRAINING_DATA_MODE = True  # 构造训练集支持文件
 CROP_WIDGET = False
 ANALYSIS_MODE = False  # 存储属性分析文件
@@ -143,15 +144,18 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
     :param csv_rows: 用于将控件属性信息记录到 csv 分析文件
     :return:
     """
-    # 不绘制属性visible-to-user值为真的控件
-    # if not json_obj['visible-to-user']:
-    #     return
-
-    # 修改或加入更多规则判断，调用 im.paste 绘制相应的图形；在 args 中增加其他属性辅助判断，如上层的 clickable 属性
+    # FIXME 确定宽高阈值排除面积较小的控件
+    w = json_obj['bounds'][2] - json_obj['bounds'][0]
+    h = json_obj['bounds'][3] - json_obj['bounds'][1]
+    if w <= 10 or h <= 50:
+        return
 
     widget_type = infer_widget_type(json_obj, args)
 
-    # csv 文件中的一行数据
+    # FIXME 排除背景图片
+    if widget_type != Widget.Layout and widget_type != Widget.Unclassified and (w * h) / (WIDTH * HEIGHT) > 0.8:
+        return
+
     # TODO 在这里添加 CSV 文件每一行内容
     if ANALYSIS_MODE:
         if widget_type != Widget.Layout and widget_type != Widget.Unclassified:
@@ -181,7 +185,8 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
 
     # 将 Layout DFS-sequence 保存到文件中
     # FIXME 有 children 节点的 Unclassified 控件修改为 Layout。
-    tokens.append(Widget.Layout.name if widget_type == Widget.Unclassified and 'children' in json_obj else widget_type.name)
+    tokens.append(
+        Widget.Layout.name if widget_type == Widget.Unclassified and 'children' in json_obj else widget_type.name)
 
     # DFS 绘制控件
     if widget_type != Widget.Layout:
@@ -197,9 +202,20 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
     # FIXME 确定正确性
     if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
         tokens.append('{')
-        for i in range(len(json_obj['children'])):
-            dfs_draw_widget(json_obj['children'][i], im_screenshot, im_sketch, args, parent_clickable_stack, tokens,
+
+        len_children = len(json_obj['children'])
+
+        midpoint_dict = []
+        for i in range(len_children):
+            bounds = json_obj['children'][i]['bounds']
+            midpoint_dict.append((i, (bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2))
+        sorted_children = sorted(midpoint_dict, key=operator.itemgetter(1, 2))
+
+        for i in range(len_children):
+            child_json_obj = json_obj['children'][sorted_children[i][0]]
+            dfs_draw_widget(child_json_obj, im_screenshot, im_sketch, args, parent_clickable_stack, tokens,
                             rico_index, csv_rows)
+
         tokens.append('}')
 
     # 要在这里清除传递的参数
@@ -341,10 +357,6 @@ def draw_widget(im, widget_type, bounds):
 
     w = bounds_inner[2] - bounds_inner[0]
     h = bounds_inner[3] - bounds_inner[1]
-
-    # 不绘制面积过小的控件
-    if w <= 1 or h <= 1:
-        return
 
     if IMG_MODE == 'color':
         if widget_type == Widget.Button:
