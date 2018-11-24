@@ -144,16 +144,18 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
     :param csv_rows: 用于将控件属性信息记录到 csv 分析文件
     :return:
     """
-    # FIXME 确定宽高阈值排除面积较小的控件
     w = json_obj['bounds'][2] - json_obj['bounds'][0]
     h = json_obj['bounds'][3] - json_obj['bounds'][1]
+
+    # FIXME 确定宽高阈值排除面积较小的控件
     if w <= 10 or h <= 50:
         return
 
     widget_type = infer_widget_type(json_obj, args)
 
-    # FIXME 排除背景图片
-    if widget_type != Widget.Layout and widget_type != Widget.Unclassified and (w * h) / (WIDTH * HEIGHT) > 0.8:
+    # FIXME 排除背景图片或巨大图片（控件）
+    if widget_type != Widget.Layout and widget_type != Widget.Unclassified and (
+            (w * h) / (WIDTH * HEIGHT) > 0.8 or h / HEIGHT > 0.8):
         return
 
     # TODO 在这里添加 CSV 文件每一行内容
@@ -183,33 +185,35 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
         parent_clickable_stack.append(json_obj['clickable'] or args[KEY_PARENT_CLICKABLE])
         args[KEY_PARENT_CLICKABLE] = parent_clickable_stack[-1]
 
-    # 将 Layout DFS-sequence 保存到文件中
-    # FIXME 有 children 节点的 Unclassified 控件修改为 Layout。
+    # 有 children 节点的 Unclassified 控件修改为 Layout
     tokens.append(
         Widget.Layout.name if widget_type == Widget.Unclassified and 'children' in json_obj else widget_type.name)
 
     # DFS 绘制控件
     if widget_type != Widget.Layout:
 
+        if CROP_WIDGET:
+            crop_widget(json_obj, im_screenshot, rico_index, widget_type)
+
         # 不绘制仍无法判断类型的控件
         if widget_type != Widget.Unclassified:
             draw_widget(im_sketch, widget_type, json_obj['bounds'])
 
-        if CROP_WIDGET:
-            crop_widget(json_obj, im_screenshot, rico_index, widget_type)
+    # 当 json_obj 无 children 属性时，不再递归执行；在此处判断是否为 Drawer 控件，也不递归执行
+    if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout) and not (
+            'NavigationView' in json_obj['class'] or
+            ('resource-id' in json_obj and 'drawer' in json_obj['resource-id'].lower()
+             and widget_type == Widget.Layout and 1.8 < h / w < 5)):
 
-    # 当json_obj无children属性时，不再递归执行；确定其他不再需要递归访问的情形
-    # FIXME 确定正确性
-    if 'children' in json_obj and (widget_type == Widget.Unclassified or widget_type == Widget.Layout):
         tokens.append('{')
 
         len_children = len(json_obj['children'])
 
-        midpoint_dict = []
+        child_midpoint = []
         for i in range(len_children):
             bounds = json_obj['children'][i]['bounds']
-            midpoint_dict.append((i, (bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2))
-        sorted_children = sorted(midpoint_dict, key=operator.itemgetter(1, 2))
+            child_midpoint.append((i, (bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2))
+        sorted_children = sorted(child_midpoint, key=operator.itemgetter(1, 2))
 
         for i in range(len_children):
             child_json_obj = json_obj['children'][sorted_children[i][0]]
@@ -218,7 +222,7 @@ def dfs_draw_widget(json_obj, im_screenshot, im_sketch, args, parent_clickable_s
 
         tokens.append('}')
 
-    # 要在这里清除传递的参数
+    # 清除传递的参数
     if widget_type == Widget.Layout:
         args[KEY_PARENT_CLICKABLE] = parent_clickable_stack.pop()
 
@@ -253,9 +257,6 @@ def crop_widget(json_obj, im_screenshot, rico_index, widget_type):
 
         outfile_path = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name, ''.join(file_name))
         im_screenshot.crop(jpg_bounds).save(outfile_path)
-
-        # if not json_obj['visible-to-user']:
-        #     im_screenshot.crop(jpg_bounds).save(outfile_path)
 
 
 def infer_widget_type(json_node, args):
@@ -297,7 +298,6 @@ def infer_widget_type(json_node, args):
                 break
 
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
-    # FIXME 这里做了较多修改：不再判断 TextLink 的 ancestor-clickable；取消 ImageLink；需要确定面积阈值
     # if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
     if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
         widget_type = Widget.TextLink
@@ -306,6 +306,7 @@ def infer_widget_type(json_node, args):
         w = json_node['bounds'][2] - json_node['bounds'][0]
         h = json_node['bounds'][3] - json_node['bounds'][1]
         # 将面积较大的图转换成 ImageLink
+        # FIXME 需要确定面积阈值
         widget_type = Widget.ImageLink if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
         # if w < 200 and h < 200:
         #     widget_type = Widget.Button
@@ -414,11 +415,10 @@ if __name__ == '__main__':
     # 初始化放置控件裁切的位置
     if CROP_WIDGET:
         for widget in Widget:
-            if widget != Widget.Layout:
-                dir_path = os.path.join(WIDGET_CUT_OUT_PATH, widget.name)
-                if os.path.exists(dir_path):
-                    shutil.rmtree(dir_path)
-                os.makedirs(dir_path)
+            dir_path = os.path.join(WIDGET_CUT_OUT_PATH, widget.name)
+            if os.path.exists(dir_path):
+                shutil.rmtree(dir_path)
+            os.makedirs(dir_path)
         print('### Directories to save widget crops:', WIDGET_CUT_OUT_PATH)
 
     print('### Cleaned json files location:', cleaned_json_dir)
