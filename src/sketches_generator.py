@@ -320,19 +320,17 @@ def infer_widget_type_from_string(string):
     :param string: 待检查字符串
     :return: 控件类型
     """
-    # 判断顺序对结果有影响
-    str_lower = string.lower()
-    if 'layout' in str_lower or 'listview' in str_lower or 'recyclerview' in str_lower:
+    if 'Layout' in string or 'ListView' in string or 'RecyclerView' in string:
         return Widget.Layout
-    if 'checkbox' in str_lower:
+    if 'CheckBox' in string:
         return Widget.CheckBox
-    if 'edittext' in str_lower or 'autocomplete' in str_lower:
+    if 'EditText' in string or 'AutoComplete' in string:
         return Widget.EditText
-    if 'image' in str_lower:
+    if 'Image' in string:
         return Widget.ImageView
-    if 'button' in str_lower or 'glyph' in str_lower:
+    if 'Button' in string or 'Glyph' in string:
         return Widget.Button
-    if 'textview' in str_lower:
+    if 'TextView' in string:
         return Widget.TextView
 
     return Widget.Unclassified
