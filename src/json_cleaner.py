@@ -2,6 +2,7 @@ import json
 import os
 import time
 from datetime import datetime
+
 import config
 
 
@@ -62,10 +63,8 @@ if __name__ == '__main__':
     rico_dirs_dir = dir_config['rico_dirs_dir']
     cleaned_json_dir = dir_config['cleaned_json_dir']
 
-    # 遍历布局文件访问节点清理结构
     print('---------------------------------')
-    print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-          '>>> Start cleaning json files in', rico_dirs_dir, '...')
+    print('>>> Start cleaning json files in', rico_dirs_dir, '...')
 
     # 检查输出文件夹状态
     if not os.path.exists(cleaned_json_dir):
@@ -77,8 +76,7 @@ if __name__ == '__main__':
         if not case_name.startswith('.'):  # hidden files
             input_case_dir = os.path.join(rico_dirs_dir, case_name)
             output_case_dir = os.path.join(cleaned_json_dir, case_name)
-            print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-                  '>>> Processing', output_case_dir, '...', end=' ')
+            print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + '] >>> Processing', output_case_dir, '...', end=' ')
 
             if not os.path.exists(output_case_dir):
                 os.makedirs(output_case_dir)
@@ -89,8 +87,7 @@ if __name__ == '__main__':
                                  file.split('.')[0])
             print('OK')
 
-    print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + ']',
-          '<<< Cleaned json files saved in ' + cleaned_json_dir)
+    print('<<< Cleaned json files saved in ' + cleaned_json_dir)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))

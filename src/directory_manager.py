@@ -1,13 +1,13 @@
-import shutil
 import os
+import shutil
 import time
 from os import walk
+
 import config
 
 NUM_PER_DIR = 1000
 
-MODE = 'test_analysis'
-# MODE = 'divide'
+MODE = 'merge_sketches'
 
 
 def check_make_dir(dir_path):
@@ -108,12 +108,14 @@ if __name__ == '__main__':
 
     data_dir = training_config['data_dir']
 
-    if MODE == 'divide':
+    print('---------------------------------')
+
+    if MODE == 'divide_rico':
         make_sub_dir(dirs_config['rico_combined_dir'], dirs_config['rico_dirs_dir'])
-    if MODE == 'merge':
+    if MODE == 'merge_sketches':
         merge_dirs(dirs_config['sketches_dirs_dir'], dirs_config['sketches_combined_dir'])
     if MODE == 'test_analysis':
-        make_test_sketches_dir(test_result_path='C:\\Users\\Xiaofei\\Desktop\\results.txt',
+        make_test_sketches_dir(test_result_path='E:\\sketches-test\\data\\test_shuffle.lst',
                                sketches_dir=dirs_config['sketches_combined_dir'],
                                output_dir='C:\\Users\\Xiaofei\\Desktop\\test-sketches')
 

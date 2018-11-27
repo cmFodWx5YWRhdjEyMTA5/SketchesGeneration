@@ -1,9 +1,9 @@
-import random
 import os
+import random
 import time
-from widget import Widget
-from layout_compressor import get_optimized_seq
+
 import config
+from widget import Widget
 
 
 def gen_vocab_file(vocab_file_path):
@@ -85,43 +85,30 @@ def gen_i2l_dict(index_map_file_path):
     return index_map
 
 
-def get_invalid_line_nos(seq_file_path, new_seq_file_path, max_num_tokens, min_num_tokens):
+def get_invalid_line_nos(seq_file_path, max_num_tokens, min_num_tokens):
     """
     去除 sequence 中长度超出阈值的项、无效项，并调用优化、压缩算法后生成新 sequence
     :param seq_file_path: 保存 sequences 的文件路径
-    :param new_seq_file_path: 生成有效 sequences 的文件路径
     :param max_num_tokens: 最大认可 token 长度
     :param min_num_tokens: 最小认可 token 长度
     :return: 无效项的行号列表
     """
     print('>>> Reading and Cleaning', seq_file_path, end=' ')
     with open(seq_file_path, 'r') as f:
-        new_lines = []
         lines = f.readlines()
         inv_line_nos = []
         line_no = 0
         for line in lines:
-            new_line = get_optimized_seq(line)
-            new_lines.append(new_line + '\n')
-            len_tokens = len(new_line.split())
+            len_tokens = len(line.split())
             if len_tokens > max_num_tokens or len_tokens < min_num_tokens and not (
-                    len_tokens == 1 and new_line != 'Layout'):
+                    len_tokens == 1 and line != 'Layout'):
                 inv_line_nos.append(line_no)
-                # if 0 < len_tokens < min_num_tokens:
-                #     inv_f.write(new_line + '\n')
             line_no += 1
             if line_no % 3000 == 0:
                 print('.', end='')
     print(' OK')
-    print(inv_line_nos[:20])
     print('### Cleaning ended.', len(inv_line_nos), 'lines have more than', max_num_tokens,
           'or less than', min_num_tokens, 'tokens which are excluded from training samples set.')
-
-    print('>>> Writing cleaned sequence file:', new_seq_file_path, '...', end=' ')
-    with open(new_seq_file_path, 'w') as f:
-        for line in new_lines:
-            f.writelines(line)
-    print('OK')
 
     return inv_line_nos
 
@@ -132,11 +119,12 @@ if __name__ == '__main__':
     training_config = config.TRAINING_CONFIG
     data_dir = training_config['data_dir']
 
+    print('---------------------------------')
+
     gen_vocab_file(os.path.join(data_dir, training_config['vocab_file_name']))
 
     i2l_dict = gen_i2l_dict(os.path.join(data_dir, training_config['index_map_file_name']))
     inv_lines = get_invalid_line_nos(os.path.join(data_dir, training_config['layout_seq_file_name']),
-                                     os.path.join(data_dir, training_config['new_layout_seq_file_name']),
                                      training_config['max_tokens_num'], training_config['min_tokens_num'])
 
     gen_training_lists(os.path.join(data_dir, training_config['train_lst_name']),

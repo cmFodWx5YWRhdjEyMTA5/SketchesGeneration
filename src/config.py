@@ -3,10 +3,9 @@ import os
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 TRAINING_CONFIG = {
-    'data_dir': 'E:\\rico-dataset\\data',
+    'data_dir': 'E:\\sketches-test\\data',
 
     'layout_seq_file_name': 'layout_sequence.lst',
-    'new_layout_seq_file_name': 'new_layout_sequence.lst',
     'index_map_file_name': 'index_map.lst',
 
     'vocab_file_name': 'vocab.txt',
@@ -31,8 +30,8 @@ DIRECTORY_CONFIG = {
 }
 
 SKETCHES_CONFIG = {
-    'widget_cut_dir': '..\\widget-cut',
-    'csv_file_path': '..\\analysis_result.csv',
+    'widget_cut_dir': 'E:\\playground\\widget-cut',
+    'csv_file_path': 'E:\\playground\\analysis_result.csv',
 
     'sketch-width': 200,
     'sketch-height': 300,
