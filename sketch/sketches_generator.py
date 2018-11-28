@@ -10,8 +10,8 @@ from datetime import datetime
 from PIL import Image
 from anytree import Node
 
-import config
-from widget import Widget, WidgetNode
+from sketch import config
+from sketch.widget import Widget, WidgetNode
 
 IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
 TRAINING_DATA_MODE = True  # 构造训练集支持文件
@@ -42,13 +42,13 @@ KEY_PARENT_CLICKABLE = 'key_parent_clickable'
 KEY_TREE_ROOT = 'tree_root'
 
 # 控件对应的图像
-im_button = Image.open('../data-sketches/drawings/frameless/button.png')
-im_edit_text = Image.open('../data-sketches/drawings/frameless/edit_text.png')
-im_image_view = Image.open('../data-sketches/drawings/frameless/image_view.png')
-im_text_view = Image.open('../data-sketches/drawings/frameless/text_view.png')
-im_image_link = Image.open('../data-sketches/drawings/frameless/image_link.png')
-im_text_link = Image.open('../data-sketches/drawings/frameless/text_link.png')
-im_checkbox = Image.open('../data-sketches/drawings/frameless/checkbox.png')
+im_button = Image.open('pictures/drawings/frameless/button.png')
+im_edit_text = Image.open('pictures/drawings/frameless/edit_text.png')
+im_image_view = Image.open('pictures/drawings/frameless/image_view.png')
+im_text_view = Image.open('pictures/drawings/frameless/text_view.png')
+im_image_link = Image.open('pictures/drawings/frameless/image_link.png')
+im_text_link = Image.open('pictures/drawings/frameless/text_link.png')
+im_checkbox = Image.open('pictures/drawings/frameless/checkbox.png')
 
 BLACK_RGB = (0, 0, 0)
 GRAY_RGB = (128, 128, 128)
@@ -583,7 +583,7 @@ if __name__ == '__main__':
     training_config = config.TRAINING_CONFIG
     dir_config = config.DIRECTORY_CONFIG
 
-    data_dir = training_config['data_dir']
+    data_dir = dir_config['training_file_dir']
     layout_seq_file_path = os.path.join(data_dir, training_config['layout_seq_file_name'])
     index_map_file_path = os.path.join(data_dir, training_config['index_map_file_name'])
 

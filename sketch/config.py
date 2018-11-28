@@ -3,8 +3,6 @@ import os
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 TRAINING_CONFIG = {
-    'data_dir': 'E:\\sketches-test\\data',
-
     'layout_seq_file_name': 'layout_sequence.lst',
     'index_map_file_name': 'index_map.lst',
 
@@ -24,9 +22,10 @@ DIRECTORY_CONFIG = {
     'rico_combined_dir': 'E:\\rico-dataset\\combined',
     'sketches_combined_dir': 'E:\\sketches-test\\data\\processedImage',
 
-    'rico_dirs_dir': 'E:\\sketches-test\\rico-data',
-    'sketches_dirs_dir': 'E:\\sketches-test\\sketches',
-    'cleaned_json_dir': 'E:\\sketches-test\\cleaned-json',
+    'rico_dirs_dir': 'E:\\playground\\rico-data',
+    'sketches_dirs_dir': 'E:\\playground\\sketches',
+    'cleaned_json_dir': 'E:\\playground\\cleaned-json',
+    'training_file_dir': 'E:\\playground\\data',
 }
 
 SKETCHES_CONFIG = {

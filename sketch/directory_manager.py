@@ -1,13 +1,14 @@
 import os
+import random
 import shutil
 import time
 from os import walk
 
-import config
+from sketch import config
+
+MODE = 'test_analysis'
 
 NUM_PER_DIR = 1000
-
-MODE = 'merge_sketches'
 
 
 def check_make_dir(dir_path):
@@ -86,16 +87,23 @@ def merge_dirs(src_dir, dst_dir):
     print('<<<', str(file_cnt), 'PNGs in sub directories copied to', dst_dir)
 
 
-def make_test_sketches_dir(test_result_path, sketches_dir, output_dir):
+def make_test_sketches_dir(test_result_path, sketches_dir, output_dir, num_samples):
     check_make_dir(output_dir)
     print('### Checking/Making directory to save all test sketches ... OK')
 
     with open(test_result_path, 'r') as f:
         lines = f.readlines()
         print('>>> Copying files to directory', output_dir, '...', end=' ')
+        files = []
         for line in lines:
-            sketch_file = line.split('\t')[0]
-            copy_file(os.path.join(sketches_dir, sketch_file), os.path.join(output_dir, sketch_file))
+            file_name = line.split()[0]
+            files.append(file_name)
+            copy_file(os.path.join(sketches_dir, file_name), os.path.join(output_dir, file_name))
+        if num_samples > 0:
+            check_make_dir(os.path.join(output_dir, 'samples'))
+            sample_files = random.sample(files, num_samples)
+            for file in sample_files:
+                copy_file(os.path.join(sketches_dir, file), os.path.join(output_dir, 'samples', file))
         print('OK')
 
 
@@ -106,8 +114,6 @@ if __name__ == '__main__':
     dirs_config = config.DIRECTORY_CONFIG
     training_config = config.TRAINING_CONFIG
 
-    data_dir = training_config['data_dir']
-
     print('---------------------------------')
 
     if MODE == 'divide_rico':
@@ -117,7 +123,8 @@ if __name__ == '__main__':
     if MODE == 'test_analysis':
         make_test_sketches_dir(test_result_path='E:\\sketches-test\\data\\test_shuffle.lst',
                                sketches_dir=dirs_config['sketches_combined_dir'],
-                               output_dir='C:\\Users\\Xiaofei\\Desktop\\test-sketches')
+                               output_dir='C:\\Users\\Xiaofei\\Desktop\\test-sketches',
+                               num_samples=30)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))

@@ -2,8 +2,8 @@ import os
 import random
 import time
 
-import config
-from widget import Widget
+from sketch import config
+from sketch.widget import Widget
 
 
 def gen_vocab_file(vocab_file_path):
@@ -117,7 +117,9 @@ if __name__ == '__main__':
     start_time = time.time()
 
     training_config = config.TRAINING_CONFIG
-    data_dir = training_config['data_dir']
+    directory_config = config.DIRECTORY_CONFIG
+
+    data_dir = directory_config['training_file_dir']
 
     print('---------------------------------')
 
