@@ -101,7 +101,7 @@ def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico
     tokens = []
 
     # 构造 anytree 树结构
-    dfs_create_tree(root_json, args, parent_clickable_stack, tree_root, nodes_dict)
+    dfs_create_tree(root_json, args, parent_clickable_stack, tree_root, nodes_dict, rico_index, csv_rows)
 
     # 扫描去除大背景、面积过小的控件
     if len(tree_root.children) > 0:
@@ -228,7 +228,41 @@ def dfs_make_tokens(tree_node, tokens, nodes_dict):
         tokens.append('}')
 
 
-def dfs_create_tree(json_obj, args, parent_clickable_stack, parent_node, nodes_dict):
+def create_csv(json_obj, widget_type, rico_index, args, csv_rows):
+    first_standard_widget_name = 'None'
+    if widget_type != Widget.Layout and widget_type != Widget.Unclassified and 'children' not in json_obj:
+
+        level = -1
+        first_standard_widget_name = 'None'
+        if json_obj['class'].startswith('android.widget'):
+            first_standard_widget_name = json_obj['class']
+            level = 0
+        else:
+            level = 1  # level 标志了在ancestors中第一次出现官方命名的位置
+            for ancestor in json_obj['ancestors']:
+                if ancestor.startswith('android.widget'):
+                    first_standard_widget_name = ancestor
+                    break
+                level += 1
+            if level == len(json_obj['ancestors']) + 1:
+                # ancestors 中未出现官方命名控件
+                level = 99999
+
+            csv_row = [first_standard_widget_name, widget_type, json_obj['class'],
+                       json_obj['resource-id'] if 'resource-id' in json_obj
+                       else 'None', rico_index, json_obj['clickable'], args[KEY_PARENT_CLICKABLE],
+                       json_obj['ancestors'], str(level), json_obj['visibility'], json_obj['visible-to-user'],
+                       json_obj['focusable'], json_obj['focused'], json_obj['enabled'], json_obj['draw'],
+                       json_obj['scrollable-horizontal'],
+                       json_obj['scrollable-vertical'], json_obj['pointer'], json_obj['long-clickable'],
+                       json_obj['selected'],
+                       json_obj['pressed'], json_obj['abs-pos'], json_obj['bounds'],
+                       json_obj['package'] if 'package' in json_obj
+                       else 'None', json_obj['content-desc']]
+            csv_rows.append(csv_row)
+
+
+def dfs_create_tree(json_obj, args, parent_clickable_stack, parent_node, nodes_dict, rico_index, csv_rows):
     """
     递归创建 anytree 树结构，将 json_obj 所指节点挂在树节点 parent_node 上；在方法内判断 json_obj 所指节点的控件类型
     :param json_obj: 当前 json 对象
@@ -239,6 +273,9 @@ def dfs_create_tree(json_obj, args, parent_clickable_stack, parent_node, nodes_d
     :return:
     """
     widget_type = infer_widget_type(json_obj, args)
+
+    if ANALYSIS_MODE:
+        create_csv(json_obj, widget_type, rico_index, args, csv_rows)
 
     # 有 children 节点的 Unclassified 控件修改为 Layout
     if widget_type == Widget.Unclassified and 'children' in json_obj:
@@ -279,7 +316,7 @@ def dfs_create_tree(json_obj, args, parent_clickable_stack, parent_node, nodes_d
 
         for i in range(len_children):
             child_json_obj = json_obj['children'][sorted_children[i][0]]
-            dfs_create_tree(child_json_obj, args, parent_clickable_stack, tree_node, nodes_dict)
+            dfs_create_tree(child_json_obj, args, parent_clickable_stack, tree_node, nodes_dict, rico_index, csv_rows)
 
     # 清除传递的参数
     if widget_type == Widget.Layout:
@@ -623,9 +660,13 @@ if __name__ == '__main__':
 
     if ANALYSIS_MODE:
         with open(CSV_FILE_PATH, 'w', newline='') as f:
-            csv.writer(f).writerow(['type', 'class', 'rico-index', 'clickable', 'parent_clickable', 'ancestors'
-                                       , 'parent_first_appear', 'parent_second_appear', 'parent_third_appear',
-                                    'parent_forth_appear'])
+            csv.writer(f).writerow(
+                ['first_standard_widget_name', 'type', 'class', 'resource-id', 'rico-index', 'clickable',
+                 'parent_clickable', 'ancestors'
+                    , 'level', 'visibility', 'visible-to-user', 'focusable', 'focused', 'enabled', 'draw',
+                 'scrollable-horizontal',
+                 'scrollable-vertical', 'pointer', 'long-clickable', 'selected', 'pressed', 'abs-pos', 'bounds',
+                 'package', 'content-desc'])
 
     for case_name in os.listdir(rico_dirs_dir):
         if not case_name.startswith('.'):  # hidden files
