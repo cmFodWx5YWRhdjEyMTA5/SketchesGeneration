@@ -14,11 +14,12 @@ NUM_PER_DIR = 1000
 def check_make_dir(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
+    print('###', dir_path, 'created.')
 
 
 def copy_file(src_path, dst_path):
     if not os.path.isfile(src_path):
-        print(src_path, "not exist!")
+        print('###', src_path, "not exist!")
     else:
         fpath, fname = os.path.split(dst_path)
         if not os.path.exists(fpath):

@@ -26,6 +26,8 @@ DIRECTORY_CONFIG = {
     'sketches_dirs_dir': 'E:\\playground\\sketches',
     'cleaned_json_dir': 'E:\\playground\\cleaned-json',
     'training_file_dir': 'E:\\playground\\data',
+
+    'widget_clusters_dir': 'E:\\playground\\clusters',
 }
 
 SKETCHES_CONFIG = {
@@ -34,4 +36,11 @@ SKETCHES_CONFIG = {
 
     'sketch-width': 200,
     'sketch-height': 300,
+}
+
+CSV_CONFIG = {
+    'column_titles': ['sha1', 'rico-index', 'resource-id', 'class', 'ancestors', 'first-official-class', 'level',
+                      'clickable', 'parent-clickable', 'visibility', 'visible-to-user', 'focusable', 'focused',
+                      'enabled', 'draw', 'scrollable-horizontal', 'scrollable-vertical', 'pointer', 'long-clickable',
+                      'selected', 'pressed', 'abs-pos', 'bounds', 'package', 'content-desc']
 }

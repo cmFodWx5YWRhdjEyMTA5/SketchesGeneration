@@ -11,16 +11,18 @@ from PIL import Image
 from anytree import Node
 
 from sketch import config
+from sketch.directory_manager import check_make_dir
 from sketch.widget import Widget, WidgetNode
 
 IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
-TRAINING_DATA_MODE = True  # 构造训练集支持文件
-CROP_WIDGET = False
-ANALYSIS_MODE = False  # 存储属性分析文件
+TRAINING_DATA_MODE = False  # 构造训练集支持文件
+CROP_WIDGET = True
+ANALYSIS_MODE = True  # 存储属性分析文件
 
 # 路径
 WIDGET_CUT_OUT_PATH = config.SKETCHES_CONFIG['widget_cut_dir']
 CSV_FILE_PATH = config.SKETCHES_CONFIG['csv_file_path']
+COLUMN_TITLES = config.CSV_CONFIG['column_titles']
 
 # 画布长宽
 SKETCH_WIDTH = config.SKETCHES_CONFIG['sketch-width']
@@ -34,6 +36,7 @@ WIDTH = 1440
 HEIGHT = 2560
 
 FILE_READ_BUF_SIZE = 65536  # 用于 File Hash 的缓存大小
+LEN_SHA1 = 10  # 节点 sha1 值的截取保留长度
 
 SEQ_LINE = 0  # xml_sequence 的行号
 
@@ -138,7 +141,7 @@ def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico
         im_sketch.save(out_sketch_path)
 
     if ANALYSIS_MODE:
-        with open(CSV_FILE_PATH, 'a', newline='') as f:
+        with open(CSV_FILE_PATH, 'a', newline='', encoding='utf-8') as f:
             csv.writer(f).writerows(csv_rows)
 
 
@@ -228,38 +231,39 @@ def dfs_make_tokens(tree_node, tokens, nodes_dict):
         tokens.append('}')
 
 
-def create_csv(json_obj, widget_type, rico_index, args, csv_rows):
-    first_standard_widget_name = 'None'
+def create_csv(node_sha1, json_obj, widget_type, rico_index, args, csv_rows):
     if widget_type != Widget.Layout and widget_type != Widget.Unclassified and 'children' not in json_obj:
-
-        level = -1
-        first_standard_widget_name = 'None'
-        if json_obj['class'].startswith('android.widget'):
-            first_standard_widget_name = json_obj['class']
-            level = 0
-        else:
-            level = 1  # level 标志了在ancestors中第一次出现官方命名的位置
+        first_official_class = json_obj['class'] if json_obj['class'].startswith('android.widget') else 'None'
+        level = 0
+        if first_official_class == 'None':
+            level = 1
             for ancestor in json_obj['ancestors']:
                 if ancestor.startswith('android.widget'):
-                    first_standard_widget_name = ancestor
+                    first_official_class = ancestor
                     break
                 level += 1
             if level == len(json_obj['ancestors']) + 1:
-                # ancestors 中未出现官方命名控件
-                level = 99999
+                level = 999
 
-            csv_row = [first_standard_widget_name, widget_type, json_obj['class'],
-                       json_obj['resource-id'] if 'resource-id' in json_obj
-                       else 'None', rico_index, json_obj['clickable'], args[KEY_PARENT_CLICKABLE],
-                       json_obj['ancestors'], str(level), json_obj['visibility'], json_obj['visible-to-user'],
-                       json_obj['focusable'], json_obj['focused'], json_obj['enabled'], json_obj['draw'],
-                       json_obj['scrollable-horizontal'],
-                       json_obj['scrollable-vertical'], json_obj['pointer'], json_obj['long-clickable'],
-                       json_obj['selected'],
-                       json_obj['pressed'], json_obj['abs-pos'], json_obj['bounds'],
-                       json_obj['package'] if 'package' in json_obj
-                       else 'None', json_obj['content-desc']]
-            csv_rows.append(csv_row)
+        csv_row = []
+
+        for col_title in COLUMN_TITLES:
+            if col_title == 'sha1':
+                csv_row.append(node_sha1)
+            elif col_title == 'rico-index':
+                csv_row.append(rico_index)
+            elif col_title == 'first-official-class':
+                csv_row.append(first_official_class)
+            elif col_title == 'level':
+                csv_row.append(level)
+            elif col_title == 'parent-clickable':
+                csv_row.append(args[KEY_PARENT_CLICKABLE])
+            elif col_title == 'resource-id' or col_title == 'package':
+                csv_row.append(json_obj[col_title] if 'resource-id' in json_obj else 'None')
+            else:
+                csv_row.append(json_obj[col_title])
+
+        csv_rows.append(csv_row)
 
 
 def dfs_create_tree(json_obj, args, parent_clickable_stack, parent_node, nodes_dict, rico_index, csv_rows):
@@ -274,21 +278,22 @@ def dfs_create_tree(json_obj, args, parent_clickable_stack, parent_node, nodes_d
     """
     widget_type = infer_widget_type(json_obj, args)
 
-    if ANALYSIS_MODE:
-        create_csv(json_obj, widget_type, rico_index, args, csv_rows)
-
     # 有 children 节点的 Unclassified 控件修改为 Layout
     if widget_type == Widget.Unclassified and 'children' in json_obj:
         widget_type = Widget.Layout
 
     node_sha1 = hashlib.sha1(str(json_obj).encode('utf-8')).hexdigest()
-    tree_node = Node(node_sha1[0:8], parent=parent_node)
+    tree_node_key = node_sha1[:LEN_SHA1]
+    tree_node = Node(tree_node_key, parent=parent_node)
+
+    if ANALYSIS_MODE:
+        create_csv(tree_node_key, json_obj, widget_type, rico_index, args, csv_rows)
 
     widget_node = WidgetNode(widget_type,
                              json_obj['bounds'],
                              json_obj['resource-id'] if 'resource-id' in json_obj else None,
                              json_obj['class'])
-    nodes_dict[node_sha1[0:8]] = widget_node
+    nodes_dict[tree_node_key] = widget_node
 
     # 传递参数：如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
     if widget_type == Widget.Layout:
@@ -456,15 +461,18 @@ def crop_widget(im_screenshot, rico_index, widget_type, widget_bounds, widget_id
                   int(widget_bounds[1] / HEIGHT * im_screenshot.size[1]),
                   int(widget_bounds[2] / WIDTH * im_screenshot.size[0]),
                   int(widget_bounds[3] / HEIGHT * im_screenshot.size[1]))
-    class_tokens = widget_class.rsplit('.', 1)
-    file_name = [rico_index, '-', class_tokens[1] if len(class_tokens) > 1 else widget_class,
-                 '-', node_sha1]
-    if widget_id is not None:
-        file_name.append('-')
-        file_name.append(widget_id.split('/')[-1])
-    file_name.append('.jpg')
 
-    outfile_path = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name, ''.join(file_name))
+    # class_tokens = widget_class.rsplit('.', 1)
+    # file_name = [rico_index, '-', class_tokens[1] if len(class_tokens) > 1 else widget_class, '-', node_sha1]
+    # if widget_id is not None:
+    #     file_name.append('-')
+    #     file_name.append(widget_id.split('/')[-1])
+    # file_name.append('.jpg')
+    # outfile_path = os.path.join(WIDGET_CUT_OUT_PATH, widget_type.name, ''.join(file_name))
+
+    file_name = node_sha1 + '.jpg'
+    outfile_path = os.path.join(WIDGET_CUT_OUT_PATH, file_name)
+
     im_screenshot.crop(jpg_bounds).save(outfile_path)
 
 
@@ -642,16 +650,12 @@ if __name__ == '__main__':
     print('### Cleaned json files location:', cleaned_json_dir)
 
     # 检查输出文件夹状态
-    if not os.path.exists(sketches_dir):
-        print('### Making directories to save generated sketches ... OK')
-        os.makedirs(sketches_dir)
+    check_make_dir(sketches_dir)
     print('### Checking directories to save generated sketches:', sketches_dir, '... OK')
 
     if TRAINING_DATA_MODE:
         # 先创建/覆盖文件用于添加内容
-        if not os.path.exists(data_dir):
-            print('### Making data directory to save training related files ... OK')
-            os.makedirs(data_dir)
+        check_make_dir(data_dir)
         print('### Checking data directory to save training related files:', data_dir, '... OK')
 
         open(layout_seq_file_path, 'w', newline='')
@@ -660,13 +664,7 @@ if __name__ == '__main__':
 
     if ANALYSIS_MODE:
         with open(CSV_FILE_PATH, 'w', newline='') as f:
-            csv.writer(f).writerow(
-                ['first_standard_widget_name', 'type', 'class', 'resource-id', 'rico-index', 'clickable',
-                 'parent_clickable', 'ancestors'
-                    , 'level', 'visibility', 'visible-to-user', 'focusable', 'focused', 'enabled', 'draw',
-                 'scrollable-horizontal',
-                 'scrollable-vertical', 'pointer', 'long-clickable', 'selected', 'pressed', 'abs-pos', 'bounds',
-                 'package', 'content-desc'])
+            csv.writer(f).writerow(COLUMN_TITLES)
 
     for case_name in os.listdir(rico_dirs_dir):
         if not case_name.startswith('.'):  # hidden files
@@ -674,8 +672,7 @@ if __name__ == '__main__':
             output_case_dir = os.path.join(sketches_dir, case_name)
             print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + '] >>> Processing', output_case_dir, '...', end=' ')
 
-            if not os.path.exists(output_case_dir):
-                os.makedirs(output_case_dir)
+            check_make_dir(output_case_dir)
             for file in os.listdir(input_case_dir):
                 if file.endswith('.json'):
                     sketch_samples_generation(os.path.join(rico_dirs_dir, case_name),
@@ -688,6 +685,8 @@ if __name__ == '__main__':
 
     if CROP_WIDGET:
         print('<<< Cropped widget images saved in', WIDGET_CUT_OUT_PATH)
+    if ANALYSIS_MODE:
+        print('<<< Analysis csv file saved in ', CSV_FILE_PATH)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
