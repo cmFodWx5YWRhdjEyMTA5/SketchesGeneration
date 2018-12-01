@@ -16,8 +16,10 @@ class Widget(Enum):
 
 class WidgetNode(object):
 
-    def __init__(self, w_type, w_bounds, w_id, w_class):
+    def __init__(self, w_type, w_json, w_id, w_class, w_bounds, w_ancestor_clickable):
         self.w_type = w_type
+        self.w_json = w_json
         self.w_bounds = w_bounds
         self.w_id = w_id
         self.w_class = w_class
+        self.w_ancestor_clickable = w_ancestor_clickable

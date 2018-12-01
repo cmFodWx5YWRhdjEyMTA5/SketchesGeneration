@@ -21,6 +21,7 @@ TRAINING_CONFIG = {
 DIRECTORY_CONFIG = {
     'rico_combined_dir': 'E:\\rico-dataset\\combined',
     'sketches_combined_dir': 'E:\\sketches-test\\data\\processedImage',
+    'widget_sketches_dir': 'C:\\Users\Xiaofei\Desktop\SketchesGeneration\\pictures\\drawings\\frameless',
 
     'rico_dirs_dir': 'E:\\playground\\rico-data',
     'sketches_dirs_dir': 'E:\\playground\\sketches',
@@ -28,6 +29,7 @@ DIRECTORY_CONFIG = {
     'training_file_dir': 'E:\\playground\\data',
 
     'widget_clusters_dir': 'E:\\playground\\clusters',
+    'models_dir': 'E:\\playground\\models',
 }
 
 SKETCHES_CONFIG = {

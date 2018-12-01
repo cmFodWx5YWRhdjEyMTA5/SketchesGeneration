@@ -41,17 +41,18 @@ LEN_SHA1 = 10  # 节点 sha1 值的截取保留长度
 SEQ_LINE = 0  # xml_sequence 的行号
 
 # 用于 layout 层次间传递辅助参数
-KEY_PARENT_CLICKABLE = 'key_parent_clickable'
+KEY_ANCESTOR_CLICKABLE = 'key_ancestor_clickable'
 KEY_TREE_ROOT = 'tree_root'
 
 # 控件对应的图像
-im_button = Image.open('pictures/drawings/frameless/button.png')
-im_edit_text = Image.open('pictures/drawings/frameless/edit_text.png')
-im_image_view = Image.open('pictures/drawings/frameless/image_view.png')
-im_text_view = Image.open('pictures/drawings/frameless/text_view.png')
-im_image_link = Image.open('pictures/drawings/frameless/image_link.png')
-im_text_link = Image.open('pictures/drawings/frameless/text_link.png')
-im_checkbox = Image.open('pictures/drawings/frameless/checkbox.png')
+widget_sketches_dir = config.DIRECTORY_CONFIG['widget_sketches_dir']
+IM_BUTTON = Image.open(widget_sketches_dir + 'button.png')
+IM_EDIT_TEXT = Image.open(widget_sketches_dir + 'edit_text.png')
+IM_IMAGE_VIEW = Image.open(widget_sketches_dir + 'image_view.png')
+IM_TEXT_VIEW = Image.open(widget_sketches_dir + 'text_view.png')
+IM_IMAGE_LINK = Image.open(widget_sketches_dir + 'image_link.png')
+IM_TEXT_LINK = Image.open(widget_sketches_dir + 'text_link.png')
+IM_CHECK_BOX = Image.open(widget_sketches_dir + 'checkbox.png')
 
 BLACK_RGB = (0, 0, 0)
 GRAY_RGB = (128, 128, 128)
@@ -98,13 +99,13 @@ def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico
     nodes_dict = {}
     tree_root = Node(KEY_TREE_ROOT)
 
-    args = {KEY_PARENT_CLICKABLE: False}
-    parent_clickable_stack = [False]  # 用于逐层存放 parent-clickable 属性
+    args = {KEY_ANCESTOR_CLICKABLE: False}
+    ancestor_clickable_stack = [False]  # 用于逐层存放 parent-clickable 属性
     csv_rows = []  # 分析模式生成 csv 文件
     tokens = []
 
     # 构造 anytree 树结构
-    dfs_create_tree(root_json, args, parent_clickable_stack, tree_root, nodes_dict, rico_index, csv_rows)
+    dfs_create_tree(root_json, args, ancestor_clickable_stack, tree_root, nodes_dict, rico_index)
 
     # 扫描去除大背景、面积过小的控件
     if len(tree_root.children) > 0:
@@ -120,7 +121,7 @@ def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico
 
     # 绘制草图
     if len(tree_root.children) > 0:
-        dfs_create_sketch(tree_root.children[0], nodes_dict, im_screenshot, im_sketch, rico_index)
+        dfs_create_sketch(tree_root.children[0], nodes_dict, im_screenshot, im_sketch, rico_index, csv_rows)
 
     # 清理/压缩树结构
     compress_clean_tree(tree_root, nodes_dict)
@@ -231,7 +232,7 @@ def dfs_make_tokens(tree_node, tokens, nodes_dict):
         tokens.append('}')
 
 
-def create_csv(node_sha1, json_obj, widget_type, rico_index, args, csv_rows):
+def append_csv_row(node_sha1, json_obj, widget_type, rico_index, ancestor_clickable, csv_rows):
     if widget_type != Widget.Layout and widget_type != Widget.Unclassified and 'children' not in json_obj:
         first_official_class = json_obj['class'] if json_obj['class'].startswith('android.widget') else 'None'
         level = 0
@@ -257,7 +258,7 @@ def create_csv(node_sha1, json_obj, widget_type, rico_index, args, csv_rows):
             elif col_title == 'level':
                 csv_row.append(level)
             elif col_title == 'parent-clickable':
-                csv_row.append(args[KEY_PARENT_CLICKABLE])
+                csv_row.append(ancestor_clickable)
             elif col_title == 'resource-id' or col_title == 'package':
                 csv_row.append(json_obj[col_title] if 'resource-id' in json_obj else 'None')
             else:
@@ -266,12 +267,12 @@ def create_csv(node_sha1, json_obj, widget_type, rico_index, args, csv_rows):
         csv_rows.append(csv_row)
 
 
-def dfs_create_tree(json_obj, args, parent_clickable_stack, parent_node, nodes_dict, rico_index, csv_rows):
+def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes_dict, rico_index):
     """
     递归创建 anytree 树结构，将 json_obj 所指节点挂在树节点 parent_node 上；在方法内判断 json_obj 所指节点的控件类型
     :param json_obj: 当前 json 对象
     :param args: 传递的参数用于控件类型判断
-    :param parent_clickable_stack: 用于保存隔层传递的 clickable 参数的栈
+    :param ancestor_clickable_stack: 用于保存隔层传递的 clickable 参数的栈
     :param parent_node: 当前控件在树上的父节点
     :param nodes_dict: node_sha1: WidgetNode 字典
     :return:
@@ -286,19 +287,14 @@ def dfs_create_tree(json_obj, args, parent_clickable_stack, parent_node, nodes_d
     tree_node_key = node_sha1[:LEN_SHA1]
     tree_node = Node(tree_node_key, parent=parent_node)
 
-    if ANALYSIS_MODE:
-        create_csv(tree_node_key, json_obj, widget_type, rico_index, args, csv_rows)
-
-    widget_node = WidgetNode(widget_type,
-                             json_obj['bounds'],
-                             json_obj['resource-id'] if 'resource-id' in json_obj else None,
-                             json_obj['class'])
+    widget_node = WidgetNode(widget_type, json_obj, json_obj['resource-id'] if 'resource-id' in json_obj else None,
+                             json_obj['class'], json_obj['bounds'], args[KEY_ANCESTOR_CLICKABLE])
     nodes_dict[tree_node_key] = widget_node
 
-    # 传递参数：如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断
+    # 传递参数：如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断（递归传递）
     if widget_type == Widget.Layout:
-        parent_clickable_stack.append(json_obj['clickable'] or args[KEY_PARENT_CLICKABLE])
-        args[KEY_PARENT_CLICKABLE] = parent_clickable_stack[-1]
+        ancestor_clickable_stack.append(json_obj['clickable'] or args[KEY_ANCESTOR_CLICKABLE])
+        args[KEY_ANCESTOR_CLICKABLE] = ancestor_clickable_stack[-1]
 
     w = max(0, json_obj['bounds'][2] - json_obj['bounds'][0]) + 1
     h = max(0, json_obj['bounds'][3] - json_obj['bounds'][1]) + 1
@@ -321,11 +317,11 @@ def dfs_create_tree(json_obj, args, parent_clickable_stack, parent_node, nodes_d
 
         for i in range(len_children):
             child_json_obj = json_obj['children'][sorted_children[i][0]]
-            dfs_create_tree(child_json_obj, args, parent_clickable_stack, tree_node, nodes_dict, rico_index, csv_rows)
+            dfs_create_tree(child_json_obj, args, ancestor_clickable_stack, tree_node, nodes_dict, rico_index)
 
     # 清除传递的参数
     if widget_type == Widget.Layout:
-        args[KEY_PARENT_CLICKABLE] = parent_clickable_stack.pop()
+        args[KEY_ANCESTOR_CLICKABLE] = ancestor_clickable_stack.pop()
 
 
 def dfs_process_invalid_nodes(tree_node, nodes_dict):
@@ -418,7 +414,7 @@ def dfs_remove_covered_widgets(tree_node, to_remove_widgets):
             dfs_remove_covered_widgets(child, to_remove_widgets)
 
 
-def dfs_create_sketch(tree_node, nodes_dict, im_screenshot, im_sketch, rico_index):
+def dfs_create_sketch(tree_node, nodes_dict, im_screenshot, im_sketch, rico_index, csv_rows):
     """
     递归绘制草图
     :param tree_node: 当前树节点
@@ -438,11 +434,14 @@ def dfs_create_sketch(tree_node, nodes_dict, im_screenshot, im_sketch, rico_inde
     if widget_type != Widget.Layout:
         if CROP_WIDGET:
             crop_widget(im_screenshot, rico_index, widget_type, widget_bounds, widget_id, widget_class, tree_node.name)
+        if ANALYSIS_MODE:
+            append_csv_row(tree_node.name, widget_node.w_json, widget_type, rico_index,
+                           widget_node.w_ancestor_clickable, csv_rows)
         if widget_type != Widget.Unclassified:
             draw_widget(im_sketch, widget_type, widget_bounds)
 
     for child in tree_node.children:
-        dfs_create_sketch(child, nodes_dict, im_screenshot, im_sketch, rico_index)
+        dfs_create_sketch(child, nodes_dict, im_screenshot, im_sketch, rico_index, csv_rows)
 
 
 def crop_widget(im_screenshot, rico_index, widget_type, widget_bounds, widget_id, widget_class, node_sha1):
@@ -515,10 +514,10 @@ def infer_widget_type(json_node, args):
                 break
 
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
-    if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+    if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_ANCESTOR_CLICKABLE]):
         widget_type = Widget.TextLink
 
-    if widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_PARENT_CLICKABLE]):
+    if widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_ANCESTOR_CLICKABLE]):
         w = json_node['bounds'][2] - json_node['bounds'][0]
         h = json_node['bounds'][3] - json_node['bounds'][1]
         # 将面积较大的图转换成 ImageLink
@@ -590,19 +589,19 @@ def draw_widget(im, widget_type, bounds):
             bounds_sketch[0] + WIDGET_FRAME_MARGIN, bounds_sketch[1] + WIDGET_FRAME_MARGIN,
             bounds_sketch[2] - WIDGET_FRAME_MARGIN, bounds_sketch[3] - WIDGET_FRAME_MARGIN))
         if widget_type == Widget.Button:
-            im.paste(im_button.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(IM_BUTTON.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.ImageView:
-            im.paste(im_image_view.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(IM_IMAGE_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.EditText:
-            im.paste(im_edit_text.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(IM_EDIT_TEXT.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.TextView:
-            im.paste(im_text_view.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(IM_TEXT_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.CheckBox:
-            im.paste(im_checkbox.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(IM_CHECK_BOX.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.ImageLink:
-            im.paste(im_image_link.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(IM_IMAGE_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.TextLink:
-            im.paste(im_text_link.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(IM_TEXT_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
 
 
 def hash_file_sha1(file_path):
@@ -638,20 +637,22 @@ if __name__ == '__main__':
 
     print('---------------------------------')
 
-    # 初始化放置控件裁切的位置
-    if CROP_WIDGET:
-        for widget in Widget:
-            dir_path = os.path.join(WIDGET_CUT_OUT_PATH, widget.name)
-            if os.path.exists(dir_path):
-                shutil.rmtree(dir_path)
-            os.makedirs(dir_path)
-        print('### Directories to save widget crops:', WIDGET_CUT_OUT_PATH)
-
     print('### Cleaned json files location:', cleaned_json_dir)
 
-    # 检查输出文件夹状态
     check_make_dir(sketches_dir)
     print('### Checking directories to save generated sketches:', sketches_dir, '... OK')
+
+    # 初始化放置控件裁切的位置
+    if CROP_WIDGET:
+        print('### Directories to save widget crops:', WIDGET_CUT_OUT_PATH)
+        # for widget in Widget:
+        #     dir_path = os.path.join(WIDGET_CUT_OUT_PATH, widget.name)
+        #     if os.path.exists(dir_path):
+        #         shutil.rmtree(dir_path)
+        #     os.makedirs(dir_path)
+        if os.path.exists(WIDGET_CUT_OUT_PATH):
+            shutil.rmtree(WIDGET_CUT_OUT_PATH)
+        os.makedirs(WIDGET_CUT_OUT_PATH)
 
     if TRAINING_DATA_MODE:
         # 先创建/覆盖文件用于添加内容
