@@ -12,7 +12,7 @@ from anytree import Node
 
 from sketch import config
 from sketch.directory_manager import check_make_dir
-from sketch.widget import Widget, WidgetNode
+from sketch.widget import Widget, WidgetNode, WidgetColor, WidgetSketch
 
 IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
 TRAINING_DATA_MODE = False  # 构造训练集支持文件
@@ -38,49 +38,26 @@ HEIGHT = 2560
 FILE_READ_BUF_SIZE = 65536  # 用于 File Hash 的缓存大小
 LEN_SHA1 = 10  # 节点 sha1 值的截取保留长度
 
-SEQ_LINE = 0  # xml_sequence 的行号
-
 # 用于 layout 层次间传递辅助参数
 KEY_ANCESTOR_CLICKABLE = 'key_ancestor_clickable'
 KEY_TREE_ROOT = 'tree_root'
 
-# 控件对应的图像
-widget_sketches_dir = config.DIRECTORY_CONFIG['widget_sketches_dir']
-IM_BUTTON = Image.open(widget_sketches_dir + 'button.png')
-IM_EDIT_TEXT = Image.open(widget_sketches_dir + 'edit_text.png')
-IM_IMAGE_VIEW = Image.open(widget_sketches_dir + 'image_view.png')
-IM_TEXT_VIEW = Image.open(widget_sketches_dir + 'text_view.png')
-IM_IMAGE_LINK = Image.open(widget_sketches_dir + 'image_link.png')
-IM_TEXT_LINK = Image.open(widget_sketches_dir + 'text_link.png')
-IM_CHECK_BOX = Image.open(widget_sketches_dir + 'checkbox.png')
-
-BLACK_RGB = (0, 0, 0)
-GRAY_RGB = (128, 128, 128)
-RED_RGB = (255, 0, 0)
-LIME_RGB = (0, 255, 0)
-BLUE_RGB = (0, 0, 255)
-YELLOW_RGB = (255, 255, 0)
-MAGENTA_RGB = (255, 0, 255)
-CYAN_RGB = (0, 255, 255)
-MAROON_RGB = (128, 0, 0)
-GREEN_RGB = (0, 128, 0)
-NAVY_RGB = (0, 0, 128)
+seq_line = 0  # xml_sequence 的行号
 
 
-def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico_index, layout_seq_file_path,
-                              index_map_file_path):
+def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_file, i2l_map_file):
     """
     读入 cleaned_json_dir 文件夹中的 json 布局文件，生成处理后的草图文件，保存到 sketches_out_dir 中
     :param rico_dir: Rico 文件夹存放的用于裁剪的屏幕截图
-    :param cleaned_json_dir: cleaned json 文件夹路径
-    :param sketches_out_dir: 输出草图的存放文件夹路径
+    :param json_dir: cleaned json 文件夹路径
+    :param sketches_dir: 输出草图的存放文件夹路径
     :param rico_index: Rico 序号
-    :param layout_seq_file_path: layout tokens 序列文件路径
-    :param index_map_file_path: index: line_number 字典文件路径
+    :param seq_file: layout tokens 序列文件路径
+    :param i2l_map_file: index: line_number 字典文件路径
     :return:
     """
-    global SEQ_LINE
-    with open(os.path.join(cleaned_json_dir, rico_index + '.json'), 'r') as f:
+    global seq_line
+    with open(os.path.join(json_dir, rico_index + '.json'), 'r') as f:
         root_json = json.load(f)
 
     # 去除冗余的外层嵌套
@@ -93,7 +70,7 @@ def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico
 
     # 空白草图画布
     im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
-    out_sketch_path = os.path.join(sketches_out_dir, rico_index + '.png')
+    out_sketch_path = os.path.join(sketches_dir, rico_index + '.png')
 
     to_remove_widgets = []
     nodes_dict = {}
@@ -133,11 +110,11 @@ def sketch_samples_generation(rico_dir, cleaned_json_dir, sketches_out_dir, rico
     # 保存草图/制作训练文件
     if TRAINING_DATA_MODE:
         im_sketch.rotate(90, expand=1).save(out_sketch_path)
-        with open(layout_seq_file_path, 'a') as f:
+        with open(seq_file, 'a') as f:
             f.write(' '.join(tokens) + '\n')
-        with open(index_map_file_path, 'a') as f:
-            f.write(str(rico_index) + ' ' + str(SEQ_LINE) + '\n')
-        SEQ_LINE += 1
+        with open(i2l_map_file, 'a') as f:
+            f.write(str(rico_index) + ' ' + str(seq_line) + '\n')
+        seq_line += 1
     else:
         im_sketch.save(out_sketch_path)
 
@@ -304,7 +281,7 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
     is_drawer = 'NavigationView' in json_obj['class'] or 'NavigationMenu' in json_obj['class'] \
                 or widget_type == Widget.Layout and id_str is not None \
                 and ('drawer' in id_str or 'slider_layout' in id_str or 'nav_layout' in id_str
-                     or 'navigation_layout' in id_str) and 1.8 < h / w < 5
+                     or 'navigation_layout' in id_str or 'menulayout' in id_str) and 1.8 < h / w < 5
 
     # 排除不需递归执行的情形
     if 'children' in json_obj and widget_type == Widget.Layout and not is_drawer:
@@ -313,7 +290,8 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
         for i in range(len_children):
             bounds = json_obj['children'][i]['bounds']
             child_midpoint.append((i, (bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2))
-        sorted_children = sorted(child_midpoint, key=operator.itemgetter(1, 2))
+        # sort children order: by mid.y then by mid.x
+        sorted_children = sorted(child_midpoint, key=operator.itemgetter(2, 1))
 
         for i in range(len_children):
             child_json_obj = json_obj['children'][sorted_children[i][0]]
@@ -570,38 +548,38 @@ def draw_widget(im, widget_type, bounds):
 
     if IMG_MODE == 'color':
         if widget_type == Widget.Button:
-            im.paste(im=RED_RGB, box=bounds_inner)
+            im.paste(im=WidgetColor.RED_RGB, box=bounds_inner)
         elif widget_type == Widget.TextView:
-            im.paste(im=YELLOW_RGB, box=bounds_inner)
+            im.paste(im=WidgetColor.YELLOW_RGB, box=bounds_inner)
         elif widget_type == Widget.TextLink:
-            im.paste(im=BLACK_RGB, box=bounds_inner)
+            im.paste(im=WidgetColor.BLACK_RGB, box=bounds_inner)
         elif widget_type == Widget.EditText:
-            im.paste(im=BLUE_RGB, box=bounds_inner)
+            im.paste(im=WidgetColor.BLUE_RGB, box=bounds_inner)
         elif widget_type == Widget.ImageView:
-            im.paste(im=LIME_RGB, box=bounds_inner)
+            im.paste(im=WidgetColor.LIME_RGB, box=bounds_inner)
         elif widget_type == Widget.ImageLink:
-            im.paste(im=CYAN_RGB, box=bounds_inner)
+            im.paste(im=WidgetColor.CYAN_RGB, box=bounds_inner)
         elif widget_type == Widget.CheckBox:
-            im.paste(im=MAGENTA_RGB, box=bounds_inner)
+            im.paste(im=WidgetColor.MAGENTA_RGB, box=bounds_inner)
 
     if IMG_MODE == 'sketch':
-        im.paste(im=BLACK_RGB, box=(
+        im.paste(im=WidgetColor.BLACK_RGB, box=(
             bounds_sketch[0] + WIDGET_FRAME_MARGIN, bounds_sketch[1] + WIDGET_FRAME_MARGIN,
             bounds_sketch[2] - WIDGET_FRAME_MARGIN, bounds_sketch[3] - WIDGET_FRAME_MARGIN))
         if widget_type == Widget.Button:
-            im.paste(IM_BUTTON.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(WidgetSketch.IM_BUTTON.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.ImageView:
-            im.paste(IM_IMAGE_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(WidgetSketch.IM_IMAGE_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.EditText:
-            im.paste(IM_EDIT_TEXT.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(WidgetSketch.IM_EDIT_TEXT.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.TextView:
-            im.paste(IM_TEXT_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(WidgetSketch.IM_TEXT_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.CheckBox:
-            im.paste(IM_CHECK_BOX.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(WidgetSketch.IM_CHECK_BOX.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.ImageLink:
-            im.paste(IM_IMAGE_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(WidgetSketch.IM_IMAGE_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         elif widget_type == Widget.TextLink:
-            im.paste(IM_TEXT_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+            im.paste(WidgetSketch.IM_TEXT_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
 
 
 def hash_file_sha1(file_path):
