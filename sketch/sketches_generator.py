@@ -7,6 +7,7 @@ import shutil
 import time
 from datetime import datetime
 
+import numpy as np
 from PIL import Image
 from anytree import Node
 
@@ -286,16 +287,26 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
     # 排除不需递归执行的情形
     if 'children' in json_obj and widget_type == Widget.Layout and not is_drawer:
         len_children = len(json_obj['children'])
-        child_midpoint = []
-        for i in range(len_children):
-            bounds = json_obj['children'][i]['bounds']
-            child_midpoint.append((i, (bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2))
-        # sort children order: by mid.y then by mid.x
-        sorted_children = sorted(child_midpoint, key=operator.itemgetter(2, 1))
+        midpoints = []
+        if len_children > 1:
+            mp_x = np.zeros(len_children)
+            mp_y = np.zeros(len_children)
+            for i in range(len_children):
+                bounds = json_obj['children'][i]['bounds']
+                mp_x[i] = (bounds[0] + bounds[2]) / 2
+                mp_y[i] = (bounds[1] + bounds[3]) / 2
+                midpoints.append((i, mp_x[i], mp_y[i]))
 
-        for i in range(len_children):
-            child_json_obj = json_obj['children'][sorted_children[i][0]]
-            dfs_create_tree(child_json_obj, args, ancestor_clickable_stack, tree_node, nodes_dict, rico_index)
+            if np.std(mp_x) > np.std(mp_y):
+                sorted_child_midpoint = sorted(midpoints, key=operator.itemgetter(1, 2))
+            else:
+                sorted_child_midpoint = sorted(midpoints, key=operator.itemgetter(2, 1))
+
+            for i in range(len_children):
+                child_json_obj = json_obj['children'][sorted_child_midpoint[i][0]]
+                dfs_create_tree(child_json_obj, args, ancestor_clickable_stack, tree_node, nodes_dict, rico_index)
+        else:
+            dfs_create_tree(json_obj['children'][0], args, ancestor_clickable_stack, tree_node, nodes_dict, rico_index)
 
     # 清除传递的参数
     if widget_type == Widget.Layout:
