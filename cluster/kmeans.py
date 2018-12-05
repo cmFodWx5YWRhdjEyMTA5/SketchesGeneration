@@ -13,7 +13,7 @@ from sketch.directory_manager import copy_file
 COLUMN_TITLES = config.CSV_CONFIG['column_titles']
 
 feature_titles = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu', 'Layout',
-                  'Container', 'clickable', 'parent-clickable', 'focusable', 'long-clickable', 'content-desc']
+                  'Container', 'clickable', 'focusable', 'long-clickable', 'content-desc']
 num_features = len(feature_titles)
 
 num_clusters = 16
@@ -59,8 +59,9 @@ def create_feature(csv_row, sha1_values):
             class_str = csv_row[col_index]
             for k in class_keywords:
                 attr_create(k, feature)
-        elif col_title == 'clickable' or col_title == 'parent-clickable' or col_title == 'focusable' or \
-                col_title == 'long-clickable':
+        elif col_title == 'clickable':
+            feature.append(int(csv_row[col_index] == 'True' or csv_row[col_index + 1] == 'True'))
+        elif col_title == 'focusable' or col_title == 'long-clickable':
             feature.append(int(csv_row[col_index] == 'True'))
         elif col_title == 'content-desc':
             feature.append(int(csv_row[col_index] != '[None]'))
@@ -91,13 +92,16 @@ if __name__ == '__main__':
     sha1s, data = transform_csv_to_matrix('E:\\playground\\analysis_result.csv')
 
     print('>>> K-means working ...', end=' ')
-    kmeans = MiniBatchKMeans(n_clusters=num_clusters, random_state=0).fit(data)
+    weights = np.ones(shape=num_features)
+    weights[4:9] = 3
+    kmeans = MiniBatchKMeans(n_clusters=num_clusters, random_state=0).fit(np.multiply(data, weights))
     print('OK')
 
     joblib.dump(kmeans, os.path.join(config.DIRECTORY_CONFIG['models_dir'], 'kmeans.pkl'))
 
     np.set_printoptions(formatter={'float_kind': lambda x: "%.3f" % x})
     centers = kmeans.cluster_centers_
+    centers = np.divide(centers, weights)
     centers_file_path = 'E:\\playground\\centers.csv'
     with open(centers_file_path, 'w', newline='') as f:
         feature_titles.insert(0, 'cluster')

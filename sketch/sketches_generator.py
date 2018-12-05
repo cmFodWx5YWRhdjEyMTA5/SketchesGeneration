@@ -305,7 +305,7 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
             for i in range(len_children):
                 child_json_obj = json_obj['children'][sorted_child_midpoint[i][0]]
                 dfs_create_tree(child_json_obj, args, ancestor_clickable_stack, tree_node, nodes_dict, rico_index)
-        else:
+        elif len_children == 1:
             dfs_create_tree(json_obj['children'][0], args, ancestor_clickable_stack, tree_node, nodes_dict, rico_index)
 
     # 清除传递的参数

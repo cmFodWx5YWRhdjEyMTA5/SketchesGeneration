@@ -18,23 +18,26 @@ TRAINING_CONFIG = {
     'min_tokens_num': 5
 }
 
+working_dir = 'E:\\sketches-test\\'
+playground_dir = 'E:\\playground\\'
+
 DIRECTORY_CONFIG = {
     'rico_combined_dir': 'E:\\rico-dataset\\combined',
-    'sketches_combined_dir': 'E:\\sketches-test\\data\\processedImage',
-    'widget_sketches_dir': 'C:\\Users\Xiaofei\Desktop\SketchesGeneration\\pictures\\drawings\\frameless',
+    'sketches_combined_dir': working_dir + 'data\\processedImage',
+    'widget_sketches_dir': os.path.join(PROJECT_ROOT, 'pictures', 'frameless'),
 
-    'rico_dirs_dir': 'E:\\playground\\rico-data',
-    'sketches_dirs_dir': 'E:\\playground\\sketches',
-    'cleaned_json_dir': 'E:\\playground\\cleaned-json',
-    'training_file_dir': 'E:\\playground\\data',
+    'rico_dirs_dir': working_dir + 'rico-data',
+    'sketches_dirs_dir': working_dir + 'sketches',
+    'cleaned_json_dir': working_dir + 'cleaned-json',
+    'training_file_dir': working_dir + 'data',
 
-    'widget_clusters_dir': 'E:\\playground\\clusters',
-    'models_dir': 'E:\\playground\\models',
+    'widget_clusters_dir': playground_dir + 'clusters',
+    'models_dir': playground_dir + 'models',
 }
 
 SKETCHES_CONFIG = {
-    'widget_cut_dir': 'E:\\playground\\widget-cut',
-    'csv_file_path': 'E:\\playground\\analysis_result.csv',
+    'widget_cut_dir': playground_dir + 'widget-cut',
+    'csv_file_path': playground_dir + 'analysis_result.csv',
 
     'sketch-width': 200,
     'sketch-height': 300,
