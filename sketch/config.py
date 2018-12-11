@@ -32,6 +32,9 @@ DIRECTORY_CONFIG = {
 
     'widget_clusters_dir': working_dir + 'clusters',
     'models_dir': working_dir + 'models',
+
+    'cluster_csv_file_path': working_dir + 'cluster_result.csv',
+    'cluster_centers_file_path': working_dir + 'centers.csv',
 }
 
 SKETCHES_CONFIG = {
