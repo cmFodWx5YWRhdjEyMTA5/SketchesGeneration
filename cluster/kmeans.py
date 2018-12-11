@@ -5,7 +5,6 @@ import time
 
 import numpy as np
 from sklearn.cluster import MiniBatchKMeans
-from sklearn.externals import joblib
 
 from sketch import config
 from sketch.directory_manager import copy_file
@@ -89,7 +88,7 @@ if __name__ == '__main__':
     print('---------------------------------')
     start_time = time.time()
 
-    sha1s, data = transform_csv_to_matrix('E:\\playground\\analysis_result.csv')
+    sha1s, data = transform_csv_to_matrix(config.SKETCHES_CONFIG['csv_file_path'])
 
     print('>>> K-means working ...', end=' ')
     weights = np.ones(shape=num_features)
@@ -97,7 +96,7 @@ if __name__ == '__main__':
     kmeans = MiniBatchKMeans(n_clusters=num_clusters, random_state=0).fit(np.multiply(data, weights))
     print('OK')
 
-    joblib.dump(kmeans, os.path.join(config.DIRECTORY_CONFIG['models_dir'], 'kmeans.pkl'))
+    # joblib.dump(kmeans, os.path.join(config.DIRECTORY_CONFIG['models_dir'], 'kmeans.pkl'))
 
     np.set_printoptions(formatter={'float_kind': lambda x: "%.3f" % x})
     centers = kmeans.cluster_centers_

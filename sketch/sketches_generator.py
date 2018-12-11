@@ -16,7 +16,7 @@ from sketch.directory_manager import check_make_dir
 from sketch.widget import Widget, WidgetNode, WidgetColor, WidgetSketch
 
 IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
-TRAINING_DATA_MODE = False  # 构造训练集支持文件
+TRAINING_DATA_MODE = True  # 构造训练集支持文件
 CROP_WIDGET = True
 ANALYSIS_MODE = True  # 存储属性分析文件
 

@@ -18,8 +18,7 @@ TRAINING_CONFIG = {
     'min_tokens_num': 5
 }
 
-working_dir = 'E:\\sketches-test\\'
-playground_dir = 'E:\\playground\\'
+working_dir = 'E:\\playground-selected\\'
 
 DIRECTORY_CONFIG = {
     'rico_combined_dir': 'E:\\rico-dataset\\combined',
@@ -31,13 +30,13 @@ DIRECTORY_CONFIG = {
     'cleaned_json_dir': working_dir + 'cleaned-json',
     'training_file_dir': working_dir + 'data',
 
-    'widget_clusters_dir': playground_dir + 'clusters',
-    'models_dir': playground_dir + 'models',
+    'widget_clusters_dir': working_dir + 'clusters',
+    'models_dir': working_dir + 'models',
 }
 
 SKETCHES_CONFIG = {
-    'widget_cut_dir': playground_dir + 'widget-cut',
-    'csv_file_path': playground_dir + 'analysis_result.csv',
+    'widget_cut_dir': working_dir + 'widget-cut',
+    'csv_file_path': working_dir + 'analysis_result.csv',
 
     'sketch-width': 200,
     'sketch-height': 300,
