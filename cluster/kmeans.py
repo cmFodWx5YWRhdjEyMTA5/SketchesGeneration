@@ -11,11 +11,11 @@ from sketch.directory_manager import copy_file
 
 COLUMN_TITLES = config.CSV_CONFIG['column_titles']
 
-feature_titles = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu', 'Layout',
-                  'Container', 'clickable', 'focusable', 'long-clickable', 'content-desc']
+feature_titles = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu', 'clickable']
 num_features = len(feature_titles)
+print(num_features)
 
-num_clusters = 16
+num_clusters = 11
 
 
 def transform_csv_to_matrix(csv_path):
@@ -44,22 +44,22 @@ def transform_csv_to_matrix(csv_path):
 
 
 def create_feature(csv_row):
-    class_keywords = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu', 'Layout',
-                      'Container']
+    class_keywords = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu']
     feature = []
 
     col_index = 0
     for col_title in COLUMN_TITLES:
         if col_title == 'class':
             class_str = csv_row[col_index]
+            class_str2 = csv_row[col_index+2]
             for k in class_keywords:
-                feature.append(int(k in class_str))
+                feature.append(int((k in class_str) or (k in class_str2)))
         elif col_title == 'clickable':
             feature.append(int(csv_row[col_index] == 'True' or csv_row[col_index + 1] == 'True'))
-        elif col_title == 'focusable' or col_title == 'long-clickable':
-            feature.append(int(csv_row[col_index] == 'True'))
-        elif col_title == 'content-desc':
-            feature.append(int(csv_row[col_index] != '[None]'))
+        #elif col_title == 'focusable' or col_title == 'long-clickable':
+            #feature.append(int(csv_row[col_index] == 'True'))
+        #elif col_title == 'content-desc':
+            #feature.append(int(csv_row[col_index] != '[None]'))
         col_index += 1
     return feature
 
@@ -80,8 +80,8 @@ def create_cluster_dirs(rows, labels, widgets_dir, clusters_dir, cluster_csv_pat
         clustered_csv_rows.append([labels[idx]] + rows[idx])
         if idx % 3000 == 0:
             print('.', end='')
-    with open(cluster_csv_path, 'w', newline='') as f:
-        csv.writer(f).writerows(clustered_csv_rows)
+    with open(cluster_csv_path, 'w', newline='', encoding='utf-8') as f:
+          csv.writer(f).writerows(clustered_csv_rows)
     print(' OK')
 
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
 
     print('>>> K-means working ...', end=' ')
     weights = np.ones(shape=num_features)
-    weights[4:9] = 3
+    weights[4:8] = 4
     kmeans = MiniBatchKMeans(n_clusters=num_clusters, random_state=0).fit(np.multiply(data, weights))
     print('OK')
 
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     centers = kmeans.cluster_centers_
     centers = np.divide(centers, weights)
     centers_file_path = config.DIRECTORY_CONFIG['cluster_centers_file_path']
-    with open(centers_file_path, 'w', newline='') as f:
+    with open(centers_file_path, 'w', newline='', encoding='utf-8') as f:
         feature_titles.insert(0, 'cluster')
         csv.writer(f).writerow(feature_titles)
         for i, center in enumerate(centers):
