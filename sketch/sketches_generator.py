@@ -255,8 +255,9 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
     :param nodes_dict: node_sha1: WidgetNode 字典
     :return:
     """
-    widget_type = infer_widget_type(json_obj, args)
-
+    widget_type = infer_widget_type(json_obj['class'], json_obj['ancestors'],
+                                    json_obj['resource-id'] if 'resource-id' in json_obj else None,
+                                    'children' in json_obj, json_obj['clickable'], json_obj['bounds'], args)
     # 有 children 节点的 Unclassified 控件修改为 Layout
     if widget_type == Widget.Unclassified and 'children' in json_obj:
         widget_type = Widget.Layout
@@ -464,7 +465,7 @@ def crop_widget(im_screenshot, rico_index, widget_type, widget_bounds, widget_id
     im_screenshot.crop(jpg_bounds).save(outfile_path)
 
 
-def infer_widget_type(json_node, args):
+def infer_widget_type(cn, ancestors, id, has_children, clickable, bounds, args):
     """
     接收json节点，返回关键词匹配后根据规则推断的控件类型
     :param json_node: 待分析 json 节点
@@ -474,41 +475,39 @@ def infer_widget_type(json_node, args):
     # 执行这些规则后，返回最终推断类型；规则的先后顺序对结果有影响。
 
     # 次序1：官方提供的特殊情况
-    if 'ActionMenuItemView' in json_node['class'] or 'AppCompatImageButton' in json_node['class']:
+    if 'ActionMenuItemView' in cn or 'AppCompatImageButton' in cn:
         return Widget.Button
     # 次序2：其他特殊情况
-    if 'NavItemView' in json_node['class'] or 'ToolBarItemView' in json_node['class'] or 'DrawerToolBarItemView' in \
-            json_node['class']:
+    if 'NavItemView' in cn or 'ToolBarItemView' in cn or 'DrawerToolBarItemView' in cn:
         return Widget.Button
-    if 'children' not in json_node and 'resource-id' in json_node and (
-            'btn' in json_node['resource-id'] or 'button' in json_node['resource-id']):
+    if not has_children and (id is not None and ('btn' in id or 'button' in id)):
         return Widget.Button
 
     # 次序2：判断class_name是否存在明确的控件类型标识
-    widget_type = infer_widget_type_from_string(json_node['class'])
+    widget_type = infer_widget_type_from_string(cn)
 
     # 到此为止的Button不区分图形、文字。如果名称中不含Image的图形按钮也会被认为是Button
     # 如果button属性是文字类型，将其统一成TextLink
     if widget_type == Widget.Button:
-        for ancestor in json_node['ancestors']:
+        for ancestor in ancestors:
             if 'TextView' in ancestor:
                 widget_type = Widget.TextLink
                 break
 
     # 次序3：判断未明确分类节点的任何一个祖先是否存在明确标识(解决祖先内的判断问题)
     if widget_type == Widget.Unclassified:
-        for ancestor in json_node['ancestors']:
+        for ancestor in ancestors:
             widget_type = infer_widget_type_from_string(ancestor)
             if widget_type != Widget.Unclassified:
                 break
 
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
-    if widget_type == Widget.TextView and (json_node['clickable'] or args[KEY_ANCESTOR_CLICKABLE]):
+    if widget_type == Widget.TextView and (clickable or args[KEY_ANCESTOR_CLICKABLE]):
         widget_type = Widget.TextLink
 
-    if widget_type == Widget.ImageView and (json_node['clickable'] or args[KEY_ANCESTOR_CLICKABLE]):
-        w = json_node['bounds'][2] - json_node['bounds'][0]
-        h = json_node['bounds'][3] - json_node['bounds'][1]
+    if widget_type == Widget.ImageView and (clickable or args[KEY_ANCESTOR_CLICKABLE]):
+        w = bounds[2] - bounds[0]
+        h = bounds[3] - bounds[1]
         # 将面积较大的图转换成 ImageLink
         # FIXME 需要确定面积阈值
         widget_type = Widget.ImageLink if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
