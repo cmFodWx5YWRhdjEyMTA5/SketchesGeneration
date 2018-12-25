@@ -18,7 +18,7 @@ TRAINING_CONFIG = {
     'min_tokens_num': 5
 }
 
-working_dir = 'E:\\playground-selected\\'
+working_dir = 'D:\\playground-test\\'
 
 DIRECTORY_CONFIG = {
     'rico_combined_dir': 'E:\\rico-dataset\\combined',
