@@ -210,29 +210,28 @@ def dfs_make_tokens(tree_node, tokens, nodes_dict):
         tokens.append('}')
 
 
+def get_std_class_name(clazz, ancestors):
+    if clazz.startswith('android.widget'):
+        return clazz, 0
+    level = 1
+    for ancestor in ancestors:
+        if ancestor.startswith('android.widget'):
+            return ancestor, level
+        level += 1
+    return 'None', 'None'
+
+
 def append_csv_row(node_sha1, json_obj, widget_type, rico_index, ancestor_clickable, csv_rows):
     if widget_type != Widget.Layout and widget_type != Widget.Unclassified and 'children' not in json_obj:
-        first_official_class = json_obj['class'] if json_obj['class'].startswith('android.widget') else 'None'
-        level = 0
-        if first_official_class == 'None':
-            level = 1
-            for ancestor in json_obj['ancestors']:
-                if ancestor.startswith('android.widget'):
-                    first_official_class = ancestor
-                    break
-                level += 1
-            if level == len(json_obj['ancestors']) + 1:
-                level = 999
-
+        std_clz_name, level = get_std_class_name(json_obj['class'], json_obj['ancestors'])
         csv_row = []
-
         for col_title in COLUMN_TITLES:
             if col_title == 'sha1':
                 csv_row.append(node_sha1)
             elif col_title == 'rico-index':
                 csv_row.append(rico_index)
             elif col_title == 'first-official-class':
-                csv_row.append(first_official_class)
+                csv_row.append(std_clz_name)
             elif col_title == 'level':
                 csv_row.append(level)
             elif col_title == 'parent-clickable':

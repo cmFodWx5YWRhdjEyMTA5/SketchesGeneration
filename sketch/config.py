@@ -18,7 +18,7 @@ TRAINING_CONFIG = {
     'min_tokens_num': 5
 }
 
-working_dir = 'D:\\playground-test\\'
+working_dir = 'E:\\playground\\'
 
 DIRECTORY_CONFIG = {
     'rico_combined_dir': 'E:\\rico-dataset\\combined',
@@ -31,10 +31,11 @@ DIRECTORY_CONFIG = {
     'training_file_dir': working_dir + 'data',
 
     'widget_clusters_dir': working_dir + 'clusters',
-    'models_dir': working_dir + 'models',
 
     'cluster_csv_file_path': working_dir + 'cluster_result.csv',
     'cluster_centers_file_path': working_dir + 'centers.csv',
+
+    'km_model_path': working_dir + 'models/kmeans.pkl',
 }
 
 SKETCHES_CONFIG = {

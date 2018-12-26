@@ -4,7 +4,8 @@ import shutil
 import time
 
 import numpy as np
-from sklearn.cluster import MiniBatchKMeans
+from sklearn.cluster import KMeans
+from sklearn.externals import joblib
 
 from sketch import config
 from sketch.directory_manager import copy_file
@@ -12,10 +13,11 @@ from sketch.directory_manager import copy_file
 COLUMN_TITLES = config.CSV_CONFIG['column_titles']
 
 feature_titles = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu', 'clickable']
-num_features = len(feature_titles)
-print(num_features)
+class_keywords = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu']
 
-num_clusters = 11
+num_features = len(feature_titles)
+
+num_clusters = 26
 
 
 def transform_csv_to_matrix(csv_path):
@@ -28,39 +30,26 @@ def transform_csv_to_matrix(csv_path):
 
     print('>>> Transforming csv file to feature matrix ...', end='')
     with open(csv_path, 'r', encoding='utf-8') as f:
-        csv_rows = []
+        rows = []
         csv_reader = csv.reader(f)
         for row in csv_reader:
             if csv_reader.line_num == 1:
                 continue  # 忽略页眉
             elif csv_reader.line_num % 3000 == 0:
                 print('.', end='')
-            feature = create_feature(row)
-            csv_rows.append(row)
+            feature = create_feature(row[3], row[5], row[7] == 'True', row[8] == 'True')
+            rows.append(row)
             matrix[csv_reader.line_num - 2] = np.array(feature)
     print(' OK')
 
-    return matrix, csv_rows
+    return matrix, rows
 
 
-def create_feature(csv_row):
-    class_keywords = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu']
+def create_feature(claz, fstdclaz, clickable, anc_clickable):
     feature = []
-
-    col_index = 0
-    for col_title in COLUMN_TITLES:
-        if col_title == 'class':
-            class_str = csv_row[col_index]
-            class_str2 = csv_row[col_index+2]
-            for k in class_keywords:
-                feature.append(int((k in class_str) or (k in class_str2)))
-        elif col_title == 'clickable':
-            feature.append(int(csv_row[col_index] == 'True' or csv_row[col_index + 1] == 'True'))
-        #elif col_title == 'focusable' or col_title == 'long-clickable':
-            #feature.append(int(csv_row[col_index] == 'True'))
-        #elif col_title == 'content-desc':
-            #feature.append(int(csv_row[col_index] != '[None]'))
-        col_index += 1
+    for k in class_keywords:
+        feature.append(int((k in claz) or (k in fstdclaz)))
+    feature.append(int(clickable or anc_clickable))
     return feature
 
 
@@ -81,7 +70,7 @@ def create_cluster_dirs(rows, labels, widgets_dir, clusters_dir, cluster_csv_pat
         if idx % 3000 == 0:
             print('.', end='')
     with open(cluster_csv_path, 'w', newline='', encoding='utf-8') as f:
-          csv.writer(f).writerows(clustered_csv_rows)
+        csv.writer(f).writerows(clustered_csv_rows)
     print(' OK')
 
 
@@ -93,11 +82,11 @@ if __name__ == '__main__':
 
     print('>>> K-means working ...', end=' ')
     weights = np.ones(shape=num_features)
-    weights[4:8] = 4
-    kmeans = MiniBatchKMeans(n_clusters=num_clusters, random_state=0).fit(np.multiply(data, weights))
+    weights[4:8] = 2
+    kmeans = KMeans(n_clusters=num_clusters, random_state=0).fit(np.multiply(data, weights))
     print('OK')
 
-    # joblib.dump(kmeans, os.path.join(config.DIRECTORY_CONFIG['models_dir'], 'kmeans.pkl'))
+    joblib.dump(kmeans, config.DIRECTORY_CONFIG['km_model_path'])
 
     np.set_printoptions(formatter={'float_kind': lambda x: "%.3f" % x})
     centers = kmeans.cluster_centers_
@@ -110,7 +99,8 @@ if __name__ == '__main__':
             csv.writer(f).writerow(np.insert(center, 0, i))
     print('<<< K-Means cluster centers saved in', centers_file_path)
 
-    create_cluster_dirs(csv_rows, kmeans.labels_, config.SKETCHES_CONFIG['widget_cut_dir'],
+    pred_labels = kmeans.predict(np.multiply(data, weights))
+    create_cluster_dirs(csv_rows, pred_labels, config.SKETCHES_CONFIG['widget_cut_dir'],
                         config.DIRECTORY_CONFIG['widget_clusters_dir'],
                         config.DIRECTORY_CONFIG['cluster_csv_file_path'])
 

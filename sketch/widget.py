@@ -8,15 +8,16 @@ from sketch import config
 
 class Widget(Enum):
     Layout = 0
-    Unclassified = 1
-    Button = 2
-    TextView = 3
-    TextLink = 4
-    ImageView = 5
-    ImageLink = 6
-    EditText = 7
-    CheckBox = 8
-    # Toolbar = 9
+    TextView = 1
+    TextLink = 2
+    EditText = 3
+    ImageView = 4
+    ImageLink = 5
+    Button = 6
+    RadioButton = 7
+    Switch = 8
+    CheckBox = 9
+    Unclassified = 10
 
 
 class WidgetColor(object):
