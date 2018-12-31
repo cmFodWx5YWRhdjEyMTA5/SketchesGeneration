@@ -1,7 +1,10 @@
+import operator
+
 import networkx as nx
 import numpy as np
 from numpy import unravel_index
 
+from sketch import config
 from sketch.layout_compressor import optimize_sequence, create_layout_tree, post_order_traversal
 
 # Layout = 0
@@ -29,6 +32,8 @@ weights = [[10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
            [0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0],
            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
+penalty = 1
+
 
 class MatchTreeNode(object):
     def __init__(self, idx, widget_type, children_idxes):
@@ -37,20 +42,16 @@ class MatchTreeNode(object):
         self.children_idxes = children_idxes
 
 
-if __name__ == '__main__':
-    penalty = 1
-
-    sequence1 = 'Layout { Layout { Button TextView Button } Layout { Layout { EditText EditText } Layout { Button Button } } }'
-    tree1, nd1 = create_layout_tree(optimize_sequence(sequence1))
+def max_score(seq1, seq2):
+    tree1, nd1 = create_layout_tree(optimize_sequence(seq1))
     post_order1 = post_order_traversal(tree1)
 
-    sequence2 = 'Layout { Layout { Button TextView Button } Layout { Layout { EditText Button EditText Button } Layout { Button Button } } }'
-    tree2, nd2 = create_layout_tree(optimize_sequence(sequence2))
+    tree2, nd2 = create_layout_tree(optimize_sequence(seq2))
     post_order2 = post_order_traversal(tree2)
 
     h = len(nd1)
     w = len(nd2)
-    print(h, w)
+    print('sequence 1 length:', h, '| sequence 2 length:', w)
     matrix = np.zeros((h, w, 2))
 
     for u in post_order1:
@@ -69,7 +70,7 @@ if __name__ == '__main__':
             G.add_nodes_from([int(c.name) for c in u_children])
             G.add_nodes_from([int(c.name) + 1000 for c in v_children])
 
-            MWM = 0
+            max_weighted_match = 0
             if len(u_children) > 0 and len(v_children) > 0:
                 for uc in u_children:
                     for vc in v_children:
@@ -77,13 +78,33 @@ if __name__ == '__main__':
                                      matrix[int(uc.name)][int(vc.name)][0] + 0)
                         G.add_edge(int(uc.name), int(vc.name) + 1000, weight=weight)
                 pairs = nx.max_weight_matching(G)
-                MWM = sum([G[pair[0]][pair[1]]['weight'] for pair in pairs])
+                max_weighted_match = sum([G[pair[0]][pair[1]]['weight'] for pair in pairs])
 
-            matrix[int(u)][int(v)][0] = weights[nd1[u].widget_type.value][nd2[v].widget_type.value] + MWM
+            matrix[int(u)][int(v)][0] = weights[nd1[u].widget_type.value][nd2[v].widget_type.value] + max_weighted_match
 
+    # print(matrix[:, :, 0].max())
     print(unravel_index(matrix[:, :, 0].argmax(), matrix[:, :, 0].shape))
 
-    for r in matrix:
-        for c in r:
-            print(c[0], end=' ')
-        print()
+    # for r in matrix:
+    #     for c in r:
+    #         print(c[0], end=' ')
+    #     print()
+
+    return matrix[:, :, 0].max()
+
+
+if __name__ == '__main__':
+    sequence1 = 'Layout { Layout { ImageView TextView } }'
+    sequence2 = 'Layout { Layout { Button TextView Button } Layout { Layout { EditText Button EditText Button } Layout { Button Button } } }'
+
+    seq_fp = config.DIRECTORY_CONFIG['apk_sequences_file_path']
+    scores_map = {}
+    with open(seq_fp, 'r') as f:
+        for line in f:
+            line_sp = line.split()
+            app = line_sp[0]
+            activ_name = line_sp[1]
+            tokens = line_sp[2:]
+            scores_map[activ_name] = max_score(sequence1, ' '.join(tokens))
+    sorted_map = sorted(scores_map.items(), key=operator.itemgetter(1), reverse=True)
+    print(sorted_map)

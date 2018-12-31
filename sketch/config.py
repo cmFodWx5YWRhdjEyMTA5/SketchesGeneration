@@ -18,29 +18,33 @@ TRAINING_CONFIG = {
     'min_tokens_num': 5
 }
 
-working_dir = 'E:\\playground\\'
+working_dir = 'E:\\playground'
+intermediate_dir = working_dir + 'intermediate'
 
 DIRECTORY_CONFIG = {
     'rico_combined_dir': 'E:\\rico-dataset\\combined',
-    'sketches_combined_dir': working_dir + 'data\\processedImage',
+    'sketches_combined_dir': os.path.join(working_dir, 'data', 'processedImage'),
     'widget_sketches_dir': os.path.join(PROJECT_ROOT, 'pictures', 'frameless'),
 
-    'rico_dirs_dir': working_dir + 'rico-data',
-    'sketches_dirs_dir': working_dir + 'sketches',
-    'cleaned_json_dir': working_dir + 'cleaned-json',
-    'training_file_dir': working_dir + 'data',
+    'rico_dirs_dir': os.path.join(working_dir, 'rico-data'),
+    'sketches_dirs_dir': os.path.join(working_dir, 'sketches'),
+    'cleaned_json_dir': os.path.join(working_dir, 'cleaned-json'),
+    'training_file_dir': os.path.join(working_dir, 'data'),
 
-    'widget_clusters_dir': working_dir + 'clusters',
+    'widget_clusters_dir': os.path.join(working_dir, 'clusters'),
 
-    'cluster_csv_file_path': working_dir + 'cluster_result.csv',
-    'cluster_centers_file_path': working_dir + 'centers.csv',
+    'cluster_csv_file_path': os.path.join(working_dir, 'cluster_result.csv'),
+    'cluster_centers_file_path': os.path.join(working_dir, 'centers.csv'),
 
-    'km_model_path': working_dir + 'models/kmeans.pkl',
+    'km_model_path': os.path.join(working_dir, 'models', 'kmeans.pkl'),
+
+    'gator_xml_dir': os.path.join(working_dir, 'gatorxml'),
+    'apk_sequences_file_path': os.path.join(working_dir, 'apk_sequence.lst'),
 }
 
 SKETCHES_CONFIG = {
-    'widget_cut_dir': working_dir + 'widget-cut',
-    'csv_file_path': working_dir + 'analysis_result.csv',
+    'widget_cut_dir': os.path.join(working_dir, 'widget-cut'),
+    'csv_file_path': os.path.join(working_dir, 'analysis_result.csv'),
 
     'sketch-width': 200,
     'sketch-height': 300,

@@ -105,7 +105,7 @@ def optimize_sequence(seq):
 
     for i in range(3):
         if len(root.children) > 0:
-            dfs_compress_tree(root.children[0], None, nodes_dict)
+            dfs_compress_tree(root.children[0], 0, nodes_dict)
         if len(root.children) > 0:
             dfs_remove_invalid_leaf(root.children[0], nodes_dict)
 
@@ -125,7 +125,7 @@ def analyze(seq, file1, file2, print_mode):
 
     for i in range(3):
         if len(root.children) > 0:
-            dfs_compress_tree(root.children[0], None, nodes_dict)
+            dfs_compress_tree(root.children[0], 0, nodes_dict)
         if len(root.children) > 0:
             dfs_remove_invalid_leaf(root.children[0], nodes_dict)
 

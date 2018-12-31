@@ -3,6 +3,8 @@ try:
 except ImportError:
     import xml.etree.ElementTree as ET
 
+import os
+
 import numpy as np
 from sklearn.externals import joblib
 
@@ -65,10 +67,10 @@ def view_xml_dfs(view, anc_clickable, tks):
         tks.append('Layout')
     else:
         tks.append(widget_type[int(label)])
-        if widget_type[int(label)] == 'Unclassified':
-            print(widget_type[int(label)])
-            print(view.attrib['type'], std_clz_name, clickable, anc_clickable)
-            print(feature)
+        # if widget_type[int(label)] == 'Unclassified':
+        #     print(widget_type[int(label)])
+        #     print(view.attrib['type'], std_clz_name, clickable, anc_clickable)
+        #     print(feature)
 
     if num_children > 0:
         for sub in view:
@@ -89,15 +91,22 @@ def xml_process(xml_fp, out_fp):
         for activ in root:
             if activ.tag == 'Activity':
                 activ_name = activ.attrib['name']
-                print('------------------------------')
+                # print('------------------------------')
                 print(activ_name)
                 for view in activ:
                     if is_valid_view(view):
                         tks = []
                         view_xml_dfs(view, anc_clickable=False, tks=tks)
-                        print(' '.join(tks))
+                        with open(out_fp, 'a') as f:
+                            f.write(app_name + ' ' + activ_name + ' ' + ' '.join(tks) + '\n')
 
 
 if __name__ == '__main__':
-    tokens = []
-    xml_process('C:\\Users\\Xiaofei\\Desktop\\org.wikipedia.apk-7988004980825930672.xml', None)
+
+    gator_xml_dir = config.DIRECTORY_CONFIG['gator_xml_dir']
+    out_fp = config.DIRECTORY_CONFIG['apk_sequences_file_path']
+    open(out_fp, 'w', newline='')
+
+    for file in os.listdir(gator_xml_dir):
+        if not file.startswith('.') and file.endswith('.xml'):
+            xml_process(os.path.join(gator_xml_dir, file), out_fp)
