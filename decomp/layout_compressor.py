@@ -1,13 +1,7 @@
 from anytree import Node, RenderTree
 from anytree.exporter import DotExporter
 
-from sketch.widget import Widget
-
-
-class MatchTreeNode:
-    def __init__(self, widget_type, tree_node):
-        self.widget_type = widget_type
-        self.tree_node = tree_node
+from sketch.widget import Widget, MatchTreeNode
 
 
 def render_tree(tree_node, nodes_dict, pic_name=None):
@@ -32,14 +26,16 @@ def post_order_traversal(root):
 
 def create_layout_tree(seq):
     """
-    解析 DFS 序列 sequence 为树，返回根节点
-    :param sequence: 待读取 DFS 序列
-    :param analyze_mode: true 为分析模式（便于打印） false 为生成模式
-    :return: DFS-tree 根节点
+    解析 DFS 序列 sequence 为树，返回根节点和字典 { idx(str): MatchTreeNode(WidgetType, TreeNode) }
+    :param seq: tokens 序列
+    :return:
     """
     tokens = seq.split()
+
+    # '0' 代表 Dummy Root Node，其他从 '1' 开始编号
     parent = root = Node('0')
     nodes_dict = {'0': MatchTreeNode(Widget.Layout, root)}
+
     stack_parent = [root]
     stack_cnt_children = [0]
 

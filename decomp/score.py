@@ -1,145 +1,114 @@
-try:
-    import xml.etree.cElementTree as ET
-except ImportError:
-    import xml.etree.ElementTree as ET
-
-import json
 import operator
-import os
 
-from sketch.widget import Widget
+import networkx as nx
+import numpy as np
+from numpy import unravel_index
 
+from decomp.layout_compressor import optimize_sequence, create_layout_tree, post_order_traversal
+from sketch import config
 
-# 深度优先遍历并添加 index
-def dfs_add_index(json_obj, cnt_map):
-    cnt_map[json_obj['type']].append(json_obj['index'])
-    if 'children' not in json_obj:
-        return
-    for c in json_obj['children']:
-        dfs_add_index(c, cnt_map)
-
-
-# 获得根节点为索引 index 的子图
-def get_subgraph(json_tree, index):
-    if json_tree['index'] == index:
-        return json_tree
-    if 'children' in json_tree:
-        for c in json_tree['children']:
-            result = get_subgraph(c, index)
-            if result is not None:
-                return result
-    return None
+# Layout = 0
+# TextView = 1
+# TextLink = 2
+# EditText = 3
+# ImageView = 4
+# ImageLink = 5
+# Button = 6
+# RadioButton = 7
+# Switch = 8
+# CheckBox = 9
+# Unclassified = 10
 
 
-# 易读格式中的控件遍历序号
-def get_component_cnt_index_map(json_obj):
-    cnt_map = {}
-    for name, widget in Widget.__members__.items():
-        cnt_map[widget] = []
-    dfs_add_index(json_obj, cnt_map)
-    return cnt_map
+weights = [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+dist_penalty = 5
+num_children_penalty = 5
 
 
-# 计算得分
-def cal_score(root1, root2):
-    score = 0
-    num_common_comp = 0
-    queue1 = [root1]
-    queue2 = [root2]
-    while len(queue1) > 0 and len(queue2) > 0:
-        comp_1 = queue1.pop(0)
-        comp_2 = queue2.pop(0)
+def max_score(seq1, seq2):
+    opt_seq1 = optimize_sequence(seq1)
+    print(opt_seq1)
+    tree1, nd1 = create_layout_tree(opt_seq1)
+    post_order1 = post_order_traversal(tree1)
 
-        # 类型相同的控件
-        if comp_1['type'] == comp_2['type']:
-            num_common_comp = num_common_comp + 1
+    opt_seq2 = optimize_sequence(seq2)
+    print(opt_seq2)
+    tree2, nd2 = create_layout_tree(opt_seq2)
+    post_order2 = post_order_traversal(tree2)
 
-        if 'children' in comp_1:
-            for c in comp_1['children']:
-                queue1.append(c)
-        if 'children' in comp_2:
-            for c in comp_2['children']:
-                queue2.append(c)
+    num_nodes1 = len(nd1)
+    num_nodes2 = len(nd2)
+    print('seq 1 len: ' + str(num_nodes1) + ', seq 2 len: ' + str(num_nodes2))
+    matrix = np.zeros((num_nodes1, num_nodes2, 2))
 
-        # 子控件数目不一致扣分
-        if 'children' in comp_1 and 'children' in comp_2:
-            score -= abs(len(comp_1['children']) - len(comp_2['children'])) * 5
+    for u in post_order1:
+        u_children = nd1[u].tree_node.children
+        for v in post_order2:
+            v_children = nd2[v].tree_node.children
 
-    return score + num_common_comp * 10
+            m1a = max([matrix[int(c.name)][int(v)][0] for c in u_children]) if len(u_children) > 0 else 0
+            m1b = max([matrix[int(c.name)][int(v)][1] for c in u_children]) if len(u_children) > 0 else 0
+            m2a = max([matrix[int(u)][int(c.name)][0] for c in v_children]) if len(v_children) > 0 else 0
+            m2b = max([matrix[int(u)][int(c.name)][1] for c in v_children]) if len(v_children) > 0 else 0
 
+            matrix[int(u)][int(v)][1] = max(m1a, m1b, m2a, m2b) - dist_penalty
 
-# 对每个子图计算得分，并计算分值最大数
-def cal_highest_score(middle_file_1, middle_file_2):
-    with open(middle_file_1, 'r') as f:
-        json_obj_1 = json.load(f)
-    comp_cnt_map_1 = get_component_cnt_index_map(json_obj_1)
+            bi_graph = nx.Graph()
+            bi_graph.add_nodes_from([int(c.name) for c in u_children])
+            bi_graph.add_nodes_from([int(c.name) + 1000 for c in v_children])
 
-    with open(middle_file_2, 'r') as f:
-        json_obj_2 = json.load(f)
-    comp_cnt_map_2 = get_component_cnt_index_map(json_obj_2)
+            max_weighted_match = 0
+            children_mismatch_penalty = 0
+            if len(u_children) > 0 and len(v_children) > 0:
+                for uc in u_children:
+                    for vc in v_children:
+                        weight = max(matrix[int(uc.name)][int(vc.name)][1],
+                                     matrix[int(uc.name)][int(vc.name)][0] + 0)
+                        bi_graph.add_edge(int(uc.name), int(vc.name) + 1000, weight=weight)
+                pairs = nx.max_weight_matching(bi_graph)
+                max_weighted_match = sum([bi_graph[pair[0]][pair[1]]['weight'] for pair in pairs])
+                children_mismatch_penalty = abs(len(u_children) - len(v_children)) * num_children_penalty
 
-    scores = []
-    num_matching = 0
+            matrix[int(u)][int(v)][0] = weights[nd1[u].widget_type.value][
+                                            nd2[v].widget_type.value] + max_weighted_match - children_mismatch_penalty
 
-    # 计算每个类型的控件出现次数
-    for name, member in MiddleComponent.__members__.items():
-        indices_1 = comp_cnt_map_1[str(member)]
-        indices_2 = comp_cnt_map_2[str(member)]
-        for i1 in indices_1:
-            for i2 in indices_2:
-                num_matching = num_matching + 1
-                # print('## Pair ' + str(num_matching) + ': (' + str(i1) + ', ' + str(i2) + ')')
-                subgraph_1 = get_subgraph(json_obj_1, i1)
-                subgraph_2 = get_subgraph(json_obj_2, i2)
-                # print('Sub graph 1 (' + str(i1) + '): ', subgraph_1)
-                # print('Sub graph 2 (' + str(i2) + '): ', subgraph_2)
-                score = cal_score(subgraph_1, subgraph_2)
-                scores.append(score)
-                # print('score = ' + str(score))
+    # print(matrix[:, :, 0].max())
+    node1_idx, node2_idx = unravel_index(matrix[:, :, 0].argmax(), matrix[:, :, 0].shape)
+    print(str(node1_idx) + ':', nd1[str(node1_idx)])
+    print(str(node2_idx) + ':', nd2[str(node2_idx)])
 
-    print('# of matched pairs: ', num_matching)
-    return max(scores) if scores else 0
+    # for r in matrix:
+    #     for c in r:
+    #         print(c[0], end=' ')
+    #     print()
 
-
-# 计算两个中间结构的得分
-def middle_structure_match(middle_file_1, middle_file_2):
-    score = cal_highest_score(middle_file_1, middle_file_2)
-    print('Score of ' + middle_file_1 + ' and ' + middle_file_2 + ':', score)
-    return score
+    return matrix[:, :, 0].max()
 
 
 if __name__ == '__main__':
-    layout_path = "./layout"
-    output_path = "./output/brainly"
+    seq_fp = config.DIRECTORY_CONFIG['apk_sequences_file_path']
+    scores_map = {}
 
-    print('##### Start processing ...')
-    print("Generating Middle format of files in " + layout_path + " ...")
+    seq_to_match = 'Layout { Layout { Layout { Layout { Button Button Button } Layout { Layout { Button Button Button } Layout { Button Button Button } Layout { Button Button Button } } } Layout { Button Button Button Button Button } Layout { Button Button Button Button Button } } }'
 
-    if not os.path.exists(os.path.join(output_path)):
-        os.makedirs(os.path.join(output_path))
-
-    # 为 layout_path 中每个文件生成中间结构并存放在 output_path 中
-    for file in os.listdir(layout_path):
-        if file.endswith(".xml"):
-            file_name = file.split('.')[0]
-            middle_format_gen(os.path.join(layout_path, file),
-                              os.path.join(output_path, file_name))
-    # print(os.path.join(output_path, case_dir))
-
-    print("Middle format of files created in " + output_path)
-
-    # input_layout_path = os.path.join(output_path, "fragment_question.json")
-    input_layout_path = './output/input_search_results.json'
-    scores_dict = {}
-    for file in os.listdir(output_path):
-        if file.endswith('.m.json'):
-            score = middle_structure_match(input_layout_path, os.path.join(output_path, file))
-            scores_dict[file] = score
-
-    sorted_scores = sorted(scores_dict.items(), key=operator.itemgetter(1))
-    sorted_scores.reverse()
-    print('=====> Most similar 20 layouts of ' + input_layout_path + ':', sorted_scores[:20])
-    # for file in os.listdir(output_path):
-    #     if file.endswith(".json"):
-    #         file_name = file.split('.')[0]
-    #         middle_structure_match(os.path.join(output_path, ""))
+    with open(seq_fp, 'r') as f:
+        for line in f:
+            line_sp = line.split()
+            app = line_sp[0]
+            activ_name = line_sp[1]
+            tokens = line_sp[2:]
+            print(activ_name)
+            scores_map[activ_name] = max_score(seq_to_match, ' '.join(tokens))
+    sorted_map = sorted(scores_map.items(), key=operator.itemgetter(1), reverse=True)
+    print(sorted_map)

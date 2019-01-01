@@ -54,3 +54,12 @@ class WidgetNode(object):
         self.w_id = w_id
         self.w_class = w_class
         self.w_ancestor_clickable = w_ancestor_clickable
+
+
+class MatchTreeNode:
+    def __init__(self, widget_type, tree_node):
+        self.widget_type = widget_type
+        self.tree_node = tree_node
+
+    def __repr__(self):
+        return "MatchTreeNode(type: {0} : children: {1})".format(self.widget_type, self.tree_node.children)
