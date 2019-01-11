@@ -1,4 +1,5 @@
 import operator
+import time
 
 import networkx as nx
 import numpy as np
@@ -20,36 +21,26 @@ from sketch import config
 # Unclassified = 10
 
 
-weights = [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-           [0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-           [0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0],
-           [0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0],
-           [0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0],
-           [0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0],
-           [0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0],
-           [0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0],
-           [0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0],
-           [0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0],
+weights = [[5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 5, 10, 0, 0, 0, 5, 0, 0, 0, 0],
+           [0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 10, 5, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 5, 10, 0, 0, 0, 0, 0],
+           [0, 0, 5, 0, 0, 0, 10, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0],
            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
 dist_penalty = 5
 num_children_penalty = 5
 
 
-def max_score(seq1, seq2):
-    opt_seq1 = optimize_sequence(seq1)
-    print(opt_seq1)
-    tree1, nd1 = create_layout_tree(opt_seq1)
-    post_order1 = post_order_traversal(tree1)
-
-    opt_seq2 = optimize_sequence(seq2)
-    print(opt_seq2)
-    tree2, nd2 = create_layout_tree(opt_seq2)
-    post_order2 = post_order_traversal(tree2)
-
+def max_score(tree1, nd1, post_order1, tree2, nd2, post_order2):
     num_nodes1 = len(nd1)
     num_nodes2 = len(nd2)
-    print('seq 1 len: ' + str(num_nodes1) + ', seq 2 len: ' + str(num_nodes2))
+    # print('seq 1 len: ' + str(num_nodes1) + ', seq 2 len: ' + str(num_nodes2))
     matrix = np.zeros((num_nodes1, num_nodes2, 2))
 
     for u in post_order1:
@@ -85,8 +76,8 @@ def max_score(seq1, seq2):
 
     # print(matrix[:, :, 0].max())
     node1_idx, node2_idx = unravel_index(matrix[:, :, 0].argmax(), matrix[:, :, 0].shape)
-    print(str(node1_idx) + ':', nd1[str(node1_idx)])
-    print(str(node2_idx) + ':', nd2[str(node2_idx)])
+    # print(str(node1_idx) + ':', nd1[str(node1_idx)])
+    # print(str(node2_idx) + ':', nd2[str(node2_idx)])
 
     # for r in matrix:
     #     for c in r:
@@ -97,10 +88,23 @@ def max_score(seq1, seq2):
 
 
 if __name__ == '__main__':
+    start_time = time.time()
+    print('---------------------------------')
+
     seq_fp = config.DIRECTORY_CONFIG['apk_sequences_file_path']
     scores_map = {}
 
-    seq_to_match = 'Layout { Layout { Layout { Layout { Button Button Button } Layout { Layout { Button Button Button } Layout { Button Button Button } Layout { Button Button Button } } } Layout { Button Button Button Button Button } Layout { Button Button Button Button Button } } }'
+    # 5388.png
+    # com.splashtop.remote.pad.v2 Login
+    # seq_to_match = 'Layout { ImageView Layout { Layout { TextLink Button } Layout { TextLink EditText Layout { TextLink TextLink } EditText TextLink EditText Button TextLink } } }'
+    seq_to_match = 'Layout { Layout { Layout { TextLink TextLink } ImageView TextView ImageView } }'
+
+    opt_seq1 = optimize_sequence(seq_to_match)
+    # print(opt_seq1)
+    tree1, nd1 = create_layout_tree(opt_seq1)
+    post_order1 = post_order_traversal(tree1)
+
+    self_score = max_score(tree1, nd1, post_order1, tree1, nd1, post_order1)
 
     with open(seq_fp, 'r') as f:
         for line in f:
@@ -109,6 +113,25 @@ if __name__ == '__main__':
             activ_name = line_sp[1]
             tokens = line_sp[2:]
             print(activ_name)
-            scores_map[activ_name] = max_score(seq_to_match, ' '.join(tokens))
+            seq2 = ' '.join(tokens)
+
+            opt_seq2 = optimize_sequence(seq2)
+            # print(opt_seq2)
+            tree2, nd2 = create_layout_tree(opt_seq2)
+            post_order2 = post_order_traversal(tree2)
+
+            if len(nd2) < 200:
+                scores_map[activ_name] = max_score(tree1, nd1, post_order1, tree2, nd2, post_order2) / self_score * 100
+
     sorted_map = sorted(scores_map.items(), key=operator.itemgetter(1), reverse=True)
-    print(sorted_map)
+
+    print('---------------------------------')
+    print('Matching results:')
+    rank = 1
+    for key, value in sorted_map:
+        if value > 50:
+            print(rank, key, '%.2f' % value + '%')
+            rank += 1
+
+    print('---------------------------------')
+    print('Duration: {:.2f} s'.format(time.time() - start_time))
