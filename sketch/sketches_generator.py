@@ -9,7 +9,7 @@ from datetime import datetime
 
 import numpy as np
 from PIL import Image
-from anytree import Node
+from anytree import Node, RenderTree
 
 from sketch import config
 from sketch.directory_manager import check_make_dir
@@ -17,8 +17,9 @@ from sketch.widget import Widget, WidgetNode, WidgetColor, WidgetSketch
 
 IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
 TRAINING_DATA_MODE = True  # 构造训练集支持文件
-CROP_WIDGET = True
-ANALYSIS_MODE = True  # 存储属性分析文件
+CROP_WIDGET = False
+ANALYSIS_MODE = False  # 存储属性分析文件
+PRINT_LOG = False
 
 # 路径
 WIDGET_CUT_OUT_PATH = config.SKETCHES_CONFIG['widget_cut_dir']
@@ -73,7 +74,7 @@ def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_
     im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
     out_sketch_path = os.path.join(sketches_dir, rico_index + '.png')
 
-    to_remove_widgets = []
+    to_remove_widgets = set()  # 待删除节点用集合表示
     nodes_dict = {}
     tree_root = Node(KEY_TREE_ROOT)
 
@@ -84,6 +85,11 @@ def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_
 
     # 构造 anytree 树结构
     dfs_create_tree(root_json, args, ancestor_clickable_stack, tree_root, nodes_dict, rico_index)
+
+    if PRINT_LOG:
+        for pre, fill, node in RenderTree(tree_root):
+            if node.name != 'tree_root':
+                print("%s%s %s" % (pre, nodes_dict[node.name].w_type.name, nodes_dict[node.name].w_id))
 
     # 扫描去除大背景、面积过小的控件
     if len(tree_root.children) > 0:
@@ -155,7 +161,9 @@ def dfs_remove_invalid_leaf(tree_node, nodes_dict):
     widget_node = nodes_dict[tree_node.name]
     widget_type = widget_node.w_type
 
-    if widget_type == Widget.Layout and len(tree_node.children) == 0 or widget_type == Widget.Unclassified:
+    # 消除不含子节点的 layout/list 或未分类节点
+    if (widget_type == Widget.Layout or widget_type == Widget.List) and len(tree_node.children) == 0 or \
+            widget_type == Widget.Unclassified:
         tree_node.parent = None
     for child in tree_node.children:
         dfs_remove_invalid_leaf(child, nodes_dict)
@@ -174,6 +182,7 @@ def dfs_compress_tree(tree_node, idx, nodes_dict):
 
     node_parent = tree_node.parent
 
+    # 消除 Layout { Layout { ... } } 及 Layout { Layout { Layout { ... } } }
     if widget_type == Widget.Layout and len(tree_node.children) == 1:
         # prev_node 的作用是避免过度压缩导致叶子控件平层
         # prev_node = tree_node
@@ -183,15 +192,18 @@ def dfs_compress_tree(tree_node, idx, nodes_dict):
             alt_node = alt_node.children[0]
         node_parent.children = node_parent.children[:idx] + (alt_node,) + node_parent.children[idx + 1:]
         # node_parent.children = node_parent.children[:idx] + (prev_node,) + node_parent.children[idx + 1:]
-        child_idx = 0
-        for child in alt_node.children:
-            dfs_compress_tree(child, child_idx, nodes_dict)
-            child_idx += 1
-    else:
-        child_idx = 0
-        for child in tree_node.children:
-            dfs_compress_tree(child, child_idx, nodes_dict)
-            child_idx += 1
+        tree_node = alt_node
+
+    # 消除 List { List { ... } }
+    if widget_type == Widget.List and len(tree_node.children) == 1:
+        child_node = tree_node.children[0]
+        if nodes_dict[child_node.name].w_type == Widget.List:
+            node_parent.children = node_parent.children[:idx] + (child_node,) + node_parent.children[idx + 1:]
+
+    child_idx = 0
+    for child in tree_node.children:
+        dfs_compress_tree(child, child_idx, nodes_dict)
+        child_idx += 1
 
 
 def dfs_make_tokens(tree_node, tokens, nodes_dict):
@@ -211,18 +223,27 @@ def dfs_make_tokens(tree_node, tokens, nodes_dict):
 
 
 def get_std_class_name(clazz, ancestors):
-    if clazz.startswith('android.widget'):
+    """
+    获取继承树上的首个官方组件（待添加更多不以 android.widget 开头的确定类型的组件）
+    :param clazz: 控件类名
+    :param ancestors: 控件祖先列表
+    :return: 首个官方组件类名和所在层次
+    """
+    if clazz.startswith('android.widget') or clazz == 'android.support.v7.widget.Toolbar' or \
+            clazz == 'android.support.v7.widget.RecyclerView':
         return clazz, 0
     level = 1
     for ancestor in ancestors:
-        if ancestor.startswith('android.widget'):
+        if clazz.startswith('android.widget') or clazz == 'android.support.v7.widget.Toolbar' or \
+                clazz == 'android.support.v7.widget.RecyclerView':
             return ancestor, level
         level += 1
     return 'None', 'None'
 
 
 def append_csv_row(node_sha1, json_obj, widget_type, rico_index, ancestor_clickable, csv_rows):
-    if widget_type != Widget.Layout and widget_type != Widget.Unclassified and 'children' not in json_obj:
+    if True:
+        # if widget_type != Widget.Layout and widget_type != Widget.Unclassified and 'children' not in json_obj:
         std_clz_name, level = get_std_class_name(json_obj['class'], json_obj['ancestors'])
         csv_row = []
         for col_title in COLUMN_TITLES:
@@ -252,6 +273,7 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
     :param ancestor_clickable_stack: 用于保存隔层传递的 clickable 参数的栈
     :param parent_node: 当前控件在树上的父节点
     :param nodes_dict: node_sha1: WidgetNode 字典
+    :param rico_index: Rico 序号
     :return:
     """
     widget_type = infer_widget_type(json_obj['class'], json_obj['ancestors'],
@@ -269,8 +291,8 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
                              json_obj['class'], json_obj['bounds'], args[KEY_ANCESTOR_CLICKABLE])
     nodes_dict[tree_node_key] = widget_node
 
-    # 传递参数：如果外层 layout 的 clickable 属性为真，则传递该参数用于后续类型判断（递归传递）
-    if widget_type == Widget.Layout:
+    # 传递参数：如果外层 layout/list 的 clickable 属性为真，则传递该参数用于后续类型判断（递归传递）
+    if widget_type == Widget.Layout or widget_type == Widget.List:
         ancestor_clickable_stack.append(json_obj['clickable'] or args[KEY_ANCESTOR_CLICKABLE])
         args[KEY_ANCESTOR_CLICKABLE] = ancestor_clickable_stack[-1]
 
@@ -279,13 +301,14 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
 
     id_str = json_obj['resource-id'].lower() if 'resource-id' in json_obj else None
 
+    # 判断抽屉控件（不为抽屉生成草图）
     is_drawer = 'NavigationView' in json_obj['class'] or 'NavigationMenu' in json_obj['class'] \
-                or widget_type == Widget.Layout and id_str is not None \
+                or (widget_type == Widget.Layout or widget_type == Widget.List) and id_str is not None \
                 and ('drawer' in id_str or 'slider_layout' in id_str or 'nav_layout' in id_str
                      or 'navigation_layout' in id_str or 'menulayout' in id_str) and 1.8 < h / w < 5
 
-    # 排除不需递归执行的情形
-    if 'children' in json_obj and widget_type == Widget.Layout and not is_drawer:
+    # 排除不需递归执行的情形（是 layout/list 且有 'children' 节点且非抽屉）
+    if 'children' in json_obj and (widget_type == Widget.Layout or widget_type == Widget.List) and not is_drawer:
         len_children = len(json_obj['children'])
         midpoints = []
         if len_children > 1:
@@ -315,7 +338,7 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
 
 def dfs_process_invalid_nodes(tree_node, nodes_dict):
     """
-    从树上删除孤立 Layout/Unclassified 节点、面积过小的控件、面积过大的叶子控件
+    在刚开始分析 XML 时从树上删除孤立 Layout/Unclassified 节点、面积过小的控件、面积过大的叶子控件
     :param tree_node:
     :param nodes_dict:
     :return:
@@ -326,11 +349,11 @@ def dfs_process_invalid_nodes(tree_node, nodes_dict):
     w = max(0, widget_bounds[2] - widget_bounds[0]) + 1
     h = max(0, widget_bounds[3] - widget_bounds[1]) + 1
 
+    # TODO 这里有冗余操作
     if widget_type == Widget.Layout and len(tree_node.children) == 0 or tree_node.name.startswith("Unclassified") or \
-            w <= 10 or h <= 50 or widget_type != Widget.Layout and widget_type != Widget.Unclassified and (w * h) / (
-            WIDTH * HEIGHT) > 0.8:
+            w <= 10 or h <= 50 or (w * h) / (
+            WIDTH * HEIGHT) > 0.8 and widget_type != Widget.Layout and widget_type != Widget.List:
         tree_node.parent = None
-        # del nodes_dict[tree_node.name]
         return
 
     for child in tree_node.children:
@@ -339,9 +362,9 @@ def dfs_process_invalid_nodes(tree_node, nodes_dict):
 
 def dfs_process_overlap_widgets(tree_node, nodes_dict, to_remove_widgets):
     """
-    处理控件重叠情况
+    处理控件重叠情况，遍历完成后确定不需绘制的控件，将其加入到 to_remove_widgets
     :param tree_node: 树节点
-    :param nodes_dict: 字典
+    :param nodes_dict: 节点字典
     :param to_remove_widgets: 不需绘制的控件 sha1 值（方法最终返回后统一删除）
     :return:
     """
@@ -352,11 +375,13 @@ def dfs_process_overlap_widgets(tree_node, nodes_dict, to_remove_widgets):
     tree_node_area = (max(0, widget_bounds[2] - widget_bounds[0]) + 1) * (
             max(0, widget_bounds[3] - widget_bounds[1]) + 1)
 
-    if widget_type != Widget.Layout and widget_type != Widget.Unclassified:
-        most_covered_widgets = []  # 大部分被遮盖的控件
-        part_covered_widgets = []  # 部分被遮盖的控件
+    if widget_type != Widget.Layout and widget_type != Widget.Unclassified and widget_type != Widget.List:
+        most_covered_widgets = set()  # 大部分被遮盖的控件
+        part_covered_widgets = set()  # 部分被遮盖的控件
+        identical_widgets = set()  # 完全重叠的控件
+
         for sha, node in nodes_dict.items():
-            if sha != tree_node.name and node.w_type != Widget.Layout and node.w_type != Widget.Unclassified:
+            if sha != tree_node.name and node.w_type != Widget.Layout and node.w_type != Widget.Unclassified and node.w_type != Widget.List:
                 node_bounds = node.w_bounds
                 dict_node_area = (max(0, node_bounds[2] - node_bounds[0]) + 1) * (
                         max(0, node_bounds[3] - node_bounds[1]) + 1)
@@ -370,20 +395,25 @@ def dfs_process_overlap_widgets(tree_node, nodes_dict, to_remove_widgets):
                     union_area = tree_node_area + dict_node_area - intersection_area
                     # 回避相同位置重叠多个相同控件的情形
                     if intersection_area / dict_node_area > 0.95 and intersection_area / union_area < 0.99:  # 该控件绝大部分被当前控件覆盖
-                        most_covered_widgets.append(sha)
+                        most_covered_widgets.add(sha)
                     elif 0.01 < intersection_area / union_area < 0.99:  # 该控件并未被完全覆盖但与当前控件有交叠
-                        part_covered_widgets.append(sha)
+                        part_covered_widgets.add(sha)
+                    elif intersection_area / union_area == 1.00:
+                        identical_widgets.add(sha)
 
         # if len(most_covered_widgets) >= 4 or len(most_covered_widgets) > 1 and len(most_covered_widgets) > 3:
         if len(most_covered_widgets) >= 3:  # 覆盖很多其他控件的控件如背景图片
             tree_node.parent = None
         elif 0 < len(most_covered_widgets) < 3:  # 如果覆盖 1~2 个则保留该控件但删去被覆盖控件和有交叠的控件
-            to_remove_widgets.extend(most_covered_widgets)
-            to_remove_widgets.extend(part_covered_widgets)
+            to_remove_widgets.update(most_covered_widgets)
+            to_remove_widgets.update(part_covered_widgets)
         elif len(most_covered_widgets) == 0:
             # if len(part_covered_widgets) > 5:
             #     to_remove_widgets.extend(part_covered_widgets)
             pass
+
+        if len(identical_widgets) > 0 and tree_node.name not in to_remove_widgets:
+            to_remove_widgets.update(identical_widgets)
 
     for child in tree_node.children:
         dfs_process_overlap_widgets(child, nodes_dict, to_remove_widgets)
@@ -420,14 +450,16 @@ def dfs_create_sketch(tree_node, nodes_dict, im_screenshot, im_sketch, rico_inde
     widget_id = widget_node.w_id
     widget_class = widget_node.w_class
 
-    if widget_type != Widget.Layout:
+    # TODO 如果需要，在这里添加 List 绘制
+    if widget_type != Widget.Layout and widget_type != Widget.List:
         if CROP_WIDGET:
             crop_widget(im_screenshot, rico_index, widget_type, widget_bounds, widget_id, widget_class, tree_node.name)
-        if ANALYSIS_MODE:
-            append_csv_row(tree_node.name, widget_node.w_json, widget_type, rico_index,
-                           widget_node.w_ancestor_clickable, csv_rows)
         if widget_type != Widget.Unclassified:
             draw_widget(im_sketch, widget_type, widget_bounds)
+
+    if ANALYSIS_MODE:
+        append_csv_row(tree_node.name, widget_node.w_json, widget_type, rico_index,
+                       widget_node.w_ancestor_clickable, csv_rows)
 
     for child in tree_node.children:
         dfs_create_sketch(child, nodes_dict, im_screenshot, im_sketch, rico_index, csv_rows)
@@ -467,25 +499,34 @@ def crop_widget(im_screenshot, rico_index, widget_type, widget_bounds, widget_id
 def infer_widget_type(cn, ancestors, id, has_children, clickable, bounds, args):
     """
     接收json节点，返回关键词匹配后根据规则推断的控件类型
-    :param json_node: 待分析 json 节点
-    :param args: 其他属性
+    :param cn: 类名
+    :param ancestors: 祖先列表
+    :param id: 控件id
+    :param has_children: 是否有子孙
+    :param clickable: clickable 属性
+    :param bounds: 范围
+    :param args: 隔层传递的属性值
     :return: 推断的控件类型结果
     """
     # 执行这些规则后，返回最终推断类型；规则的先后顺序对结果有影响。
 
-    # 次序1：官方提供的特殊情况
+    # 次序1：官方控件中的特殊情况
     if 'ActionMenuItemView' in cn or 'AppCompatImageButton' in cn:
         return Widget.Button
+
     # 次序2：其他特殊情况
     if 'NavItemView' in cn or 'ToolBarItemView' in cn or 'DrawerToolBarItemView' in cn:
         return Widget.Button
     if not has_children and (id is not None and ('btn' in id or 'button' in id)):
         return Widget.Button
 
-    # 次序2：判断class_name是否存在明确的控件类型标识
-    widget_type = infer_widget_type_from_string(cn)
+    android_std_class_name, _ = get_std_class_name(cn, ancestors)
+    widget_type = infer_widget_type_from_std_class(android_std_class_name)
 
-    # 到此为止的Button不区分图形、文字。如果名称中不含Image的图形按钮也会被认为是Button
+    # # 次序2：判断class_name是否存在明确的控件类型标识
+    # widget_type = infer_widget_type_from_string(cn)
+
+    # 到此为止的Button不区分图形、文字。名称中不含Image的图形按钮也会被认为是Button
     # 如果button属性是文字类型，将其统一成TextLink
     if widget_type == Widget.Button:
         for ancestor in ancestors:
@@ -496,7 +537,7 @@ def infer_widget_type(cn, ancestors, id, has_children, clickable, bounds, args):
     # 次序3：判断未明确分类节点的任何一个祖先是否存在明确标识(解决祖先内的判断问题)
     if widget_type == Widget.Unclassified:
         for ancestor in ancestors:
-            widget_type = infer_widget_type_from_string(ancestor)
+            widget_type = infer_widget_type_from_std_class(ancestor)
             if widget_type != Widget.Unclassified:
                 break
 
@@ -510,18 +551,49 @@ def infer_widget_type(cn, ancestors, id, has_children, clickable, bounds, args):
         # 将面积较大的图转换成 ImageLink
         # FIXME 需要确定面积阈值
         widget_type = Widget.ImageLink if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
-
+    if PRINT_LOG:
+        print(cn, ancestors, id, widget_type.name)
     return widget_type
 
 
-def infer_widget_type_from_string(string):
+def infer_widget_type_from_std_class(string):
     """
-    当控件类型名称明确地包括于字符串中时，直接确定该控件类型；否则返回 Unclassified
-    :param string: 待检查字符串
-    :return: 控件类型
+    判断官方组件类名 string 中对应的控件类型
+    :param string: 官方组件类名
+    :return: 推测控件类型
     """
-    if 'Layout' in string or 'ListView' in string or 'RecyclerView' in string:
+    if string == 'android.support.v7.widget.Toolbar':
+        return Widget.Toolbar
+    if 'Layout' in string or 'android.widget.ViewGroup' in string:
         return Widget.Layout
+    if 'ListView' in string or 'android.support.v7.widget.RecyclerView' in string or 'android.widget.AdapterView' in string:
+        return Widget.List
+    if 'android.widget.ToggleButton' in string or 'android.widget.Switch' in string:
+        return Widget.Switch
+    if 'android.widget.RadioButton' in string:
+        return Widget.RadioButton
+    if 'Button' in string:
+        return Widget.Button
+    if 'android.widget.CheckBox' in string or 'android.widget.CheckedTextView' in string:
+        return Widget.CheckBox
+    if 'ImageView' in string:
+        return Widget.ImageView
+    if 'AutoComplete' in string or 'android.widget.EditText' in string:
+        return Widget.EditText
+    if 'TextView' in string:
+        return Widget.TextView
+    return Widget.Unclassified
+
+
+def infer_widget_type_from_string(string):
+    if 'Layout' in string:
+        return Widget.Layout
+    if 'android.widget.ListView' in string or 'RecyclerView' in string:
+        return Widget.List
+    if 'RadioButton' in string:
+        return Widget.RadioButton
+    if 'Switch' in string or 'ToggleButton' in string:
+        return Widget.Switch
     if 'CheckBox' in string:
         return Widget.CheckBox
     if 'EditText' in string or 'AutoComplete' in string:
@@ -532,8 +604,37 @@ def infer_widget_type_from_string(string):
         return Widget.Button
     if 'TextView' in string:
         return Widget.TextView
-
     return Widget.Unclassified
+
+
+def draw_colored_image(im, widget_type, bounds):
+    """
+    在 Image 对象上绘制与控件类型对应的彩色图
+    :param im: Image 对象
+    :param widget_type: 控件类型（据此绘制颜色不同的色块）
+    :param bounds: 实际绘制到 im 上的坐标值
+    :return:
+    """
+    if widget_type == Widget.Button:
+        im.paste(im=WidgetColor.BLUE_RGB, box=bounds)
+    elif widget_type == Widget.TextView:
+        im.paste(im=WidgetColor.NAVY_RGB, box=bounds)
+    elif widget_type == Widget.TextLink:
+        im.paste(im=WidgetColor.BLACK_RGB, box=bounds)
+    elif widget_type == Widget.EditText:
+        im.paste(im=WidgetColor.CYAN_RGB, box=bounds)
+    elif widget_type == Widget.ImageView:
+        im.paste(im=WidgetColor.RED_RGB, box=bounds)
+    elif widget_type == Widget.ImageLink:
+        im.paste(im=WidgetColor.MAROON_RGB, box=bounds)
+    elif widget_type == Widget.CheckBox:
+        im.paste(im=WidgetColor.MAGENTA_RGB, box=bounds)
+    elif widget_type == Widget.Switch:
+        im.paste(im=WidgetColor.LIME_RGB, box=bounds)
+    elif widget_type == Widget.RadioButton:
+        im.paste(im=WidgetColor.YELLOW_RGB, box=bounds)
+    elif widget_type == Widget.Toolbar:
+        im.paste(im=WidgetColor.GREEN_RGB, box=bounds)
 
 
 def draw_widget(im, widget_type, bounds):
@@ -556,20 +657,7 @@ def draw_widget(im, widget_type, bounds):
     h = bounds_inner[3] - bounds_inner[1] + 1
 
     if IMG_MODE == 'color':
-        if widget_type == Widget.Button:
-            im.paste(im=WidgetColor.RED_RGB, box=bounds_inner)
-        elif widget_type == Widget.TextView:
-            im.paste(im=WidgetColor.YELLOW_RGB, box=bounds_inner)
-        elif widget_type == Widget.TextLink:
-            im.paste(im=WidgetColor.BLACK_RGB, box=bounds_inner)
-        elif widget_type == Widget.EditText:
-            im.paste(im=WidgetColor.BLUE_RGB, box=bounds_inner)
-        elif widget_type == Widget.ImageView:
-            im.paste(im=WidgetColor.LIME_RGB, box=bounds_inner)
-        elif widget_type == Widget.ImageLink:
-            im.paste(im=WidgetColor.CYAN_RGB, box=bounds_inner)
-        elif widget_type == Widget.CheckBox:
-            im.paste(im=WidgetColor.MAGENTA_RGB, box=bounds_inner)
+        draw_colored_image(im, widget_type, bounds_inner)
 
     if IMG_MODE == 'sketch':
         im.paste(im=WidgetColor.BLACK_RGB, box=(
