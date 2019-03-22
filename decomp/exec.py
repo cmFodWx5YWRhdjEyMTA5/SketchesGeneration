@@ -3,6 +3,8 @@ import shutil
 import subprocess
 from configparser import ConfigParser
 
+from termcolor import colored
+
 cfg = ConfigParser()
 cfg.read('config.ini')
 
@@ -22,15 +24,16 @@ def remove_dir(path):
 
 if __name__ == '__main__':
 
-    for file in os.listdir(apk_dir):
+    files = os.listdir(apk_dir)
+    for i, file in enumerate(files):
         if file.endswith('.apk'):
-            print('---------------------------------------------')
+            print('>>>>>>>>>> ' + str(i + 1) + '/' + str(len(files)))
 
             file_name = os.path.splitext(file)[0]
             apk_path = os.path.join(apk_dir, file)
             apktool_out_path = os.path.join(temp_dir, file_name)
 
-            subprocess.call(['apktool', 'd', apk_path, '-f', '-o', apktool_out_path])
+            subprocess.call(['apktool', 'd', apk_path, '-f', '-o', apktool_out_path], shell=True)
 
             # 检查 apktool decode 结果文件状态
             if not os.path.isdir(apktool_out_path):
@@ -41,7 +44,7 @@ if __name__ == '__main__':
             if not os.path.exists(soot_output):
                 os.makedirs(soot_output)
             # todo sootrun 路径
-            cmd = ['java', '-jar', '/Users/gexiaofei/soot/SootRun/out/artifacts/SootRun_jar/SootRun.jar',
+            cmd = ['java', '-jar', 'E:\soot\SootRun.jar',
                    '-d', soot_output,
                    '-android-jars', cfg.get('decode', 'android_jars'),
                    '-package', file_name,
@@ -53,17 +56,17 @@ if __name__ == '__main__':
             print('I: Entering another thread to perform soot analysis (time out = ' + str(TIME_OUT) + 's).',
                   'Execution output will be shown until the subprocess ended.')
             try:
-                out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=240)
+                out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=TIME_OUT)
             except subprocess.TimeoutExpired as e:
                 # 处理超时异常
-                print(str(e.output, encoding='utf-8'))
-                print('E:', type(e), 'Soot analysis times out >>> Skip', file)
+                print(e.output.decode())
+                print(colored('E: ' + str(type(e)) + ' Soot analysis times out >>> Skip ' + file, 'red'))
             except subprocess.CalledProcessError as e:
                 # 处理调用失败异常
-                print(str(e.output, encoding='utf-8'))
-                print('E:', type(e))
+                print(e.output.decode())
+                print(colored('E: ' + str(type(e)), 'red'))
             else:
-                print(str(out_bytes, encoding='utf-8'))
+                print(out_bytes.decode())
             finally:
                 print('I: Finished. Removing intermediate files (Apktool files) ...')
                 # 使用完毕后删除 apktool 生成目录
