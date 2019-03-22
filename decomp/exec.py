@@ -59,14 +59,14 @@ if __name__ == '__main__':
                 out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=TIME_OUT)
             except subprocess.TimeoutExpired as e:
                 # 处理超时异常
-                print(e.output.decode())
+                print(e.output.decode('utf-8', 'replace'))
                 print(colored('E: ' + str(type(e)) + ' Soot analysis times out >>> Skip ' + file, 'red'))
             except subprocess.CalledProcessError as e:
                 # 处理调用失败异常
-                print(e.output.decode())
+                print(e.output.decode('utf-8', 'replace'))
                 print(colored('E: ' + str(type(e)), 'red'))
             else:
-                print(out_bytes.decode())
+                print(out_bytes.decode('utf-8', 'replace'))
             finally:
                 print('I: Finished. Removing intermediate files (Apktool files) ...')
                 # 使用完毕后删除 apktool 生成目录
