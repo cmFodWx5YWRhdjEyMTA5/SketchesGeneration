@@ -1,12 +1,17 @@
 import operator
 import os
 import time
+from configparser import ConfigParser
 
 import networkx as nx
 import numpy as np
 
 from decomp.layout_utils import optimize_sequence, create_layout_tree, post_order_traversal, split_list_item_subtree
-from sketch import config
+
+cfg = ConfigParser()
+cfg.read('config.ini')
+
+seq_dir = cfg.get('decode', 'apk_tokens_dir')
 
 # Layout = 0
 # TextView = 1
@@ -107,10 +112,9 @@ if __name__ == '__main__':
     start_time = time.time()
     print('---------------------------------')
 
-    seq_dir = config.DIRECTORY_CONFIG['apk_sequences_dir']
     scores_map = {}
 
-    seq_to_match = 'Layout { Layout { Button TextView } Layout { ImageView Layout { Layout { EditText EditText } Button } } }'
+    seq_to_match = 'Layout { ImageView Layout {  Layout { Layout { Layout { TextView TextView } Layout { EditText ImageView } Layout { EditText ImageView } Layout { Button Button } } } } }'
 
     # 建树，获得 node dict
     tree_root, nd1 = create_layout_tree(optimize_sequence(seq_to_match))

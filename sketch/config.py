@@ -39,7 +39,6 @@ DIRECTORY_CONFIG = {
     'km_model_path': os.path.join(working_dir, 'models', 'kmeans.pkl'),
 
     'gator_xml_dir': os.path.join(working_dir, 'gatorxml'),
-    'apk_sequences_dir': os.path.join(working_dir, 'apk_sequences'),
 }
 
 SKETCHES_CONFIG = {
