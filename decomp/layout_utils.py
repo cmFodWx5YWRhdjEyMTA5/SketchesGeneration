@@ -32,9 +32,9 @@ def create_layout_tree(seq):
     """
     tokens = seq.split()
 
-    # '0' 代表 Dummy Root Node，其他从 '1' 开始编号
+    # '0' 代表 Dummy Root Node，类型为 Unclassified（得分记为0）。其他节点从 '1' 开始编号
     parent = root = Node('0')
-    nodes_dict = {'0': MatchTreeNode(Widget.Layout, root)}
+    nodes_dict = {'0': MatchTreeNode(Widget.Unclassified, root)}
 
     stack_parent = [root]
     stack_cnt_children = [0]
@@ -59,29 +59,60 @@ def create_layout_tree(seq):
     return root, nodes_dict
 
 
-def dfs_compress_tree(tree_node, idx, nodes_dict):
+def split_list_item_subtree(tree_node, nd, item_roots):
+    """
+    解除待匹配的输入布局树 tree_node 中类型为 List 的节点的子项。目前处理是默认选择 List 的第一个子项作为所有子项的结构
+    :param tree_node: 输入布局树节点（开始递归遍历）
+    :param nd: node dict
+    :param item_roots: 输入布局树中的所有表项根节点（可能有多个）
+    :return:
+    """
+    node_id = tree_node.name
+
+    if tree_node.parent is not None and nd[tree_node.parent.name].widget_type == Widget.List:
+        tree_node.parent = None
+
+    # 解除所有 List 节点的子节点，并保留其中一个加入到 item_roots 列表中
+    if nd[node_id].widget_type == Widget.List:
+        if len(tree_node.children) > 0:
+            item_roots.append(tree_node.children[0])
+
+    for child in tree_node.children:
+        split_list_item_subtree(child, nd, item_roots)
+
+
+def dfs_compress_tree(tree_node, idx, nd):
     node_parent = tree_node.parent
-    if nodes_dict[tree_node.name].widget_type == Widget.Layout and len(tree_node.children) == 1:
+    if nd[tree_node.name].widget_type == Widget.Layout and len(tree_node.children) == 1:
         alt_node = tree_node.children[0]
-        while nodes_dict[alt_node.name].widget_type == Widget.Layout and len(alt_node.children) == 1:
+        while nd[alt_node.name].widget_type == Widget.Layout and len(alt_node.children) == 1:
             alt_node = alt_node.children[0]
         # replace the tree node to the alt node
         node_parent.children = node_parent.children[:idx] + (alt_node,) + node_parent.children[idx + 1:]
         # remove leaf layout node
         child_idx = 0
         for child in alt_node.children:
-            dfs_compress_tree(child, child_idx, nodes_dict)
+            dfs_compress_tree(child, child_idx, nd)
             child_idx += 1
     else:
         child_idx = 0
         for child in tree_node.children:
-            dfs_compress_tree(child, child_idx, nodes_dict)
+            dfs_compress_tree(child, child_idx, nd)
             child_idx += 1
 
 
 def dfs_remove_invalid_leaf(tree_node, nodes_dict):
-    if nodes_dict[tree_node.name].widget_type == Widget.Layout and len(tree_node.children) == 0 or \
-            nodes_dict[tree_node.name].widget_type == Widget.Unclassified:
+    """
+    清理孤立 Layout/Unclassified 节点（与清理 Rico 数据集不同）
+    :param tree_node:
+    :param nodes_dict:
+    :return:
+    """
+    widget_node = nodes_dict[tree_node.name]
+    widget_type = widget_node.widget_type
+
+    if widget_type == Widget.Layout and len(tree_node.children) == 0 or \
+            widget_type == Widget.Unclassified:
         tree_node.parent = None
     for child in tree_node.children:
         dfs_remove_invalid_leaf(child, nodes_dict)
@@ -127,8 +158,3 @@ def analyze(seq, file1, file2, print_mode):
 
     if print_mode:
         render_tree(root, nodes_dict, file2)
-
-
-if __name__ == '__main__':
-    sequence = 'Layout { Layout { Layout { Button Button } Button TextLink } Layout { Layout { TextLink TextLink } Layout { Layout { Layout { Layout { TextView TextLink } Layout { TextLink TextLink TextLink TextLink TextLink } } Layout { Layout { TextView TextLink } Layout { TextLink TextLink TextLink TextLink TextLink } } Layout { Layout { TextView TextLink } Layout { TextLink TextLink TextLink TextLink TextLink } } } Layout { TextView TextLink } Layout { TextLink TextLink } } } }'
-    analyze(sequence, '../layout1.png', '../layout2.png', print_mode=True)

@@ -137,23 +137,16 @@ def compress_clean_tree(tree_root, nodes_dict):
     :param nodes_dict: node_sha1: WidgetNode 字典
     :return:
     """
-    if len(tree_root.children) > 0:
-        dfs_compress_tree(tree_root.children[0], 0, nodes_dict)
-    if len(tree_root.children) > 0:
-        dfs_remove_invalid_leaf(tree_root.children[0], nodes_dict)
-    if len(tree_root.children) > 0:
-        dfs_compress_tree(tree_root.children[0], 0, nodes_dict)
-    if len(tree_root.children) > 0:
-        dfs_remove_invalid_leaf(tree_root.children[0], nodes_dict)
-    if len(tree_root.children) > 0:
-        dfs_compress_tree(tree_root.children[0], 0, nodes_dict)
-    if len(tree_root.children) > 0:
-        dfs_remove_invalid_leaf(tree_root.children[0], nodes_dict)
+    for i in range(3):
+        if len(tree_root.children) > 0:
+            dfs_compress_tree(tree_root.children[0], 0, nodes_dict)
+        if len(tree_root.children) > 0:
+            dfs_remove_invalid_leaf(tree_root.children[0], nodes_dict)
 
 
 def dfs_remove_invalid_leaf(tree_node, nodes_dict):
     """
-    清理孤立 Layout/Unclassified 节点
+    清理 Rico 数据集中孤立 Layout/List/Unclassified 节点
     :param tree_node: 树节点
     :param nodes_dict: node_sha1: WidgetNode 字典
     :return:
