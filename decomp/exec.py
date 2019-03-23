@@ -11,7 +11,7 @@ cfg.read('config.ini')
 
 apk_dir = cfg.get('decode', 'apk_dir')
 temp_dir = cfg.get('decode', 'temp_dir')
-token_file_dir = cfg.get('decode', 'token_file_dir')
+apk_tokens_dir = cfg.get('decode', 'apk_tokens_dir')
 
 android_jars = cfg.get('decode', 'android_jars')
 soot_jar = cfg.get('decode', 'soot_jar')
@@ -56,7 +56,7 @@ if __name__ == '__main__':
                '-package', file_name,
                '-process-dir', apk_path,
                '-apktool-dir', apktool_out_path,
-               '-token-dir', token_file_dir,
+               '-token-dir', apk_tokens_dir,
                '-process-multiple-dex', '-allow-phantom-refs']
 
         print('I: Entering another thread to perform soot analysis (time out = ' + str(TIME_OUT) + 's).',
