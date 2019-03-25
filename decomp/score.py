@@ -36,11 +36,11 @@ weights = [[5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0],  # 0
            [0, 0, 0, 0, 20, 20, 5, 0, 0, 0, 0, 0, 0],  # 4
            [0, 0, 0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0],  # 5
            [0, 0, 5, 0, 5, 0, 25, 0, 0, 0, 0, 0, 0],  # 6
-           [0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0],  # 7
-           [0, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0],  # 8
-           [0, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0],  # 9
+           [0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0],  # 7
+           [0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 0, 0],  # 8
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 0],  # 9
            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 10
-           [10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0],  # 11
+           [10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0],  # 11
            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20]]  # 12
 
 dist_penalty = 5
@@ -130,12 +130,14 @@ if __name__ == '__main__':
     post_order_item = None
 
     self_score = max_score(nd1, post_order_main, nd1, post_order_main)
+    item_self_score = 0
 
     if contains_list:
         # todo 目前只处理了所有表项的第一个
         item_root = item_roots[0]
         post_order_item = post_order_traversal(item_root)
-        self_score += max_score(nd1, post_order_item, nd1, post_order_item)
+        item_self_score = max_score(nd1, post_order_item, nd1, post_order_item)
+        self_score += item_self_score * 1.5
 
     for file_name in os.listdir(seq_dir):
         if file_name.endswith('.lst'):
@@ -160,13 +162,18 @@ if __name__ == '__main__':
                     cfile_pot = post_order_traversal(cfile_tree_root)
 
                     # 文件中 2(item) 总是放在 1(layout) 前面
-                    if file_type == 2 and contains_list:
-                        current_item_score = max_score(nd1, post_order_item, cfile_nd, cfile_pot)
-                        item_self_score = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
-                        current_item_simi_score = current_item_score / item_self_score
+                    if contains_list and file_type == 2:
+                        current_item_common_score = max_score(nd1, post_order_item, cfile_nd, cfile_pot)
+                        current_item_self_score = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
+
+                        current_item_simi_score = 2 * current_item_common_score * current_item_common_score / current_item_self_score / (
+                                current_item_self_score + item_self_score) if current_item_self_score > 0 else 0
+                        # if apk_package == 'com.kudago.android':
+                        #     print(layout_id, current_item_common_score, current_item_self_score,
+                        #           current_item_simi_score)
                         if current_item_simi_score > max_match_item_simi_score:
-                            max_match_item_self_score = item_self_score
-                            max_match_item_score = current_item_score
+                            max_match_item_self_score = current_item_self_score
+                            max_match_item_score = current_item_common_score
                             max_match_item_simi_score = current_item_simi_score
                             max_item_fname = file_name
 
@@ -181,8 +188,10 @@ if __name__ == '__main__':
                         # scores_map[key_id] = (current_layout_score + max_match_item_score) - \
                         #                      abs(current_layout_self_score - current_layout_score) - \
                         #                      abs(max_match_item_score - max_match_item_self_score)
-                        scores_map[key_id] = 2 * (current_layout_score + max_match_item_score) / \
-                                             (self_score + current_layout_self_score + max_match_item_self_score)
+                        common_score = current_layout_score + max_match_item_score * 1.5
+                        scores_map[key_id] = 2 * common_score * common_score / self_score / \
+                                             (self_score + current_layout_self_score + max_match_item_self_score * 1.5)
+
                         print(key_id, current_layout_score, current_layout_self_score, max_match_item_score,
                               max_match_item_self_score, self_score)
 

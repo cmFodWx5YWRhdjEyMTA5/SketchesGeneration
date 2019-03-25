@@ -44,22 +44,23 @@ class Rectangle(Component):
 
         def judge_widget_type(flags):
             if flags[Shape.HLINE.value] == 3 and flags[Shape.CIRCLE.value] == 1:
-                return Widget.Toolbar
+                return Widget.Toolbar  # - - - O
             if flags[Shape.ARROW.value] == 1:
-                return Widget.List
+                return Widget.List  # ->
             if flags[Shape.CROSS.value] == 3:
-                return Widget.TextLink if flags[Shape.HLINE.value] == 1 else Widget.TextView
+                return Widget.TextLink if flags[Shape.HLINE.value] == 1 else Widget.TextView  # X X X
             if flags[Shape.TRIANGLE.value] == 1:
-                return Widget.ImageLink if flags[Shape.HLINE.value] == 1 else Widget.ImageView
+                return Widget.ImageLink if flags[Shape.HLINE.value] == 1 else Widget.ImageView  # △
             if flags[Shape.VLINE.value] == 1:
-                return Widget.EditText
-            if flags[Shape.CROSS.value] == 2:
-                if flags[Shape.CIRCLE.value] == 1:
-                    return Widget.RadioButton
-                if flags[Shape.CHECK.value] == 1:
-                    return Widget.CheckBox
+                return Widget.EditText  # |
+            if flags[Shape.CHECK.value] == 1:
+                return Widget.CheckBox  # X X V
             if flags[Shape.CIRCLE.value] == 1:
-                return Widget.Switch if flags[Shape.HLINE.value] == 1 else Widget.Button
+                if flags[Shape.CROSS.value] > 0:
+                    return Widget.RadioButton  # X X O
+                if flags[Shape.HLINE.value] == 1:
+                    return Widget.Switch  # O -
+                return Widget.Button  # O
             return Widget.Unclassified
 
         self.widget = judge_widget_type(self.inside_shapes_cnt)
