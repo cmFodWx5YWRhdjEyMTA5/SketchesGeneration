@@ -18,13 +18,13 @@ TRAINING_CONFIG = {
     'min_tokens_num': 5
 }
 
-working_dir = 'E:\\playground'
+working_dir = '/Users/gexiaofei/PycharmProjects/json_handler'
 intermediate_dir = working_dir + 'intermediate'
 
 DIRECTORY_CONFIG = {
     'rico_combined_dir': 'E:\\rico-dataset\\combined',
     'sketches_combined_dir': os.path.join(working_dir, 'data', 'processedImage'),
-    'widget_sketches_dir': os.path.join(PROJECT_ROOT, 'pictures', 'frameless'),
+    # 'widget_sketches_dir': os.path.join(PROJECT_ROOT, 'pictures', 'frameless'),
 
     'rico_dirs_dir': os.path.join(working_dir, 'rico-data'),
     'sketches_dirs_dir': os.path.join(working_dir, 'sketches'),

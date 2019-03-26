@@ -1,14 +1,30 @@
+import os
+from configparser import ConfigParser
 from enum import Enum
 
 from PIL import Image
 
-from sketch import config
-from sketch.sketches_generator import draw_colored_image
-from sketch.widget import Widget
+from rico import config
+from rico.sketches_generator import draw_colored_image
+from utils.directory_manager import check_make_dir
+from utils.widget import Widget
 
 # 画布长宽
 SKETCH_WIDTH = config.SKETCHES_CONFIG['sketch-width']
 SKETCH_HEIGHT = config.SKETCHES_CONFIG['sketch-height']
+
+cfg = ConfigParser()
+cfg.read('../config.ini')
+
+coord_dir = cfg.get('sketch', 'coord_dir')
+colored_dir = cfg.get('sketch', 'colored_dir')
+nmt_file_dir = cfg.get('nmt', 'sketch_files_dir')
+
+check_make_dir(colored_dir)
+check_make_dir(nmt_file_dir)
+
+sketch_lst_fp = os.path.join(nmt_file_dir, cfg.get('nmt', 'sketch_lst_name'))
+layout_seq_fp = os.path.join(nmt_file_dir, cfg.get('nmt', 'layout_seq_file_name'))
 
 
 class Shape(Enum):
@@ -41,16 +57,17 @@ class Rectangle(Component):
         self.widget = Widget.Unclassified
 
     def set_widget_type(self):
-
         def judge_widget_type(flags):
             if flags[Shape.HLINE.value] == 3 and flags[Shape.CIRCLE.value] == 1:
                 return Widget.Toolbar  # - - - O
             if flags[Shape.ARROW.value] == 1:
                 return Widget.List  # ->
             if flags[Shape.CROSS.value] == 3:
-                return Widget.TextLink if flags[Shape.HLINE.value] == 1 else Widget.TextView  # X X X
+                # return Widget.TextLink if flags[Shape.HLINE.value] == 1 else Widget.TextView  # X X X
+                return Widget.TextView
             if flags[Shape.TRIANGLE.value] == 1:
-                return Widget.ImageLink if flags[Shape.HLINE.value] == 1 else Widget.ImageView  # △
+                # return Widget.ImageLink if flags[Shape.HLINE.value] == 1 else Widget.ImageView  # △
+                return Widget.ImageView
             if flags[Shape.VLINE.value] == 1:
                 return Widget.EditText  # |
             if flags[Shape.CHECK.value] == 1:
@@ -66,16 +83,16 @@ class Rectangle(Component):
         self.widget = judge_widget_type(self.inside_shapes_cnt)
 
 
-if __name__ == '__main__':
-    with open('/Users/gexiaofei/Desktop/PaperExample3-out.txt', 'r') as f:
-        non_rectangles = []
-        rectangles = []
+def create_colored_pic(sketch_data_fp, out_fp):
+    with open(sketch_data_fp, 'r') as f:
+        non_rectangles = []  # 保存非矩形形状的列表
+        rectangles = []  # 保存矩形的列表
 
+        # 先获取第一行（为最外围矩形）
         head_line = next(f)
         nums = head_line.split()
         if int(nums[4]) != Shape.RECTANGLE.value:
-            print('Error: The first line must be the contour rectangle!')
-            exit(-1)
+            raise Exception('First line in the sketch data file must be the valid contour rectangle.')
 
         move_x = int(nums[1])
         move_y = int(nums[0])
@@ -84,6 +101,7 @@ if __name__ == '__main__':
 
         contour_rect = Rectangle(Shape.RECTANGLE, 0, 0, contour_width, contour_height)
 
+        # 处理草图数据文件中的每一行（坐标）
         for line in f:
             nums = line.split()
             # 计算平移后的新坐标值
@@ -96,24 +114,50 @@ if __name__ == '__main__':
             else:
                 non_rectangles.append(Component(Shape(int(nums[4])), x0, y0, x1, y1))
 
+        # 非矩形形状
         for component in non_rectangles:
             mid_x = (component.x0 + component.x1) / 2
             mid_y = (component.y0 + component.y1) / 2
             direct_rect = contour_rect
+            # 检查每个矩形，记录包围该形状的最小矩形
             for rect in rectangles:
                 if rect.x0 < mid_x < rect.x1 and rect.y0 < mid_y < rect.y1 and rect.get_area() < direct_rect.get_area():
                     direct_rect = rect
+            # 修改最小包围矩形的内部形状计数值矩阵
             direct_rect.inside_shapes_cnt[component.shape.value] += 1
 
         im_colored = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
 
+        # 矩形
         for rect in rectangles:
-            rect.set_widget_type()
-            print(rect.inside_shapes_cnt, rect.x0, rect.y0, rect.widget.name)
+            rect.set_widget_type()  # 根据计数值矩阵判断控件类型
+            # print(rect.inside_shapes_cnt, rect.x0, rect.y0, rect.x1, rect.y1, rect.widget.name)
 
             bounds = (int(rect.x0 / contour_width * SKETCH_WIDTH), int(rect.y0 / contour_height * SKETCH_HEIGHT),
                       int(rect.x1 / contour_width * SKETCH_WIDTH), int(rect.y1 / contour_height * SKETCH_HEIGHT))
-            print(bounds)
             draw_colored_image(im_colored, rect.widget, bounds)
 
-            im_colored.save('/Users/gexiaofei/Desktop/PaperExample3-out.png')
+        im_colored.rotate(90, expand=1).save(out_fp)
+        print(out_fp, "saved.")
+
+
+def create_nmt_files(sketch_lst_fp, sketch_lst_content, layout_seq_fp, num_lines):
+    with open(sketch_lst_fp, 'w') as f:
+        f.write(sketch_lst_content)
+    with open(layout_seq_fp, 'w') as f:
+        f.write((Widget.Unclassified.name + '\n') * num_lines)
+
+
+if __name__ == '__main__':
+    files = os.listdir(coord_dir)
+    files.sort()
+    sketch_nmt = ''
+
+    for i, coord_file in enumerate(files):
+        if coord_file.endswith('.lst'):
+            file_name = os.path.splitext(coord_file)[0]
+            create_colored_pic(sketch_data_fp=os.path.join(coord_dir, coord_file),
+                               out_fp=os.path.join(colored_dir, file_name + '.png'))
+            sketch_nmt += file_name + '.png ' + str(i) + '\n'
+
+    create_nmt_files(sketch_lst_fp, sketch_nmt, layout_seq_fp, len(files))

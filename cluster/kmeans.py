@@ -7,8 +7,8 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 
-from sketch import config
-from sketch.directory_manager import copy_file
+from rico import config
+from utils.directory_manager import copy_file
 
 COLUMN_TITLES = config.CSV_CONFIG['column_titles']
 

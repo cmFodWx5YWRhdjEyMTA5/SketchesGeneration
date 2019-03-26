@@ -1,9 +1,4 @@
-import os
 from enum import Enum
-
-from PIL import Image
-
-from sketch import config
 
 
 class Widget(Enum):
@@ -36,16 +31,16 @@ class WidgetColor(object):
     NAVY_RGB = (0, 0, 128)  #
 
 
-class WidgetSketch(object):
-    widget_sketches_dir = config.DIRECTORY_CONFIG['widget_sketches_dir']
-
-    IM_BUTTON = Image.open(os.path.join(widget_sketches_dir, 'button.png'))
-    IM_EDIT_TEXT = Image.open(os.path.join(widget_sketches_dir, 'edit_text.png'))
-    IM_IMAGE_VIEW = Image.open(os.path.join(widget_sketches_dir, 'image_view.png'))
-    IM_TEXT_VIEW = Image.open(os.path.join(widget_sketches_dir, 'text_view.png'))
-    IM_IMAGE_LINK = Image.open(os.path.join(widget_sketches_dir, 'image_link.png'))
-    IM_TEXT_LINK = Image.open(os.path.join(widget_sketches_dir, 'text_link.png'))
-    IM_CHECK_BOX = Image.open(os.path.join(widget_sketches_dir, 'checkbox.png'))
+# class WidgetSketch(object):
+#     widget_sketches_dir = config.DIRECTORY_CONFIG['widget_sketches_dir']
+#
+#     IM_BUTTON = Image.open(os.path.join(widget_sketches_dir, 'button.png'))
+#     IM_EDIT_TEXT = Image.open(os.path.join(widget_sketches_dir, 'edit_text.png'))
+#     IM_IMAGE_VIEW = Image.open(os.path.join(widget_sketches_dir, 'image_view.png'))
+#     IM_TEXT_VIEW = Image.open(os.path.join(widget_sketches_dir, 'text_view.png'))
+#     IM_IMAGE_LINK = Image.open(os.path.join(widget_sketches_dir, 'image_link.png'))
+#     IM_TEXT_LINK = Image.open(os.path.join(widget_sketches_dir, 'text_link.png'))
+#     IM_CHECK_BOX = Image.open(os.path.join(widget_sketches_dir, 'checkbox.png'))
 
 
 class WidgetNode(object):

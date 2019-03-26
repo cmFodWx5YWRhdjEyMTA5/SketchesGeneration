@@ -1,7 +1,7 @@
 from anytree import Node, RenderTree
 from anytree.exporter import DotExporter
 
-from sketch.widget import Widget, MatchTreeNode
+from utils.widget import Widget, MatchTreeNode
 
 
 def render_tree(tree_node, nodes_dict, pic_name=None):
@@ -40,7 +40,7 @@ def create_layout_tree(seq):
     stack_cnt_children = [0]
 
     idx = 1
-    for _, token in enumerate(tokens):
+    for token in tokens:
         if token == '{':
             parent = stack_parent[-1]
             stack_cnt_children.append(0)
@@ -90,15 +90,11 @@ def dfs_compress_tree(tree_node, idx, nd):
         # replace the tree node to the alt node
         node_parent.children = node_parent.children[:idx] + (alt_node,) + node_parent.children[idx + 1:]
         # remove leaf layout node
-        child_idx = 0
-        for child in alt_node.children:
-            dfs_compress_tree(child, child_idx, nd)
-            child_idx += 1
+        for i, child in enumerate(alt_node.children):
+            dfs_compress_tree(child, i, nd)
     else:
-        child_idx = 0
-        for child in tree_node.children:
-            dfs_compress_tree(child, child_idx, nd)
-            child_idx += 1
+        for i, child in enumerate(tree_node.children):
+            dfs_compress_tree(child, i, nd)
 
 
 def dfs_remove_invalid_leaf(tree_node, nodes_dict):

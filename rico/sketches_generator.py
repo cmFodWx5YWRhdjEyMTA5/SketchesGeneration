@@ -11,9 +11,9 @@ import numpy as np
 from PIL import Image
 from anytree import Node, RenderTree
 
-from sketch import config
-from sketch.directory_manager import check_make_dir
-from sketch.widget import Widget, WidgetNode, WidgetColor, WidgetSketch
+from rico import config
+from utils.directory_manager import check_make_dir
+from utils.widget import Widget, WidgetNode, WidgetColor
 
 IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
 TRAINING_DATA_MODE = True  # 构造训练集支持文件
@@ -193,10 +193,8 @@ def dfs_compress_tree(tree_node, idx, nodes_dict):
         if nodes_dict[child_node.name].w_type == Widget.List:
             node_parent.children = node_parent.children[:idx] + (child_node,) + node_parent.children[idx + 1:]
 
-    child_idx = 0
-    for child in tree_node.children:
-        dfs_compress_tree(child, child_idx, nodes_dict)
-        child_idx += 1
+    for i, child in enumerate(tree_node.children):
+        dfs_compress_tree(child, i, nodes_dict)
 
 
 def dfs_make_tokens(tree_node, tokens, nodes_dict):
@@ -225,12 +223,10 @@ def get_std_class_name(clazz, ancestors):
     if clazz.startswith('android.widget') or clazz == 'android.support.v7.widget.Toolbar' or \
             clazz == 'android.support.v7.widget.RecyclerView':
         return clazz, 0
-    level = 1
-    for ancestor in ancestors:
+    for i, ancestor in enumerate(ancestors):
         if clazz.startswith('android.widget') or clazz == 'android.support.v7.widget.Toolbar' or \
                 clazz == 'android.support.v7.widget.RecyclerView':
-            return ancestor, level
-        level += 1
+            return ancestor, i + 1
     return 'None', 'None'
 
 
@@ -653,23 +649,24 @@ def draw_widget(im, widget_type, bounds):
         draw_colored_image(im, widget_type, bounds_inner)
 
     if IMG_MODE == 'sketch':
-        im.paste(im=WidgetColor.BLACK_RGB, box=(
-            bounds_sketch[0] + WIDGET_FRAME_MARGIN, bounds_sketch[1] + WIDGET_FRAME_MARGIN,
-            bounds_sketch[2] - WIDGET_FRAME_MARGIN, bounds_sketch[3] - WIDGET_FRAME_MARGIN))
-        if widget_type == Widget.Button:
-            im.paste(WidgetSketch.IM_BUTTON.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
-        elif widget_type == Widget.ImageView:
-            im.paste(WidgetSketch.IM_IMAGE_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
-        elif widget_type == Widget.EditText:
-            im.paste(WidgetSketch.IM_EDIT_TEXT.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
-        elif widget_type == Widget.TextView:
-            im.paste(WidgetSketch.IM_TEXT_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
-        elif widget_type == Widget.CheckBox:
-            im.paste(WidgetSketch.IM_CHECK_BOX.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
-        elif widget_type == Widget.ImageLink:
-            im.paste(WidgetSketch.IM_IMAGE_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
-        elif widget_type == Widget.TextLink:
-            im.paste(WidgetSketch.IM_TEXT_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        raise Exception("Unsupported rico mode.")
+        # im.paste(im=WidgetColor.BLACK_RGB, box=(
+        #     bounds_sketch[0] + WIDGET_FRAME_MARGIN, bounds_sketch[1] + WIDGET_FRAME_MARGIN,
+        #     bounds_sketch[2] - WIDGET_FRAME_MARGIN, bounds_sketch[3] - WIDGET_FRAME_MARGIN))
+        # if widget_type == Widget.Button:
+        #     im.paste(WidgetSketch.IM_BUTTON.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        # elif widget_type == Widget.ImageView:
+        #     im.paste(WidgetSketch.IM_IMAGE_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        # elif widget_type == Widget.EditText:
+        #     im.paste(WidgetSketch.IM_EDIT_TEXT.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        # elif widget_type == Widget.TextView:
+        #     im.paste(WidgetSketch.IM_TEXT_VIEW.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        # elif widget_type == Widget.CheckBox:
+        #     im.paste(WidgetSketch.IM_CHECK_BOX.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        # elif widget_type == Widget.ImageLink:
+        #     im.paste(WidgetSketch.IM_IMAGE_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+        # elif widget_type == Widget.TextLink:
+        #     im.paste(WidgetSketch.IM_TEXT_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
 
 
 def hash_file_sha1(file_path):

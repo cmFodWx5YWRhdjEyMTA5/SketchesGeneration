@@ -9,9 +9,9 @@ import numpy as np
 from sklearn.externals import joblib
 
 from cluster.kmeans import create_feature
-from sketch import config
-from sketch.sketches_generator import get_std_class_name
-from sketch.widget import Widget
+from rico import config
+from rico.sketches_generator import get_std_class_name
+from utils.widget import Widget
 
 kmeans = joblib.load(config.DIRECTORY_CONFIG['km_model_path'])
 widget_type = {0: Widget.Button.name,

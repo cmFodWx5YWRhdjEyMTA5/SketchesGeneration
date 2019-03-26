@@ -8,7 +8,7 @@ from configparser import ConfigParser
 from utils.logging import Loggers
 
 cfg = ConfigParser()
-cfg.read('config.ini')
+cfg.read('../config.ini')
 
 apk_dir = cfg.get('decode', 'apk_dir')
 temp_dir = cfg.get('decode', 'temp_dir')

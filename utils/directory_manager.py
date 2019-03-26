@@ -4,7 +4,7 @@ import shutil
 import time
 from os import walk
 
-from sketch import config
+from rico import config
 
 MODE = 'test_analysis'
 

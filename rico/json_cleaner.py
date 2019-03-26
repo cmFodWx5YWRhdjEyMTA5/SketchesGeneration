@@ -3,7 +3,7 @@ import os
 import time
 from datetime import datetime
 
-from sketch import config
+from rico import config
 
 
 def json_handler(subdir_path, cleaned_subdir_path, rico_index):

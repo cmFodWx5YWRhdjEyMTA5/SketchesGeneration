@@ -9,7 +9,7 @@ import numpy as np
 from decomp.layout_utils import optimize_sequence, create_layout_tree, post_order_traversal, split_list_item_subtree
 
 cfg = ConfigParser()
-cfg.read('config.ini')
+cfg.read('../config.ini')
 
 seq_dir = cfg.get('decode', 'apk_tokens_dir')
 
@@ -95,53 +95,51 @@ def max_score(nd1, post_order1, nd2, post_order2):
             matrix[int(u)][int(v)][0] = weights[nd1[u].widget_type.value][nd2[v].widget_type.value] + \
                                         max_weighted_match - children_mismatch_penalty
 
-    # print(matrix[:, :, 0].max())
-    # node1_idx, node2_idx = unravel_index(matrix[:, :, 0].argmax(), matrix[:, :, 0].shape)
-    # print(str(node1_idx) + ':', nd1[str(node1_idx)])
-    # print(str(node2_idx) + ':', nd2[str(node2_idx)])
-
-    # for r in matrix:
-    #     for c in r:
-    #         print(c[0], end=' ')
-    #     print()
-
     return matrix[:, :, 0].max()
 
 
-if __name__ == '__main__':
-    start_time = time.time()
-    print('---------------------------------')
+def create_tree(sequence):
+    """
+    优化输入布局序列，输出该序列的根节点（用于遍历）、节点字典、后序遍历（用于依次比较）
+    :param sequence: 布局序列
+    :return:
+    """
+    root, nd = create_layout_tree(optimize_sequence(sequence))
+    post_order = post_order_traversal(root)
+    return root, nd, post_order
 
+
+def cal_common_score(tree_root, nd, post_order, layout_dir):
+    """
+    将 layout_dir 中的每个文件中每个布局与输入的布局树进行比较，返回一个按相似度排序的有序字典
+    :param tree_root: 待匹配布局树根节点
+    :param nd: 待匹配布局树节点字典
+    :param post_order: 待匹配布局树后序遍历
+    :param layout_dir: 布局序列文件文件夹
+    :return: 按相似度排序的字典（key: layout id, value: similarity score）
+    """
     scores_map = {}
 
-    seq_to_match = 'Layout { ImageView Layout {  Layout { Layout { Layout { TextView TextView } Layout { EditText ImageView } Layout { EditText ImageView } Layout { Button Button } } } } }'
-
-    # 建树，获得 node dict
-    tree_root, nd1 = create_layout_tree(optimize_sequence(seq_to_match))
-
     item_roots = []
-    split_list_item_subtree(tree_root, nd1, item_roots)
-
-    post_order_main = post_order_traversal(tree_root)
+    split_list_item_subtree(tree_root, nd, item_roots)
     contains_list = len(item_roots) > 0
 
-    # 新建变量代表待匹配 item 树根节点及其后序遍历，仅当 has_item 为真时有效
-    item_root = None
+    # 新建变量代表待匹配 item 树根节点及其后序遍历，仅当 contains_list 为真时有效
     post_order_item = None
 
-    self_score = max_score(nd1, post_order_main, nd1, post_order_main)
+    self_score = max_score(nd, post_order, nd, post_order)  # 自身得分/最大可能得分
     item_self_score = 0
 
     if contains_list:
         # todo 目前只处理了所有表项的第一个
         item_root = item_roots[0]
         post_order_item = post_order_traversal(item_root)
-        item_self_score = max_score(nd1, post_order_item, nd1, post_order_item)
+        item_self_score = max_score(nd, post_order_item, nd, post_order_item)
         self_score += item_self_score * 1.5
 
-    for file_name in os.listdir(seq_dir):
+    for file_name in os.listdir(layout_dir):
         if file_name.endswith('.lst'):
-            with open(os.path.join(seq_dir, file_name), 'r') as f:
+            with open(os.path.join(layout_dir, file_name), 'r') as f:
 
                 # 新建变量代表当需要 item 匹配时记录当前最大近似的 item 文件名和分值
                 max_match_item_self_score = 0
@@ -151,26 +149,23 @@ if __name__ == '__main__':
 
                 for line in f:
                     line_sp = line.split()
-                    apk_package = line_sp[0]
-                    file_type = int(line_sp[1])
+                    package = line_sp[0]
+                    type = int(line_sp[1])
                     file_name = line_sp[2]
                     tokens = line_sp[3:]
-                    layout_id = apk_package + ':' + file_name
+                    layout_id = package + ':' + file_name
 
                     # 优化树结构
-                    cfile_tree_root, cfile_nd = create_layout_tree(optimize_sequence(' '.join(tokens)))
-                    cfile_pot = post_order_traversal(cfile_tree_root)
+                    cfile_tree_root, cfile_nd, cfile_pot = create_tree(' '.join(tokens))
 
                     # 文件中 2(item) 总是放在 1(layout) 前面
-                    if contains_list and file_type == 2:
-                        current_item_common_score = max_score(nd1, post_order_item, cfile_nd, cfile_pot)
+                    if contains_list and type == 2:
+                        current_item_common_score = max_score(nd, post_order_item, cfile_nd, cfile_pot)
                         current_item_self_score = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
 
                         current_item_simi_score = 2 * current_item_common_score * current_item_common_score / current_item_self_score / (
                                 current_item_self_score + item_self_score) if current_item_self_score > 0 else 0
-                        # if apk_package == 'com.kudago.android':
-                        #     print(layout_id, current_item_common_score, current_item_self_score,
-                        #           current_item_simi_score)
+
                         if current_item_simi_score > max_match_item_simi_score:
                             max_match_item_self_score = current_item_self_score
                             max_match_item_score = current_item_common_score
@@ -178,16 +173,13 @@ if __name__ == '__main__':
                             max_item_fname = file_name
 
                     # 将每一行代表的 layout 所对应的近似得分保存到 map 中
-                    if file_type == 1 and len(cfile_nd) < 200:
+                    if type == 1 and len(cfile_nd) < 200:
                         # 用 package name + main layout + item layout 作为索引
                         key_id = layout_id + '/' + max_item_fname if contains_list and max_item_fname is not None else layout_id
                         current_layout_self_score = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
-                        current_layout_score = max_score(nd1, post_order_main, cfile_nd, cfile_pot)
+                        current_layout_score = max_score(nd, post_order, cfile_nd, cfile_pot)
 
-                        # 放到 map 中的是计算后的 "近似度得分" 绝对值计算的是惩罚
-                        # scores_map[key_id] = (current_layout_score + max_match_item_score) - \
-                        #                      abs(current_layout_self_score - current_layout_score) - \
-                        #                      abs(max_match_item_score - max_match_item_self_score)
+                        # 放到 map 中的是计算后的 "近似度得分"
                         common_score = current_layout_score + max_match_item_score * 1.5
                         scores_map[key_id] = 2 * common_score * common_score / self_score / \
                                              (self_score + current_layout_self_score + max_match_item_self_score * 1.5)
@@ -195,14 +187,26 @@ if __name__ == '__main__':
                         print(key_id, current_layout_score, current_layout_self_score, max_match_item_score,
                               max_match_item_self_score, self_score)
 
-    sorted_map = sorted(scores_map.items(), key=operator.itemgetter(1), reverse=True)
+    return sorted(scores_map.items(), key=operator.itemgetter(1), reverse=True)
+
+
+def search_similar_seq(seq):
+    start_time = time.time()
+    print('---------------------------------')
+
+    tree_root, nd, post_order_main = create_tree(seq)
+    sorted_map = cal_common_score(tree_root, nd, post_order_main, seq_dir)
 
     print('---------------------------------')
-    print('Matching results:')
-    rank = 1
-    for key, value in sorted_map[:30]:
-        print(rank, key, '| similarity: %.2f' % (value * 100) + '%, score:', int(value))
-        rank += 1
+    print('Matched results:')
+
+    for i, (key, value) in enumerate(sorted_map[:30]):
+        print(i + 1, key, '| similarity: %.2f' % (value * 100) + '%')
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
+
+
+if __name__ == '__main__':
+    seq = 'Layout { ImageView Layout { Layout { Layout { Layout { TextView TextView } Layout { EditText ImageView } Layout { EditText ImageView } Layout { Button Button } } } } }'
+    search_similar_seq(seq)
