@@ -87,20 +87,21 @@ if __name__ == '__main__':
             out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=TIME_OUT)
         except subprocess.TimeoutExpired as e:
             # 处理超时异常
-            log.logger.error(e.output.decode('utf-8', 'replace'))
             log.logger.error(str(type(e)) + ' Soot analysis times out >>> Skip ' + file)
+            log.logger.error(e.output)
         except subprocess.CalledProcessError as e:
             # 处理调用失败异常
-            log.logger.error(e.output.decode('utf-8', 'replace'))
             log.logger.error(str(type(e)))
+            utf_message = e.output.decode('utf-8', 'ignore')
+            log.logger.error(e.output)
         else:
-            print(out_bytes.decode('utf-8', 'replace'))
+            print(out_bytes.decode('utf-8', 'ignore'))
             log.logger.info('Soot finished. The layout sequences are saved in ' + apk_tokens_dir)
         finally:
             # remove_dir(apktool_out_path)  # 删除 apktool 生成目录，如果需要可以注释这一行
             remove_dir(soot_output)
             log.logger.info('Intermediate files produced by Soot and Apktool are removed.')
             log.logger.info(
-                'Analysis on ' + file + ' finished. It has run for {:.2f} s'.format(time.time() - start_time))
+                'Analysis on ' + file + ' finished. It has run for {:.2f} s.'.format(time.time() - start_time))
 
     log.logger.info('Layout extraction on ' + str(len(files)) + ' APK(s) finished.')
