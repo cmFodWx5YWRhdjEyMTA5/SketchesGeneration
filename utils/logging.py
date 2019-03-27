@@ -1,6 +1,6 @@
 import logging
 import os
-import uuid
+from datetime import datetime
 from logging import Handler, FileHandler, StreamHandler
 
 
@@ -28,12 +28,12 @@ class Loggers(object):
         'error': logging.ERROR, 'critical': logging.CRITICAL
     }
 
-    def __init__(self, filename='{uid}.log'.format(uid=uuid.uuid4()), level='info', log_dir='log',
+    def __init__(self, filename='{:%Y-%m-%d-%H%M%S}.log'.format(datetime.now()), level='info', log_dir='log',
                  fmt='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s'):
         self.logger = logging.getLogger(filename)
         abspath = os.path.dirname(os.path.abspath(__file__))
         self.directory = os.path.join(abspath, log_dir)
-        format_str = logging.Formatter(fmt, datefmt='%m/%d/%Y %H:%M:%S')  # 设置日志格式
+        format_str = logging.Formatter(fmt, datefmt='%Y/%m/%d %H:%M:%S')  # 设置日志格式
         self.logger.setLevel(self.level_relations.get(level))  # 设置日志级别
         stream_handler = logging.StreamHandler()  # 往屏幕上输出
         stream_handler.setFormatter(format_str)

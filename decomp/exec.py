@@ -3,6 +3,7 @@ import platform
 import shutil
 import subprocess
 import time
+import xml.etree.ElementTree as ET
 from configparser import ConfigParser
 
 from utils.logging import Loggers
@@ -43,7 +44,7 @@ if __name__ == '__main__':
         apktool_out_path = os.path.join(temp_dir, file_name)
 
         start_time = time.time()
-        log.logger.info('(' + str(i + 1) + '/' + str(len(files)) + ') Analysis on ' + file + ' started.')
+        log.logger.info('(' + str(i + 1) + '/' + str(len(files)) + ') Analysis started on ' + file)
 
         # 执行 apktool 命令
         if platform.system() == 'Windows':
@@ -56,20 +57,30 @@ if __name__ == '__main__':
             log.logger.error('Apktool decoding failed.')
             continue
 
+        # todo 获取 APK 包名
+        package = None
+        manifest_fp = os.path.join(apktool_out_path, 'AndroidManifest.xml')
+        if os.path.isfile(manifest_fp):
+            e = ET.parse(manifest_fp).getroot()
+            if e.tag == 'manifest':
+                package = e.attrib['package']
+        log.logger.info('APK package is ' +
+                        ('parsed: ' + package if package else 'not parsed, using hashcode to substitute.'))
+
         if not os.path.exists(soot_output):
             os.makedirs(soot_output)
 
         cmd = ['java', '-jar', soot_jar,
                '-d', soot_output,
                '-android-jars', android_jars,
-               '-package', file_name,
+               '-package', package if package else file_name,
                '-process-dir', apk_path,
                '-apktool-dir', apktool_out_path,
                '-token-dir', apk_tokens_dir,
                '-process-multiple-dex', '-allow-phantom-refs']
 
         log.logger.info('Soot analysis is running (time out = ' + str(TIME_OUT) +
-                        's). The execution output will be shown in the console after the subprocess ended.')
+                        's). The execution output will display in the console after the subprocess ended.')
 
         # 执行 soot 程序并处理返回
         try:
@@ -86,9 +97,9 @@ if __name__ == '__main__':
             print(out_bytes.decode('utf-8', 'replace'))
             log.logger.info('Soot finished. The layout sequences are saved in ' + apk_tokens_dir)
         finally:
-            log.logger.info('Removing intermediate files (Apktool files).')
             # remove_dir(apktool_out_path)  # 删除 apktool 生成目录，如果需要可以注释这一行
             remove_dir(soot_output)
+            log.logger.info('Intermediate files produced by Soot and Apktool are removed.')
             log.logger.info(
                 'Analysis on ' + file + ' finished. It has run for {:.2f} s'.format(time.time() - start_time))
 
