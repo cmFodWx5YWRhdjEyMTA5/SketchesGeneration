@@ -5,8 +5,8 @@ from enum import Enum
 from PIL import Image
 
 from rico import config
-from rico.sketches_generator import draw_colored_image
-from utils.directory_manager import check_make_dir
+from rico.generator import draw_colored_image
+from utils.files import check_make_dir, listdir_nohidden
 from utils.widget import Widget
 
 # 画布长宽
@@ -133,8 +133,10 @@ def create_colored_pic(sketch_data_fp, out_fp):
             rect.set_widget_type()  # 根据计数值矩阵判断控件类型
             # print(rect.inside_shapes_cnt, rect.x0, rect.y0, rect.x1, rect.y1, rect.widget.name)
 
-            bounds = (int(rect.x0 / contour_width * SKETCH_WIDTH), int(rect.y0 / contour_height * SKETCH_HEIGHT),
-                      int(rect.x1 / contour_width * SKETCH_WIDTH), int(rect.y1 / contour_height * SKETCH_HEIGHT))
+            # Toolbar 特殊处理
+            bounds = (2, 11, 198, 30) if rect.widget == Widget.Toolbar else (
+                int(rect.x0 / contour_width * SKETCH_WIDTH), int(rect.y0 / contour_height * SKETCH_HEIGHT),
+                int(rect.x1 / contour_width * SKETCH_WIDTH), int(rect.y1 / contour_height * SKETCH_HEIGHT))
             draw_colored_image(im_colored, rect.widget, bounds)
 
         im_colored.rotate(90, expand=1).save(out_fp)
@@ -146,10 +148,11 @@ def create_nmt_files(sketch_lst_fp, sketch_lst_content, layout_seq_fp, num_lines
         f.write(sketch_lst_content)
     with open(layout_seq_fp, 'w') as f:
         f.write((Widget.Unclassified.name + '\n') * num_lines)
+    print('NMT Training files saved in', sketch_lst_fp)
 
 
 if __name__ == '__main__':
-    files = os.listdir(coord_dir)
+    files = list(listdir_nohidden(coord_dir))
     files.sort()
     sketch_nmt = ''
 

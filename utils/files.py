@@ -11,6 +11,12 @@ MODE = 'test_analysis'
 NUM_PER_DIR = 1000
 
 
+def listdir_nohidden(path):
+    for f in os.listdir(path):
+        if not f.startswith('.'):
+            yield f
+
+
 def check_make_dir(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)

@@ -18,17 +18,17 @@ class Widget(Enum):
 
 
 class WidgetColor(object):
-    BLACK_RGB = (0, 0, 0)
+    BLACK_RGB = (0, 0, 0)  # TextLink
     GRAY_RGB = (128, 128, 128)
-    RED_RGB = (255, 0, 0)  #
-    LIME_RGB = (0, 255, 0)  #
-    BLUE_RGB = (0, 0, 255)  #
-    YELLOW_RGB = (255, 255, 0)  #
-    MAGENTA_RGB = (255, 0, 255)  #
-    CYAN_RGB = (0, 255, 255)  #
-    MAROON_RGB = (128, 0, 0)  #
-    GREEN_RGB = (0, 128, 0)  #
-    NAVY_RGB = (0, 0, 128)  #
+    RED_RGB = (255, 0, 0)  # ImageView
+    LIME_RGB = (0, 255, 0)  # Switch
+    BLUE_RGB = (0, 0, 255)  # Button
+    YELLOW_RGB = (255, 255, 0)  # RadioButton
+    MAGENTA_RGB = (255, 0, 255)  # CheckBox
+    CYAN_RGB = (0, 255, 255)  # EditText
+    MAROON_RGB = (128, 0, 0)  # ImageLink
+    GREEN_RGB = (0, 128, 0)  # Toolbar
+    NAVY_RGB = (0, 0, 128)  # TextView
 
 
 # class WidgetSketch(object):

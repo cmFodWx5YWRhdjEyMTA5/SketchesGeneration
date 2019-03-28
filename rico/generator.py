@@ -12,7 +12,7 @@ from PIL import Image
 from anytree import Node, RenderTree
 
 from rico import config
-from utils.directory_manager import check_make_dir
+from utils.files import check_make_dir
 from utils.widget import Widget, WidgetNode, WidgetColor
 
 IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
