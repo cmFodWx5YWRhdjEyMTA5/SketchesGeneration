@@ -85,7 +85,7 @@ def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_
     im_sketch = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
     out_sketch_path = os.path.join(sketches_dir, rico_index + '.png')
 
-    to_remove_widgets = set()  # 待删除节点用集合表示
+    removable_widgets = set()  # 待删除节点用集合表示
     nodes_dict = {}
     tree_root = Node(KEY_TREE_ROOT)
 
@@ -94,7 +94,7 @@ def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_
     csv_rows = []  # 分析模式生成 csv 文件
     tokens = []
 
-    # 构造 anytree 树结构
+    # 根据 rico json 文件构造树结构
     dfs_create_tree(root_json, args, ancestor_clickable_stack, tree_root, nodes_dict, rico_index)
 
     if PRINT_LOG:
@@ -106,20 +106,27 @@ def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_
     if len(tree_root.children) > 0:
         dfs_process_invalid_nodes(tree_root.children[0], nodes_dict)
 
-    # 处理控件遮盖情形，并记录待清除元素
+    # 处理控件遮盖情形，并记录待清除元素到 removable_widgets
     if len(tree_root.children) > 0:
-        dfs_process_overlap_widgets(tree_root.children[0], nodes_dict, to_remove_widgets)
+        dfs_process_overlapped_widgets(tree_root.children[0], nodes_dict, removable_widgets)
 
     # 扫描去除被遮盖的元素
     if len(tree_root.children) > 0:
-        dfs_remove_covered_widgets(tree_root.children[0], to_remove_widgets)
+        dfs_remove_covered_widgets(tree_root.children[0], removable_widgets)
+
+    # 迭代执行多次清理/压缩树结构
+    for i in range(3):
+        if len(tree_root.children) > 0:
+            dfs_compress_tree(tree_root.children[0], 0, nodes_dict)
+        if len(tree_root.children) > 0:
+            dfs_remove_invalid_leaf(tree_root.children[0], nodes_dict)
+
+    if len(tree_root.children) > 0:
+        dfs_remove_extra_list_items(tree_root.children[0], nodes_dict)
 
     # 绘制草图
     if len(tree_root.children) > 0:
         dfs_create_sketch(tree_root.children[0], nodes_dict, im_screenshot, im_sketch, rico_index, csv_rows)
-
-    # 清理/压缩树结构
-    compress_clean_tree(tree_root, nodes_dict)
 
     # 生成 tokens 序列
     if len(tree_root.children) > 0:
@@ -128,10 +135,8 @@ def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_
     # 保存草图/制作训练文件
     if TRAINING_DATA_MODE:
         im_sketch.rotate(90, expand=1).save(out_sketch_path)
-        with open(seq_file, 'a') as f:
-            f.write(' '.join(tokens) + '\n')
-        with open(i2l_map_file, 'a') as f:
-            f.write(str(rico_index) + ' ' + str(seq_line) + '\n')
+        open(seq_file, 'a').write(' '.join(tokens) + '\n')
+        open(i2l_map_file, 'a').write(str(rico_index) + ' ' + str(seq_line) + '\n')
         seq_line += 1
     else:
         im_sketch.save(out_sketch_path)
@@ -141,18 +146,50 @@ def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_
             csv.writer(f).writerows(csv_rows)
 
 
-def compress_clean_tree(tree_root, nodes_dict):
+def are_equivalent(root1, root2, nodes_dict):
+    children1 = root1.children
+    children2 = root2.children
+
+    if len(children1) != len(children2):
+        return False
+    else:
+        # 两者子节点数目相等
+        type1 = nodes_dict[root1.name].w_type
+        type2 = nodes_dict[root2.name].w_type
+        if len(children1) == 0:
+            return type1 == type2
+        for i in range(len(children1)):
+            if not are_equivalent(children1[i], children2[i], nodes_dict):
+                return False
+        return True
+
+
+def dfs_remove_extra_list_items(tree_node, nodes_dict):
     """
-    多次执行压缩树结构、清理冗余节点操作的包装方法
-    :param tree_root: 树结构根节点
-    :param nodes_dict: node_sha1: WidgetNode 字典
+    递归遍历树结构，对于 List 类型的节点判断其唯一的表项根节点，删除其他节点
+    :param tree_node:
+    :param nodes_dict:
     :return:
     """
-    for i in range(3):
-        if len(tree_root.children) > 0:
-            dfs_compress_tree(tree_root.children[0], 0, nodes_dict)
-        if len(tree_root.children) > 0:
-            dfs_remove_invalid_leaf(tree_root.children[0], nodes_dict)
+    widget_type = nodes_dict[tree_node.name].w_type
+
+    if widget_type == Widget.List:
+        children = tree_node.children
+        if 0 < len(children) < 3:
+            tree_node.children = [children[0]]
+        elif len(children) >= 3:
+            cnt_equal_to_first = 0
+            cnt_equal_to_second = 0
+            for child in children:
+                if are_equivalent(children[0], child, nodes_dict):
+                    cnt_equal_to_first += 1
+                if are_equivalent(children[1], child, nodes_dict):
+                    cnt_equal_to_second += 1
+            tree_node.children = [children[0]] if cnt_equal_to_first >= cnt_equal_to_second else [children[1]]
+        return
+
+    for child in tree_node.children:
+        dfs_remove_extra_list_items(child, nodes_dict)
 
 
 def dfs_remove_invalid_leaf(tree_node, nodes_dict):
@@ -162,8 +199,7 @@ def dfs_remove_invalid_leaf(tree_node, nodes_dict):
     :param nodes_dict: node_sha1: WidgetNode 字典
     :return:
     """
-    widget_node = nodes_dict[tree_node.name]
-    widget_type = widget_node.w_type
+    widget_type = nodes_dict[tree_node.name].w_type
 
     # 消除不含子节点的 layout/list 或未分类节点
     if (widget_type == Widget.Layout or widget_type == Widget.List) and len(tree_node.children) == 0 or \
@@ -181,9 +217,7 @@ def dfs_compress_tree(tree_node, idx, nodes_dict):
     :param nodes_dict: node_sha1: WidgetNode 字典
     :return:
     """
-    widget_node = nodes_dict[tree_node.name]
-    widget_type = widget_node.w_type
-
+    widget_type = nodes_dict[tree_node.name].w_type
     node_parent = tree_node.parent
 
     # 消除 Layout { Layout { ... } } 及 Layout { Layout { Layout { ... } } }
@@ -349,27 +383,21 @@ def dfs_process_invalid_nodes(tree_node, nodes_dict):
     w = max(0, widget_bounds[2] - widget_bounds[0]) + 1
     h = max(0, widget_bounds[3] - widget_bounds[1]) + 1
 
-    # TODO 这里有冗余操作
-    if widget_type == Widget.Layout and len(tree_node.children) == 0 or tree_node.name.startswith("Unclassified") or \
-            w <= 10 or h <= 50 or (w * h) / (
-            WIDTH * HEIGHT) > 0.8 and widget_type != Widget.Layout and widget_type != Widget.List:
+    if (widget_type == Widget.Layout or widget_type == Widget.Unclassified) and len(tree_node.children) == 0 or \
+            w <= 10 or h <= 50 or \
+            (w * h) / (WIDTH * HEIGHT) > 0.8 and widget_type != Widget.Layout and widget_type != Widget.List:
         tree_node.parent = None
-        return
-
-    # 对表格中的多个表项，只保留重复的第一个表项。
-    if widget_type == Widget.List:
-        pass
-
-    for child in tree_node.children:
-        dfs_process_invalid_nodes(child, nodes_dict)
+    else:
+        for child in tree_node.children:
+            dfs_process_invalid_nodes(child, nodes_dict)
 
 
-def dfs_process_overlap_widgets(tree_node, nodes_dict, to_remove_widgets):
+def dfs_process_overlapped_widgets(tree_node, nodes_dict, removable_widgets):
     """
-    处理控件重叠情况，遍历完成后确定不需绘制的控件，将其加入到 to_remove_widgets
+    处理控件重叠情况，遍历完成后确定不需绘制的控件，将其加入到 removable_widgets
     :param tree_node: 树节点
     :param nodes_dict: 节点字典
-    :param to_remove_widgets: 不需绘制的控件 sha1 值（方法最终返回后统一删除）
+    :param removable_widgets: 不需绘制的控件 sha1 值（方法最终返回后统一删除）
     :return:
     """
     widget_node = nodes_dict[tree_node.name]
@@ -409,32 +437,32 @@ def dfs_process_overlap_widgets(tree_node, nodes_dict, to_remove_widgets):
         if len(most_covered_widgets) >= 3:  # 覆盖很多其他控件的控件如背景图片
             tree_node.parent = None
         elif 0 < len(most_covered_widgets) < 3:  # 如果覆盖 1~2 个则保留该控件但删去被覆盖控件和有交叠的控件
-            to_remove_widgets.update(most_covered_widgets)
-            to_remove_widgets.update(part_covered_widgets)
+            removable_widgets.update(most_covered_widgets)
+            removable_widgets.update(part_covered_widgets)
         elif len(most_covered_widgets) == 0:
             # if len(part_covered_widgets) > 5:
             #     to_remove_widgets.extend(part_covered_widgets)
             pass
 
-        if len(identical_widgets) > 0 and tree_node.name not in to_remove_widgets:
-            to_remove_widgets.update(identical_widgets)
+        if len(identical_widgets) > 0 and tree_node.name not in removable_widgets:
+            removable_widgets.update(identical_widgets)
 
     for child in tree_node.children:
-        dfs_process_overlap_widgets(child, nodes_dict, to_remove_widgets)
+        dfs_process_overlapped_widgets(child, nodes_dict, removable_widgets)
 
 
-def dfs_remove_covered_widgets(tree_node, to_remove_widgets):
+def dfs_remove_covered_widgets(tree_node, removable_widgets):
     """
-    递归删除 sha1 值在 to_remove_widgets 列表中的控件
+    递归删除 sha1 值在 removable_widgets 列表中的控件
     :param tree_node: 当前树节点
-    :param to_remove_widgets: 待删除控件 sha1 值列表
+    :param removable_widgets: 待删除控件 sha1 值列表
     :return:
     """
-    if tree_node.name in to_remove_widgets:
+    if tree_node.name in removable_widgets:
         tree_node.parent = None
     else:
         for child in tree_node.children:
-            dfs_remove_covered_widgets(child, to_remove_widgets)
+            dfs_remove_covered_widgets(child, removable_widgets)
 
 
 def dfs_create_sketch(tree_node, nodes_dict, im_screenshot, im_sketch, rico_index, csv_rows):
@@ -454,7 +482,6 @@ def dfs_create_sketch(tree_node, nodes_dict, im_screenshot, im_sketch, rico_inde
     widget_id = widget_node.w_id
     widget_class = widget_node.w_class
 
-    # TODO 如果需要，在这里添加 List 绘制
     if widget_type != Widget.Layout:
         if CROP_WIDGET:
             crop_widget(im_screenshot, rico_index, widget_type, widget_bounds, widget_id, widget_class, tree_node.name)
@@ -659,14 +686,13 @@ def draw_widget(im, widget_type, bounds):
     bounds_inner = (bounds_sketch[0] + WIDGET_INNER_MARGIN, bounds_sketch[1] + WIDGET_INNER_MARGIN,
                     bounds_sketch[2] - WIDGET_INNER_MARGIN, bounds_sketch[3] - WIDGET_INNER_MARGIN)
 
-    w = bounds_inner[2] - bounds_inner[0] + 1
-    h = bounds_inner[3] - bounds_inner[1] + 1
-
     if IMG_MODE == 'color':
         draw_colored_image(im, widget_type, bounds_inner)
 
     if IMG_MODE == 'sketch':
         raise Exception("Unsupported sketch mode.")
+        # w = bounds_inner[2] - bounds_inner[0] + 1
+        # h = bounds_inner[3] - bounds_inner[1] + 1
         # im.paste(im=WidgetColor.BLACK_RGB, box=(
         #     bounds_sketch[0] + WIDGET_FRAME_MARGIN, bounds_sketch[1] + WIDGET_FRAME_MARGIN,
         #     bounds_sketch[2] - WIDGET_FRAME_MARGIN, bounds_sketch[3] - WIDGET_FRAME_MARGIN))
@@ -705,13 +731,12 @@ def hash_file_sha1(file_path):
 if __name__ == '__main__':
 
     start_time = time.time()
-
     print('---------------------------------')
-
     print('### Cleaned json files location:', cleaned_jsons_dir)
 
+    print('### Checking directories to save generated sketches:', colored_pics_divided_dir, '...', end=' ')
     check_make_dir(colored_pics_divided_dir)
-    print('### Checking directories to save generated sketches:', colored_pics_divided_dir, '... OK')
+    print('OK')
 
     # 初始化放置控件裁切的位置
     if CROP_WIDGET:
