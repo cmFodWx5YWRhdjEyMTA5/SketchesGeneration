@@ -1,16 +1,27 @@
 import csv
+import json
 import os
 import shutil
 import time
+from configparser import ConfigParser, ExtendedInterpolation
 
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 
-from rico import config
 from utils.files import copy_file
 
-COLUMN_TITLES = config.CSV_CONFIG['column_titles']
+cfg = ConfigParser(interpolation=ExtendedInterpolation())
+cfg.read('../config.ini')
+
+COLUMN_TITLES = json.loads(cfg.get('debug', 'columns'))
+
+KM_MODEL_PATH = cfg.get('debug', 'km_model')
+CSV_ANALYSIS_FP = cfg.get('debug', 'csv_analysis')
+CSV_CLUSTER_CENTERS_FP = cfg.get('debug', 'csv_cluster_centers')
+CSV_CLUSTERS = cfg.get('debug', 'csv_clusters')
+WIDGET_FLAKES_DIR = cfg.get('debug', 'widget_flakes')
+WIDGET_CLUSTERS_DIR = cfg.get('debug', 'widget_clusters')
 
 feature_titles = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu', 'clickable']
 class_keywords = ['Text', 'Edit', 'Button', 'Image', 'CheckBox', 'Toggle', 'Switch', 'Radio', 'Menu']
@@ -78,7 +89,7 @@ if __name__ == '__main__':
     print('---------------------------------')
     start_time = time.time()
 
-    data, csv_rows = transform_csv_to_matrix(config.SKETCHES_CONFIG['csv_file_path'])
+    data, csv_rows = transform_csv_to_matrix(CSV_ANALYSIS_FP)
 
     print('>>> K-means working ...', end=' ')
     weights = np.ones(shape=num_features)
@@ -86,23 +97,20 @@ if __name__ == '__main__':
     kmeans = KMeans(n_clusters=num_clusters, random_state=0).fit(np.multiply(data, weights))
     print('OK')
 
-    joblib.dump(kmeans, config.DIRECTORY_CONFIG['km_model_path'])
+    joblib.dump(kmeans, KM_MODEL_PATH)
 
     np.set_printoptions(formatter={'float_kind': lambda x: "%.3f" % x})
     centers = kmeans.cluster_centers_
     centers = np.divide(centers, weights)
-    centers_file_path = config.DIRECTORY_CONFIG['cluster_centers_file_path']
-    with open(centers_file_path, 'w', newline='', encoding='utf-8') as f:
+    with open(CSV_CLUSTER_CENTERS_FP, 'w', newline='', encoding='utf-8') as f:
         feature_titles.insert(0, 'cluster')
         csv.writer(f).writerow(feature_titles)
         for i, center in enumerate(centers):
             csv.writer(f).writerow(np.insert(center, 0, i))
-    print('<<< K-Means cluster centers saved in', centers_file_path)
+    print('<<< K-Means cluster centers saved in', CSV_CLUSTER_CENTERS_FP)
 
     pred_labels = kmeans.predict(np.multiply(data, weights))
-    create_cluster_dirs(csv_rows, pred_labels, config.SKETCHES_CONFIG['widget_cut_dir'],
-                        config.DIRECTORY_CONFIG['widget_clusters_dir'],
-                        config.DIRECTORY_CONFIG['cluster_csv_file_path'])
+    create_cluster_dirs(csv_rows, pred_labels, WIDGET_FLAKES_DIR, WIDGET_CLUSTERS_DIR, CSV_CLUSTERS)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))

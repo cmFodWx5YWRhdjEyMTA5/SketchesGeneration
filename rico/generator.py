@@ -5,33 +5,44 @@ import operator
 import os
 import shutil
 import time
+from configparser import ConfigParser, ExtendedInterpolation
 from datetime import datetime
 
 import numpy as np
 from PIL import Image
 from anytree import Node, RenderTree
 
-from rico import config
 from utils.files import check_make_dir
 from utils.widget import Widget, WidgetNode, WidgetColor
+
+cfg = ConfigParser(interpolation=ExtendedInterpolation())
+cfg.read('../config.ini')
+
+# 路径
+data_dir = cfg.get('dirs', 'nmt_data')
+layout_sequences_fp = cfg.get('files', 'sequences')
+index_map_fp = cfg.get('files', 'index_map')
+
+rico_divided_dir = cfg.get('dirs', 'rico_divided')
+cleaned_jsons_dir = cfg.get('dirs', 'cleaned_jsons')
+colored_pics_divided_dir = cfg.get('dirs', 'colored_pics_divided')
+
+WIDGET_CUT_OUT_PATH = cfg.get('debug', 'widget_flakes')
+CSV_FILE_PATH = cfg.get('debug', 'csv_analysis')
+COLUMN_TITLES = json.loads(cfg.get('debug', 'columns'))
+
+# 画布长宽
+SKETCH_WIDTH = cfg.getint('nmt', 'sketch_width')
+SKETCH_HEIGHT = cfg.getint('nmt', 'sketch_height')
+
+WIDGET_FRAME_MARGIN = 1
+WIDGET_INNER_MARGIN = 2
 
 IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
 TRAINING_DATA_MODE = True  # 构造训练集支持文件
 CROP_WIDGET = False
 ANALYSIS_MODE = False  # 存储属性分析文件
 PRINT_LOG = False
-
-# 路径
-WIDGET_CUT_OUT_PATH = config.SKETCHES_CONFIG['widget_cut_dir']
-CSV_FILE_PATH = config.SKETCHES_CONFIG['csv_file_path']
-COLUMN_TITLES = config.CSV_CONFIG['column_titles']
-
-# 画布长宽
-SKETCH_WIDTH = config.SKETCHES_CONFIG['sketch-width']
-SKETCH_HEIGHT = config.SKETCHES_CONFIG['sketch-height']
-
-WIDGET_FRAME_MARGIN = 1
-WIDGET_INNER_MARGIN = 2
 
 # Layout 默认长宽
 WIDTH = 1440
@@ -345,6 +356,10 @@ def dfs_process_invalid_nodes(tree_node, nodes_dict):
         tree_node.parent = None
         return
 
+    # 对表格中的多个表项，只保留重复的第一个表项。
+    if widget_type == Widget.List:
+        pass
+
     for child in tree_node.children:
         dfs_process_invalid_nodes(child, nodes_dict)
 
@@ -440,7 +455,7 @@ def dfs_create_sketch(tree_node, nodes_dict, im_screenshot, im_sketch, rico_inde
     widget_class = widget_node.w_class
 
     # TODO 如果需要，在这里添加 List 绘制
-    if widget_type != Widget.Layout and widget_type != Widget.List:
+    if widget_type != Widget.Layout:
         if CROP_WIDGET:
             crop_widget(im_screenshot, rico_index, widget_type, widget_bounds, widget_id, widget_class, tree_node.name)
         if widget_type != Widget.Unclassified:
@@ -624,6 +639,8 @@ def draw_colored_image(im, widget_type, bounds):
         im.paste(im=WidgetColor.YELLOW_RGB, box=bounds)
     elif widget_type == Widget.Toolbar:
         im.paste(im=WidgetColor.GREEN_RGB, box=bounds)
+    elif widget_type == Widget.List:
+        im.paste(im=WidgetColor.GRAY_RGB, box=bounds)
 
 
 def draw_widget(im, widget_type, bounds):
@@ -649,7 +666,7 @@ def draw_widget(im, widget_type, bounds):
         draw_colored_image(im, widget_type, bounds_inner)
 
     if IMG_MODE == 'sketch':
-        raise Exception("Unsupported rico mode.")
+        raise Exception("Unsupported sketch mode.")
         # im.paste(im=WidgetColor.BLACK_RGB, box=(
         #     bounds_sketch[0] + WIDGET_FRAME_MARGIN, bounds_sketch[1] + WIDGET_FRAME_MARGIN,
         #     bounds_sketch[2] - WIDGET_FRAME_MARGIN, bounds_sketch[3] - WIDGET_FRAME_MARGIN))
@@ -689,23 +706,12 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    training_config = config.TRAINING_CONFIG
-    dir_config = config.DIRECTORY_CONFIG
-
-    data_dir = dir_config['training_file_dir']
-    layout_seq_file_path = os.path.join(data_dir, training_config['layout_seq_file_name'])
-    index_map_file_path = os.path.join(data_dir, training_config['index_map_file_name'])
-
-    rico_dirs_dir = dir_config['rico_dirs_dir']
-    cleaned_json_dir = dir_config['cleaned_json_dir']
-    sketches_dir = dir_config['sketches_dirs_dir']
-
     print('---------------------------------')
 
-    print('### Cleaned json files location:', cleaned_json_dir)
+    print('### Cleaned json files location:', cleaned_jsons_dir)
 
-    check_make_dir(sketches_dir)
-    print('### Checking directories to save generated sketches:', sketches_dir, '... OK')
+    check_make_dir(colored_pics_divided_dir)
+    print('### Checking directories to save generated sketches:', colored_pics_divided_dir, '... OK')
 
     # 初始化放置控件裁切的位置
     if CROP_WIDGET:
@@ -724,30 +730,30 @@ if __name__ == '__main__':
         check_make_dir(data_dir)
         print('### Checking data directory to save training related files:', data_dir, '... OK')
 
-        open(layout_seq_file_path, 'w', newline='')
-        open(index_map_file_path, 'w', newline='')
+        open(layout_sequences_fp, 'w', newline='')
+        open(index_map_fp, 'w', newline='')
         print('### Creating training related files ... OK')
 
     if ANALYSIS_MODE:
         with open(CSV_FILE_PATH, 'w', newline='') as f:
             csv.writer(f).writerow(COLUMN_TITLES)
 
-    for case_name in os.listdir(rico_dirs_dir):
+    for case_name in os.listdir(rico_divided_dir):
         if not case_name.startswith('.'):  # hidden files
-            input_case_dir = os.path.join(cleaned_json_dir, case_name)
-            output_case_dir = os.path.join(sketches_dir, case_name)
+            input_case_dir = os.path.join(cleaned_jsons_dir, case_name)
+            output_case_dir = os.path.join(colored_pics_divided_dir, case_name)
             print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + '] >>> Processing', output_case_dir, '...', end=' ')
 
             check_make_dir(output_case_dir)
             for file in os.listdir(input_case_dir):
                 if file.endswith('.json'):
-                    sketch_samples_generation(os.path.join(rico_dirs_dir, case_name),
-                                              os.path.join(cleaned_json_dir, case_name),
-                                              os.path.join(sketches_dir, case_name),
-                                              file.split('.')[0], layout_seq_file_path, index_map_file_path)
+                    sketch_samples_generation(os.path.join(rico_divided_dir, case_name),
+                                              os.path.join(cleaned_jsons_dir, case_name),
+                                              os.path.join(colored_pics_divided_dir, case_name),
+                                              file.split('.')[0], layout_sequences_fp, index_map_fp)
             print('OK')
 
-    print('<<< Generated sketches saved in', sketches_dir)
+    print('<<< Generated sketches saved in', colored_pics_divided_dir)
 
     if CROP_WIDGET:
         print('<<< Cropped widget images saved in', WIDGET_CUT_OUT_PATH)

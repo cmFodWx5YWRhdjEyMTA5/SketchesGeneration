@@ -1,9 +1,14 @@
 import json
 import os
 import time
+from configparser import ConfigParser, ExtendedInterpolation
 from datetime import datetime
 
-from rico import config
+cfg = ConfigParser(interpolation=ExtendedInterpolation())
+cfg.read('../config.ini')
+
+rico_divided_dir = cfg.get('dirs', 'rico_divided')
+cleaned_jsons_dir = cfg.get('dirs', 'cleaned_jsons')
 
 
 def json_handler(subdir_path, cleaned_subdir_path, rico_index):
@@ -59,35 +64,31 @@ def delete_unrelated_attrs(json_node):
 if __name__ == '__main__':
     start_time = time.time()
 
-    dir_config = config.DIRECTORY_CONFIG
-    rico_dirs_dir = dir_config['rico_dirs_dir']
-    cleaned_json_dir = dir_config['cleaned_json_dir']
-
     print('---------------------------------')
-    print('>>> Start cleaning json files in', rico_dirs_dir, '...')
+    print('>>> Start cleaning json files in', rico_divided_dir, '...')
 
     # 检查输出文件夹状态
-    if not os.path.exists(cleaned_json_dir):
+    if not os.path.exists(cleaned_jsons_dir):
         print('### Making directories to save cleaned json files ... OK')
-        os.makedirs(cleaned_json_dir)
-    print('### Checking directories to save cleaned json files:', cleaned_json_dir, '... OK')
+        os.makedirs(cleaned_jsons_dir)
+    print('### Checking directories to save cleaned json files:', cleaned_jsons_dir, '... OK')
 
-    for case_name in os.listdir(rico_dirs_dir):
+    for case_name in os.listdir(rico_divided_dir):
         if not case_name.startswith('.'):  # hidden files
-            input_case_dir = os.path.join(rico_dirs_dir, case_name)
-            output_case_dir = os.path.join(cleaned_json_dir, case_name)
+            input_case_dir = os.path.join(rico_divided_dir, case_name)
+            output_case_dir = os.path.join(cleaned_jsons_dir, case_name)
             print('[' + datetime.now().strftime('%m-%d %H:%M:%S') + '] >>> Processing', output_case_dir, '...', end=' ')
 
             if not os.path.exists(output_case_dir):
                 os.makedirs(output_case_dir)
             for file in os.listdir(input_case_dir):
                 if file.endswith('.json'):
-                    json_handler(os.path.join(rico_dirs_dir, case_name),
-                                 os.path.join(cleaned_json_dir, case_name),
+                    json_handler(os.path.join(rico_divided_dir, case_name),
+                                 os.path.join(cleaned_jsons_dir, case_name),
                                  file.split('.')[0])
             print('OK')
 
-    print('<<< Cleaned json files saved in ' + cleaned_json_dir)
+    print('<<< Cleaned json files saved in ' + cleaned_jsons_dir)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))

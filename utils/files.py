@@ -2,13 +2,21 @@ import os
 import random
 import shutil
 import time
+from configparser import ConfigParser, ExtendedInterpolation
 from os import walk
-
-from rico import config
 
 MODE = 'test_analysis'
 
 NUM_PER_DIR = 1000
+
+cfg = ConfigParser(interpolation=ExtendedInterpolation())
+cfg.read('../config.ini')
+
+rico_combined_dir = cfg.get('dirs', 'rico_combined')
+rico_divided_dir = cfg.get('dirs', 'rico_divided')
+
+colored_pics_combined_dir = cfg.get('dirs', 'colored_pics_combined')
+colored_pics_divided_dir = cfg.get('dirs', 'colored_pics_divided')
 
 
 def listdir_nohidden(path):
@@ -123,19 +131,17 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    dirs_config = config.DIRECTORY_CONFIG
-    training_config = config.TRAINING_CONFIG
-
     print('---------------------------------')
 
     if MODE == 'divide_rico':
-        make_sub_dir(dirs_config['rico_combined_dir'], dirs_config['rico_dirs_dir'])
+        make_sub_dir(rico_combined_dir, rico_divided_dir)
     if MODE == 'merge_sketches':
-        merge_dirs(dirs_config['sketches_dirs_dir'], dirs_config['sketches_combined_dir'])
+        merge_dirs(colored_pics_divided_dir, colored_pics_combined_dir)
     if MODE == 'test_analysis':
+        # 根据需要调整参数
         make_test_sketches_dir(test_lst_path='E:\\sketches-test\\data\\test_shuffle.lst',
-                               rico_dir=dirs_config['rico_combined_dir'],
-                               sketches_dir=dirs_config['sketches_combined_dir'],
+                               rico_dir=rico_combined_dir,
+                               sketches_dir=colored_pics_combined_dir,
                                output_dir='C:\\Users\\Xiaofei\\Desktop\\test-sketches',
                                num_samples=30)
 

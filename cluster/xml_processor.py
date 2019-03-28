@@ -4,16 +4,24 @@ except ImportError:
     import xml.etree.ElementTree as ET
 
 import os
+from configparser import ConfigParser, ExtendedInterpolation
 
 import numpy as np
 from sklearn.externals import joblib
 
 from cluster.kmeans import create_feature
-from rico import config
 from rico.generator import get_std_class_name
 from utils.widget import Widget
 
-kmeans = joblib.load(config.DIRECTORY_CONFIG['km_model_path'])
+cfg = ConfigParser(interpolation=ExtendedInterpolation())
+cfg.read('../config.ini')
+
+KM_MODEL_PATH = cfg.get('debug', 'km_model')
+GATOR_XML_DIR = cfg.get('debug', 'gator_xml')
+GATOR_OUT_DIR = cfg.get('dirs', 'intermediate')
+
+kmeans = joblib.load(KM_MODEL_PATH)
+
 widget_type = {0: Widget.Button.name,
                1: Widget.TextLink.name,
                2: Widget.ImageLink.name,
@@ -103,10 +111,7 @@ def xml_process(xml_fp, out_fp):
 
 if __name__ == '__main__':
 
-    gator_xml_dir = config.DIRECTORY_CONFIG['gator_xml_dir']
-    out_fp = config.DIRECTORY_CONFIG['apk_sequences_file_path']
-    open(out_fp, 'w', newline='')
-
-    for file in os.listdir(gator_xml_dir):
+    open(GATOR_OUT_DIR, 'w', newline='')
+    for file in os.listdir(GATOR_XML_DIR):
         if not file.startswith('.') and file.endswith('.xml'):
-            xml_process(os.path.join(gator_xml_dir, file), out_fp)
+            xml_process(os.path.join(GATOR_XML_DIR, file), GATOR_OUT_DIR)

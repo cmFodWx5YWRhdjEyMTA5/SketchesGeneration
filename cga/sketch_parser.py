@@ -1,24 +1,23 @@
 import os
-from configparser import ConfigParser
+from configparser import ConfigParser, ExtendedInterpolation
 from enum import Enum
 
 from PIL import Image
 
-from rico import config
 from rico.generator import draw_colored_image
 from utils.files import check_make_dir, listdir_nohidden
 from utils.widget import Widget
 
-# 画布长宽
-SKETCH_WIDTH = config.SKETCHES_CONFIG['sketch-width']
-SKETCH_HEIGHT = config.SKETCHES_CONFIG['sketch-height']
-
-cfg = ConfigParser()
+cfg = ConfigParser(interpolation=ExtendedInterpolation())
 cfg.read('../config.ini')
+
+# 画布长宽
+SKETCH_WIDTH = cfg.getint('nmt', 'sketch_width')
+SKETCH_HEIGHT = cfg.getint('nmt', 'sketch_height')
 
 coord_dir = cfg.get('sketch', 'coord_dir')
 colored_dir = cfg.get('sketch', 'colored_dir')
-nmt_file_dir = cfg.get('nmt', 'sketch_files_dir')
+nmt_file_dir = cfg.get('sketch', 'nmt_files_dir')
 
 check_make_dir(colored_dir)
 check_make_dir(nmt_file_dir)

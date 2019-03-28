@@ -1,9 +1,25 @@
-import os
 import random
 import time
+from configparser import ConfigParser, ExtendedInterpolation
 
-from rico import config
 from utils.widget import Widget
+
+cfg = ConfigParser(interpolation=ExtendedInterpolation())
+cfg.read('../config.ini')
+
+vocab_fp = cfg.get('files', 'vocab')
+index_map_fp = cfg.get('files', 'index_map')
+layout_sequences_fp = cfg.get('files', 'sequences')
+
+max_tokens_num = cfg.getint('nmt', 'max_tokens_num')
+min_tokens_num = cfg.getint('nmt', 'min_tokens_num')
+dataset_size = cfg.getint('nmt', 'dataset_size')
+test_prop = cfg.getint('nmt', 'test_prop')
+val_prop = cfg.getint('nmt', 'val_prop')
+
+train_fp = cfg.get('files', 'train')
+val_fp = cfg.get('files', 'val')
+test_fp = cfg.get('files', 'test')
 
 
 def gen_vocab_file(vocab_file_path):
@@ -116,24 +132,14 @@ def get_invalid_lineno_list(seq_fp, max_num_tokens, min_num_tokens):
 if __name__ == '__main__':
     start_time = time.time()
 
-    training_config = config.TRAINING_CONFIG
-    directory_config = config.DIRECTORY_CONFIG
-
-    data_dir = directory_config['training_file_dir']
-
     print('---------------------------------')
 
-    gen_vocab_file(os.path.join(data_dir, training_config['vocab_file_name']))
+    gen_vocab_file(vocab_fp)
 
-    i2l_dict = gen_i2l_dict(os.path.join(data_dir, training_config['index_map_file_name']))
-    inv_lines = get_invalid_lineno_list(os.path.join(data_dir, training_config['layout_seq_file_name']),
-                                        training_config['max_tokens_num'], training_config['min_tokens_num'])
+    i2l_dict = gen_i2l_dict(index_map_fp)
+    inv_lines = get_invalid_lineno_list(layout_sequences_fp, max_tokens_num, min_tokens_num)
 
-    gen_training_lists(train_fp=os.path.join(data_dir, training_config['train_lst_name']),
-                       val_fp=os.path.join(data_dir, training_config['val_lst_name']),
-                       test_fp=os.path.join(data_dir, training_config['test_lst_name']),
-                       dataset_size=training_config['dataset_size'], test_prop=training_config['test_prop'],
-                       val_prop=training_config['val_prop'], i2l_dict=i2l_dict, inv_lines=inv_lines)
+    gen_training_lists(train_fp, val_fp, test_fp, dataset_size, test_prop, val_prop, i2l_dict, inv_lines)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
