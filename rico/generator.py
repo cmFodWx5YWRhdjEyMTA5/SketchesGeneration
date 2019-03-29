@@ -35,9 +35,6 @@ COLUMN_TITLES = json.loads(cfg.get('debug', 'columns'))
 SKETCH_WIDTH = cfg.getint('nmt', 'sketch_width')
 SKETCH_HEIGHT = cfg.getint('nmt', 'sketch_height')
 
-WIDGET_FRAME_MARGIN = 1
-WIDGET_INNER_MARGIN = 2
-
 IMG_MODE = 'color'  # color 为色彩模式，sketch 为草图模式
 TRAINING_DATA_MODE = True  # 构造训练集支持文件
 CROP_WIDGET = False
@@ -121,6 +118,7 @@ def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_
         if len(tree_root.children) > 0:
             dfs_remove_invalid_leaf(tree_root.children[0], nodes_dict)
 
+    # 列表的相同子项仅保留一个
     if len(tree_root.children) > 0:
         dfs_remove_extra_list_items(tree_root.children[0], nodes_dict)
 
@@ -258,6 +256,15 @@ def dfs_make_tokens(tree_node, tokens, nodes_dict):
         tokens.append('}')
 
 
+def is_std_class(clz):
+    return clz.startswith("android.widget") or clz in ['android.support.v7.widget.Toolbar',
+                                                       'androidx.appcompat.widget.Toolbar',
+                                                       'android.support.v7.widget.RecyclerView',
+                                                       'androidx.recyclerview.widget.RecyclerView',
+                                                       'androidx.appcompat.widget.SwitchCompat',
+                                                       'android.support.v7.widget.SwitchCompat']
+
+
 def get_std_class_name(clazz, ancestors):
     """
     获取继承树上的首个官方组件（待添加更多不以 android.widget 开头的确定类型的组件）
@@ -265,12 +272,10 @@ def get_std_class_name(clazz, ancestors):
     :param ancestors: 控件祖先列表
     :return: 首个官方组件类名和所在层次
     """
-    if clazz.startswith('android.widget') or clazz == 'android.support.v7.widget.Toolbar' or \
-            clazz == 'android.support.v7.widget.RecyclerView':
+    if is_std_class(clazz):
         return clazz, 0
     for i, ancestor in enumerate(ancestors):
-        if clazz.startswith('android.widget') or clazz == 'android.support.v7.widget.Toolbar' or \
-                clazz == 'android.support.v7.widget.RecyclerView':
+        if is_std_class(clazz):
             return ancestor, i + 1
     return 'None', 'None'
 
@@ -314,7 +319,8 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
                                     json_obj['resource-id'] if 'resource-id' in json_obj else None,
                                     'children' in json_obj, json_obj['clickable'], json_obj['bounds'], args)
     # 有 children 节点的 Unclassified 控件修改为 Layout
-    if widget_type == Widget.Unclassified and 'children' in json_obj:
+    if widget_type == Widget.Unclassified and 'children' in json_obj or \
+            widget_type == Widget.List and json_obj['bounds'][3] - json_obj['bounds'][1] < 600:
         widget_type = Widget.Layout
 
     node_sha1 = hashlib.sha1(str(json_obj).encode('utf-8')).hexdigest()
@@ -339,7 +345,8 @@ def dfs_create_tree(json_obj, args, ancestor_clickable_stack, parent_node, nodes
     is_drawer = 'NavigationView' in json_obj['class'] or 'NavigationMenu' in json_obj['class'] \
                 or (widget_type == Widget.Layout or widget_type == Widget.List) and id_str is not None \
                 and ('drawer' in id_str or 'slider_layout' in id_str or 'nav_layout' in id_str
-                     or 'navigation_layout' in id_str or 'menulayout' in id_str) and 1.8 < h / w < 5
+                     or 'navigation_layout' in id_str or 'menulayout' in id_str) and 1.8 < h / w < 5 or \
+                widget_type == Widget.List and json_obj['bounds'][0] < 50 and 800 <= json_obj['bounds'][2] <= 1200
 
     # 排除不需递归执行的情形（是 layout/list 且有 'children' 节点且非抽屉）
     if 'children' in json_obj and (widget_type == Widget.Layout or widget_type == Widget.List) and not is_drawer:
@@ -383,8 +390,8 @@ def dfs_process_invalid_nodes(tree_node, nodes_dict):
     w = max(0, widget_bounds[2] - widget_bounds[0]) + 1
     h = max(0, widget_bounds[3] - widget_bounds[1]) + 1
 
-    if (widget_type == Widget.Layout or widget_type == Widget.Unclassified) and len(tree_node.children) == 0 or \
-            w <= 10 or h <= 50 or \
+    if (widget_type == Widget.Layout or widget_type == Widget.Unclassified or widget_type == Widget.List) and \
+            len(tree_node.children) == 0 or w <= 40 or h <= 50 or widget_type == Widget.TextView and w <= 80 or \
             (w * h) / (WIDTH * HEIGHT) > 0.8 and widget_type != Widget.Layout and widget_type != Widget.List:
         tree_node.parent = None
     else:
@@ -559,11 +566,12 @@ def infer_widget_type(cn, ancestors, id, has_children, clickable, bounds, args):
 
     # 到此为止的Button不区分图形、文字。名称中不含Image的图形按钮也会被认为是Button
     # 如果button属性是文字类型，将其统一成TextLink
-    if widget_type == Widget.Button:
-        for ancestor in ancestors:
-            if 'TextView' in ancestor:
-                widget_type = Widget.TextLink
-                break
+    # todo 不再考虑 TextLink 类型
+    # if widget_type == Widget.Button:
+    #     for ancestor in ancestors:
+    #         if 'TextView' in ancestor:
+    #             widget_type = Widget.TextLink
+    #             break
 
     # 次序3：判断未明确分类节点的任何一个祖先是否存在明确标识(解决祖先内的判断问题)
     if widget_type == Widget.Unclassified:
@@ -573,15 +581,16 @@ def infer_widget_type(cn, ancestors, id, has_children, clickable, bounds, args):
                 break
 
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
-    if widget_type == Widget.TextView and (clickable or args[KEY_ANCESTOR_CLICKABLE]):
-        widget_type = Widget.TextLink
+    # todo 不再考虑 TextLink 类型
+    # if widget_type == Widget.TextView and (clickable or args[KEY_ANCESTOR_CLICKABLE]):
+    #     widget_type = Widget.TextLink
 
     if widget_type == Widget.ImageView and (clickable or args[KEY_ANCESTOR_CLICKABLE]):
         w = bounds[2] - bounds[0]
         h = bounds[3] - bounds[1]
         # 将面积较大的图转换成 ImageLink
         # FIXME 需要确定面积阈值
-        widget_type = Widget.ImageLink if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
+        widget_type = Widget.ImageView if w > 200 and h > 200 else Widget.Button  # ImageLink 仅出现在这种情形
     if PRINT_LOG:
         print(cn, ancestors, id, widget_type.name)
     return widget_type
@@ -593,81 +602,75 @@ def infer_widget_type_from_std_class(string):
     :param string: 官方组件类名
     :return: 推测控件类型
     """
-    if string == 'android.support.v7.widget.Toolbar':
+    if 'Toolbar' in string:
         return Widget.Toolbar
-    if 'Layout' in string or 'android.widget.ViewGroup' in string:
-        return Widget.Layout
-    if 'ListView' in string or 'android.support.v7.widget.RecyclerView' in string or 'android.widget.AdapterView' in string:
+    if 'ListView' in string or 'RecyclerView' in string:
         return Widget.List
-    if 'android.widget.ToggleButton' in string or 'android.widget.Switch' in string:
+    if 'Layout' in string or string == 'android.widget.ViewGroup':
+        return Widget.Layout
+    if string in ['android.widget.ToggleButton', 'android.widget.Switch']:
         return Widget.Switch
-    if 'android.widget.RadioButton' in string:
+    if string == 'android.widget.RadioButton':
         return Widget.RadioButton
     if 'Button' in string:
         return Widget.Button
-    if 'android.widget.CheckBox' in string or 'android.widget.CheckedTextView' in string:
+    if 'CheckBox' in string or 'CheckedTextView' in string:
         return Widget.CheckBox
     if 'ImageView' in string:
         return Widget.ImageView
-    if 'AutoComplete' in string or 'android.widget.EditText' in string:
+    if 'AutoCompleteTextView' in string or 'EditText' in string:
         return Widget.EditText
     if 'TextView' in string:
         return Widget.TextView
     return Widget.Unclassified
 
 
-def infer_widget_type_from_string(string):
-    if 'Layout' in string:
-        return Widget.Layout
-    if 'android.widget.ListView' in string or 'RecyclerView' in string:
-        return Widget.List
-    if 'RadioButton' in string:
-        return Widget.RadioButton
-    if 'Switch' in string or 'ToggleButton' in string:
-        return Widget.Switch
-    if 'CheckBox' in string:
-        return Widget.CheckBox
-    if 'EditText' in string or 'AutoComplete' in string:
-        return Widget.EditText
-    if 'Image' in string:
-        return Widget.ImageView
-    if 'Button' in string or 'Glyph' in string:
-        return Widget.Button
-    if 'TextView' in string:
-        return Widget.TextView
-    return Widget.Unclassified
+def get_margin_scale(w, h):
+    if w < 10:
+        x_scale = 0
+    elif w < 25:
+        x_scale = 1
+    elif w < 40:
+        x_scale = 2
+    elif w < 70:
+        x_scale = 3
+    elif w < 90:
+        x_scale = 5
+    elif w < 120:
+        x_scale = 7
+    elif w < 150:
+        x_scale = 9
+    elif w < 180:
+        x_scale = 11
+    elif w < 210:
+        x_scale = 13
+    elif w < 240:
+        x_scale = 15
+    elif w < 270:
+        x_scale = 17
+    else:
+        x_scale = 19
 
+    if h < 30:
+        y_scale = 1
+    elif h < 60:
+        y_scale = 2
+    elif h < 100:
+        y_scale = 3
+    elif h < 150:
+        y_scale = 5
+    elif h < 180:
+        y_scale = 6
+    elif h < 210:
+        y_scale = 8
+    elif h < 240:
+        y_scale = 10
+    elif h < 270:
+        y_scale = 12
+    else:
+        y_scale = 14
 
-def draw_colored_image(im, widget_type, bounds):
-    """
-    在 Image 对象上绘制与控件类型对应的彩色图
-    :param im: Image 对象
-    :param widget_type: 控件类型（据此绘制颜色不同的色块）
-    :param bounds: 实际绘制到 im 上的坐标值
-    :return:
-    """
-    if widget_type == Widget.Button:
-        im.paste(im=WidgetColor.BLUE_RGB, box=bounds)
-    elif widget_type == Widget.TextView:
-        im.paste(im=WidgetColor.NAVY_RGB, box=bounds)
-    elif widget_type == Widget.TextLink:
-        im.paste(im=WidgetColor.BLACK_RGB, box=bounds)
-    elif widget_type == Widget.EditText:
-        im.paste(im=WidgetColor.CYAN_RGB, box=bounds)
-    elif widget_type == Widget.ImageView:
-        im.paste(im=WidgetColor.RED_RGB, box=bounds)
-    elif widget_type == Widget.ImageLink:
-        im.paste(im=WidgetColor.MAROON_RGB, box=bounds)
-    elif widget_type == Widget.CheckBox:
-        im.paste(im=WidgetColor.MAGENTA_RGB, box=bounds)
-    elif widget_type == Widget.Switch:
-        im.paste(im=WidgetColor.LIME_RGB, box=bounds)
-    elif widget_type == Widget.RadioButton:
-        im.paste(im=WidgetColor.YELLOW_RGB, box=bounds)
-    elif widget_type == Widget.Toolbar:
-        im.paste(im=WidgetColor.GREEN_RGB, box=bounds)
-    elif widget_type == Widget.List:
-        im.paste(im=WidgetColor.GRAY_RGB, box=bounds)
+    return x_scale, y_scale
 
 
 def draw_widget(im, widget_type, bounds):
@@ -682,17 +685,44 @@ def draw_widget(im, widget_type, bounds):
     bounds_sketch = (int((bounds[0]) / WIDTH * SKETCH_WIDTH), int((bounds[1]) / HEIGHT * SKETCH_HEIGHT),
                      int((bounds[2]) / WIDTH * SKETCH_WIDTH), int((bounds[3]) / HEIGHT * SKETCH_HEIGHT))
 
+    w = bounds_sketch[2] - bounds_sketch[0] + 1
+    h = bounds_sketch[3] - bounds_sketch[1] + 1
+
+    if widget_type == Widget.List:
+        x_scale, y_scale = 2, 2
+    else:
+        x_scale, y_scale = get_margin_scale(w, h)
+
     # 将长宽按比例缩小到画布上后确定草图元素缩放范围
-    bounds_inner = (bounds_sketch[0] + WIDGET_INNER_MARGIN, bounds_sketch[1] + WIDGET_INNER_MARGIN,
-                    bounds_sketch[2] - WIDGET_INNER_MARGIN, bounds_sketch[3] - WIDGET_INNER_MARGIN)
+    bounds_inner = (bounds_sketch[0] + x_scale, bounds_sketch[1] + y_scale,
+                    bounds_sketch[2] - x_scale, bounds_sketch[3] - y_scale)
 
     if IMG_MODE == 'color':
-        draw_colored_image(im, widget_type, bounds_inner)
+        if widget_type == Widget.Button:
+            im.paste(im=WidgetColor.BLUE_RGB, box=bounds_inner)
+        elif widget_type == Widget.TextView:
+            im.paste(im=WidgetColor.BLACK_RGB, box=bounds_inner)
+        # elif widget_type == Widget.TextLink:
+        #     im.paste(im=WidgetColor.NAVY_RGB, box=bounds)
+        elif widget_type == Widget.EditText:
+            im.paste(im=WidgetColor.LIME_RGB, box=bounds_inner)
+        elif widget_type == Widget.ImageView:
+            im.paste(im=WidgetColor.RED_RGB, box=bounds_inner)
+        # elif widget_type == Widget.ImageLink:
+        #     im.paste(im=WidgetColor.MAROON_RGB, box=bounds)
+        elif widget_type == Widget.CheckBox:
+            im.paste(im=WidgetColor.MAGENTA_RGB, box=bounds_inner)
+        elif widget_type == Widget.Switch:
+            im.paste(im=WidgetColor.CYAN_RGB, box=bounds_inner)
+        elif widget_type == Widget.RadioButton:
+            im.paste(im=WidgetColor.YELLOW_RGB, box=bounds_inner)
+        elif widget_type == Widget.Toolbar:
+            im.paste(im=WidgetColor.GREEN_RGB, box=bounds_inner)
+        elif widget_type == Widget.List:
+            im.paste(im=WidgetColor.GRAY_RGB, box=bounds_inner)
 
-    if IMG_MODE == 'sketch':
+    elif IMG_MODE == 'sketch':
         raise Exception("Unsupported sketch mode.")
-        # w = bounds_inner[2] - bounds_inner[0] + 1
-        # h = bounds_inner[3] - bounds_inner[1] + 1
         # im.paste(im=WidgetColor.BLACK_RGB, box=(
         #     bounds_sketch[0] + WIDGET_FRAME_MARGIN, bounds_sketch[1] + WIDGET_FRAME_MARGIN,
         #     bounds_sketch[2] - WIDGET_FRAME_MARGIN, bounds_sketch[3] - WIDGET_FRAME_MARGIN))

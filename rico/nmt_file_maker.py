@@ -131,7 +131,6 @@ def get_invalid_lineno_list(seq_fp, max_num_tokens, min_num_tokens):
 
 if __name__ == '__main__':
     start_time = time.time()
-
     print('---------------------------------')
 
     gen_vocab_file(vocab_fp)
