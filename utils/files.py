@@ -5,7 +5,7 @@ import time
 from configparser import ConfigParser, ExtendedInterpolation
 from os import walk
 
-MODE = 'test_analysis'
+MODE = 'merge_sketches'  # divide_rico merge_sketches test_analysis
 
 NUM_PER_DIR = 1000
 
@@ -130,7 +130,6 @@ def make_test_sketches_dir(test_lst_path, rico_dir, sketches_dir, output_dir, nu
 if __name__ == '__main__':
 
     start_time = time.time()
-
     print('---------------------------------')
 
     if MODE == 'divide_rico':
