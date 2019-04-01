@@ -22,8 +22,8 @@ nmt_file_dir = cfg.get('sketch', 'nmt_files_dir')
 check_make_dir(colored_dir)
 check_make_dir(nmt_file_dir)
 
-sketch_lst_fp = os.path.join(nmt_file_dir, cfg.get('nmt', 'sketch_lst_name'))
-layout_seq_fp = os.path.join(nmt_file_dir, cfg.get('nmt', 'layout_seq_file_name'))
+sketch_sequences_fp = cfg.get('sketch', 'sequences')
+sketch_lst_fp = cfg.get('sketch', 'dummy_lst')
 
 
 class Shape(Enum):
@@ -54,6 +54,7 @@ class Rectangle(Component):
         super().__init__(shape, x0, y0, x1, y1)
         self.inside_shapes_cnt = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.widget = Widget.Unclassified
+        self.bounds = None
 
     def set_widget_type(self):
         def judge_widget_type(flags):
@@ -127,16 +128,19 @@ def create_colored_pic(sketch_data_fp, out_fp):
 
         im_colored = Image.new('RGB', (SKETCH_WIDTH, SKETCH_HEIGHT), (255, 255, 255))
 
-        # 矩形
+        # 矩形: 先画 List，再画其他控件
         for rect in rectangles:
             rect.set_widget_type()  # 根据计数值矩阵判断控件类型
-            # print(rect.inside_shapes_cnt, rect.x0, rect.y0, rect.x1, rect.y1, rect.widget.name)
-
             # Toolbar 特殊处理
-            bounds = (2, 11, 198, 30) if rect.widget == Widget.Toolbar else (
+            rect.bounds = (13, 10, 187, 31) if rect.widget == Widget.Toolbar else (
                 int(rect.x0 / contour_width * SKETCH_WIDTH), int(rect.y0 / contour_height * SKETCH_HEIGHT),
                 int(rect.x1 / contour_width * SKETCH_WIDTH), int(rect.y1 / contour_height * SKETCH_HEIGHT))
-            draw_colored_image(im_colored, rect.widget, bounds)
+            if rect.widget == Widget.List:
+                draw_colored_image(im_colored, rect.widget, rect.bounds)
+
+        for rect in rectangles:
+            if rect.widget != Widget.List:
+                draw_colored_image(im_colored, rect.widget, rect.bounds)
 
         im_colored.rotate(90, expand=1).save(out_fp)
         print(out_fp, "saved.")
@@ -162,4 +166,4 @@ if __name__ == '__main__':
                                out_fp=os.path.join(colored_dir, file_name + '.png'))
             sketch_nmt += file_name + '.png ' + str(i) + '\n'
 
-    create_nmt_files(sketch_lst_fp, sketch_nmt, layout_seq_fp, len(files))
+    create_nmt_files(sketch_lst_fp, sketch_nmt, sketch_sequences_fp, len(files))

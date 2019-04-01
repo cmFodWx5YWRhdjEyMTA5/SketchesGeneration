@@ -698,28 +698,7 @@ def draw_widget(im, widget_type, bounds):
                     bounds_sketch[2] - x_scale, bounds_sketch[3] - y_scale)
 
     if IMG_MODE == 'color':
-        if widget_type == Widget.Button:
-            im.paste(im=WidgetColor.BLUE_RGB, box=bounds_inner)
-        elif widget_type == Widget.TextView:
-            im.paste(im=WidgetColor.BLACK_RGB, box=bounds_inner)
-        # elif widget_type == Widget.TextLink:
-        #     im.paste(im=WidgetColor.NAVY_RGB, box=bounds)
-        elif widget_type == Widget.EditText:
-            im.paste(im=WidgetColor.LIME_RGB, box=bounds_inner)
-        elif widget_type == Widget.ImageView:
-            im.paste(im=WidgetColor.RED_RGB, box=bounds_inner)
-        # elif widget_type == Widget.ImageLink:
-        #     im.paste(im=WidgetColor.MAROON_RGB, box=bounds)
-        elif widget_type == Widget.CheckBox:
-            im.paste(im=WidgetColor.MAGENTA_RGB, box=bounds_inner)
-        elif widget_type == Widget.Switch:
-            im.paste(im=WidgetColor.CYAN_RGB, box=bounds_inner)
-        elif widget_type == Widget.RadioButton:
-            im.paste(im=WidgetColor.YELLOW_RGB, box=bounds_inner)
-        elif widget_type == Widget.Toolbar:
-            im.paste(im=WidgetColor.GREEN_RGB, box=bounds_inner)
-        elif widget_type == Widget.List:
-            im.paste(im=WidgetColor.GRAY_RGB, box=bounds_inner)
+        draw_colored_image(im, widget_type, bounds_inner)
 
     elif IMG_MODE == 'sketch':
         raise Exception("Unsupported sketch mode.")
@@ -740,6 +719,38 @@ def draw_widget(im, widget_type, bounds):
         #     im.paste(WidgetSketch.IM_IMAGE_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
         # elif widget_type == Widget.TextLink:
         #     im.paste(WidgetSketch.IM_TEXT_LINK.resize((w, h)), box=(bounds_inner[0], bounds_inner[1]))
+
+
+def draw_colored_image(im, widget_type, bounds):
+    """
+    在 Image 对象上绘制与控件类型对应的彩色图
+    :param im: Image 对象
+    :param widget_type: 控件类型（据此绘制颜色不同的色块）
+    :param bounds: 实际绘制到 im 上的坐标值
+    :return:
+    """
+    if widget_type == Widget.Button:
+        im.paste(im=WidgetColor.BLUE_RGB, box=bounds)
+    elif widget_type == Widget.TextView:
+        im.paste(im=WidgetColor.BLACK_RGB, box=bounds)
+    # elif widget_type == Widget.TextLink:
+    #     im.paste(im=WidgetColor.NAVY_RGB, box=bounds)
+    elif widget_type == Widget.EditText:
+        im.paste(im=WidgetColor.LIME_RGB, box=bounds)
+    elif widget_type == Widget.ImageView:
+        im.paste(im=WidgetColor.RED_RGB, box=bounds)
+    # elif widget_type == Widget.ImageLink:
+    #     im.paste(im=WidgetColor.MAROON_RGB, box=bounds)
+    elif widget_type == Widget.CheckBox:
+        im.paste(im=WidgetColor.MAGENTA_RGB, box=bounds)
+    elif widget_type == Widget.Switch:
+        im.paste(im=WidgetColor.CYAN_RGB, box=bounds)
+    elif widget_type == Widget.RadioButton:
+        im.paste(im=WidgetColor.YELLOW_RGB, box=bounds)
+    elif widget_type == Widget.Toolbar:
+        im.paste(im=WidgetColor.GREEN_RGB, box=bounds)
+    elif widget_type == Widget.List:
+        im.paste(im=WidgetColor.GRAY_RGB, box=bounds)
 
 
 def hash_file_sha1(file_path):
