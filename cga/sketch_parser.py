@@ -73,10 +73,10 @@ class Rectangle(Component):
             if flags[Shape.CHECK.value] == 1:
                 return Widget.CheckBox  # X X V
             if flags[Shape.CIRCLE.value] == 1:
-                if flags[Shape.CROSS.value] > 0:
-                    return Widget.RadioButton  # X X O
                 if flags[Shape.HLINE.value] == 1:
                     return Widget.Switch  # O -
+                if flags[Shape.CROSS.value] > 0:
+                    return Widget.RadioButton  # X X O
                 return Widget.Button  # O
             return Widget.Unclassified
 
