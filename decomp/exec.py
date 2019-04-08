@@ -21,7 +21,7 @@ soot_output = cfg.get('decode', 'soot_output')
 
 log_dir = cfg.get('log', 'log_dir')
 
-TIME_OUT = 240
+TIME_OUT = 300
 
 
 def remove_dir(path):
@@ -98,8 +98,8 @@ if __name__ == '__main__':
             print(out_bytes.decode('utf-8', 'ignore'))
             log.logger.info('Soot finished. The layout sequences are saved in ' + apk_tokens_dir)
         finally:
-            # remove_dir(apktool_out_path)  # 删除 apktool 生成目录，如果需要可以注释这一行
-            remove_dir(soot_output)
+            remove_dir(apktool_out_path)  # 删除 apktool 生成目录，如果需要可以注释这一行
+            # remove_dir(soot_output)
             log.logger.info('Intermediate files produced by Soot and Apktool are removed.')
             log.logger.info(
                 'Analysis on ' + file + ' finished. It has run for {:.2f} s.'.format(time.time() - start_time))

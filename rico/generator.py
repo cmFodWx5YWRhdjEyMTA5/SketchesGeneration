@@ -54,6 +54,9 @@ KEY_TREE_ROOT = 'tree_root'
 
 seq_line = 0  # xml_sequence 的行号
 
+widgets_count = {}
+container_cnt = {}
+
 
 def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_file, i2l_map_file):
     """
@@ -256,13 +259,41 @@ def dfs_make_tokens(tree_node, tokens, nodes_dict):
         tokens.append('}')
 
 
+def infer_widget_type_from_std_class(string):
+    """
+    判断官方组件类名 string 中对应的控件类型
+    :param string: 官方组件类名
+    :return: 推测控件类型
+    """
+    if 'Toolbar' in string:
+        return Widget.Toolbar
+    if 'ListView' in string or 'RecyclerView' in string:
+        return Widget.List
+    if 'Layout' in string or string == 'android.view.ViewGroup':
+        return Widget.Layout
+    if string in ['android.widget.ToggleButton', 'android.widget.Switch',
+                  'androidx.appcompat.widget.SwitchCompat', 'android.support.v7.widget.SwitchCompat']:
+        return Widget.Switch
+    if string == 'android.widget.RadioButton':
+        return Widget.RadioButton
+    if 'Button' in string:
+        return Widget.Button
+    if 'CheckBox' in string or 'CheckedTextView' in string:
+        return Widget.CheckBox
+    if 'ImageView' in string:
+        return Widget.ImageView
+    if 'AutoCompleteTextView' in string or 'EditText' in string:
+        return Widget.EditText
+    if 'TextView' in string:
+        return Widget.TextView
+    return Widget.Unclassified
+
+
 def is_std_class(clz):
-    return clz.startswith("android.widget") or clz in ['android.support.v7.widget.Toolbar',
-                                                       'androidx.appcompat.widget.Toolbar',
-                                                       'android.support.v7.widget.RecyclerView',
-                                                       'androidx.recyclerview.widget.RecyclerView',
-                                                       'androidx.appcompat.widget.SwitchCompat',
-                                                       'android.support.v7.widget.SwitchCompat']
+    return clz.startswith("android.widget") or clz == 'android.view.View' or clz == 'android.view.ViewGroup' or \
+           clz in ['android.support.v7.widget.Toolbar', 'androidx.appcompat.widget.Toolbar',
+                   'android.support.v7.widget.RecyclerView', 'androidx.recyclerview.widget.RecyclerView',
+                   'androidx.appcompat.widget.SwitchCompat', 'android.support.v7.widget.SwitchCompat']
 
 
 def get_std_class_name(clazz, ancestors):
@@ -275,7 +306,7 @@ def get_std_class_name(clazz, ancestors):
     if is_std_class(clazz):
         return clazz, 0
     for i, ancestor in enumerate(ancestors):
-        if is_std_class(clazz):
+        if is_std_class(ancestor):
             return ancestor, i + 1
     return 'None', 'None'
 
@@ -549,24 +580,39 @@ def infer_widget_type(cn, ancestors, id, has_children, clickable, bounds, args):
     # 执行这些规则后，返回最终推断类型；规则的先后顺序对结果有影响。
 
     # 次序1：官方控件中的特殊情况
-    if 'ActionMenuItemView' in cn or 'AppCompatImageButton' in cn:
-        return Widget.Button
+    # if 'ActionMenuItemView' in cn or 'AppCompatImageButton' in cn:
+    #     # print(cn, ancestors)
+    #     return Widget.Button
 
     # 次序2：其他特殊情况
-    if 'NavItemView' in cn or 'ToolBarItemView' in cn or 'DrawerToolBarItemView' in cn:
-        return Widget.Button
-    if not has_children and (id is not None and ('btn' in id or 'button' in id)):
-        return Widget.Button
+    # if not has_children and (id is not None and ('btn' in id or 'button' in id)):
+    #     print(cn, ancestors)
+    #     return Widget.Button
 
-    android_std_class_name, _ = get_std_class_name(cn, ancestors)
-    widget_type = infer_widget_type_from_std_class(android_std_class_name)
+    android_std_cn, _ = get_std_class_name(cn, ancestors)
+    widget_type = infer_widget_type_from_std_class(android_std_cn)
+
+    if 'android.view.ViewGroup' not in ancestors:
+        widgets_count[android_std_cn] = 1 if android_std_cn not in widgets_count else widgets_count[android_std_cn] + 1
+    else:
+        container_cnt[android_std_cn] = 1 if android_std_cn not in container_cnt else container_cnt[android_std_cn] + 1
+
+    if widget_type == Widget.Unclassified:
+        if 'android.widget.AbsListView' in ancestors:
+            return Widget.List
+        if 'android.view.ViewGroup' in ancestors:
+            return Widget.Layout
+
+    # if widget_type == Widget.Unclassified and cn != 'android.view.View' and android_std_cn != 'android.view.View' and
+    #         cn not in std_class_map:
+    #     std_class_map[cn] = ancestors
 
     # # 次序2：判断class_name是否存在明确的控件类型标识
     # widget_type = infer_widget_type_from_string(cn)
 
+    # 不再考虑 TextLink 类型
     # 到此为止的Button不区分图形、文字。名称中不含Image的图形按钮也会被认为是Button
     # 如果button属性是文字类型，将其统一成TextLink
-    # todo 不再考虑 TextLink 类型
     # if widget_type == Widget.Button:
     #     for ancestor in ancestors:
     #         if 'TextView' in ancestor:
@@ -574,14 +620,14 @@ def infer_widget_type(cn, ancestors, id, has_children, clickable, bounds, args):
     #             break
 
     # 次序3：判断未明确分类节点的任何一个祖先是否存在明确标识(解决祖先内的判断问题)
-    if widget_type == Widget.Unclassified:
-        for ancestor in ancestors:
-            widget_type = infer_widget_type_from_std_class(ancestor)
-            if widget_type != Widget.Unclassified:
-                break
+    # if widget_type == Widget.Unclassified:
+    #     for ancestor in ancestors:
+    #         widget_type = infer_widget_type_from_std_class(ancestor)
+    #         if widget_type != Widget.Unclassified:
+    #             break
 
+    # 不再考虑 TextLink 类型
     # 次序4：确定嵌套在layout内部属性不可点击但实际行为可点击情况
-    # todo 不再考虑 TextLink 类型
     # if widget_type == Widget.TextView and (clickable or args[KEY_ANCESTOR_CLICKABLE]):
     #     widget_type = Widget.TextLink
 
@@ -594,35 +640,6 @@ def infer_widget_type(cn, ancestors, id, has_children, clickable, bounds, args):
     if PRINT_LOG:
         print(cn, ancestors, id, widget_type.name)
     return widget_type
-
-
-def infer_widget_type_from_std_class(string):
-    """
-    判断官方组件类名 string 中对应的控件类型
-    :param string: 官方组件类名
-    :return: 推测控件类型
-    """
-    if 'Toolbar' in string:
-        return Widget.Toolbar
-    if 'ListView' in string or 'RecyclerView' in string:
-        return Widget.List
-    if 'Layout' in string or string == 'android.widget.ViewGroup':
-        return Widget.Layout
-    if string in ['android.widget.ToggleButton', 'android.widget.Switch']:
-        return Widget.Switch
-    if string == 'android.widget.RadioButton':
-        return Widget.RadioButton
-    if 'Button' in string:
-        return Widget.Button
-    if 'CheckBox' in string or 'CheckedTextView' in string:
-        return Widget.CheckBox
-    if 'ImageView' in string:
-        return Widget.ImageView
-    if 'AutoCompleteTextView' in string or 'EditText' in string:
-        return Widget.EditText
-    if 'TextView' in string:
-        return Widget.TextView
-    return Widget.Unclassified
 
 
 def get_margin_scale(w, h):
@@ -825,6 +842,20 @@ if __name__ == '__main__':
         print('<<< Cropped widget images saved in', WIDGET_CUT_OUT_PATH)
     if ANALYSIS_MODE:
         print('<<< Analysis csv file saved in ', CSV_FILE_PATH)
+
+    sorted_map = sorted(widgets_count.items(), key=operator.itemgetter(1), reverse=True)
+    cnt_sum = 0
+    for i, (key, value) in enumerate(sorted_map):
+        print(i + 1, key, value)
+        cnt_sum += value
+    print('Total widget counts:', cnt_sum)
+
+    sorted_map = sorted(container_cnt.items(), key=operator.itemgetter(1), reverse=True)
+    cnt_sum = 0
+    for i, (key, value) in enumerate(sorted_map):
+        print(i + 1, key, value)
+        cnt_sum += value
+    print('Total container counts:', cnt_sum)
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
