@@ -210,3 +210,11 @@ def search_similar_seq(seq):
 if __name__ == '__main__':
     seq = 'Layout { ImageView Layout { Layout { Layout { Layout { TextView TextView } Layout { EditText ImageView } Layout { EditText ImageView } Layout { Button Button } } } } }'
     search_similar_seq(seq)
+
+    # seq1 = 'Layout { Layout { EditText EditText TextView } Layout { Button Button } }'
+    # seq2 = 'Layout { Layout { EditText EditText } Layout { Layout { Button Button } Layout { TextView Button } } }'
+    # tree_root1, nd1, post_order_main1 = create_tree(seq1)
+    # tree_root2, nd2, post_order_main2 = create_tree(seq2)
+    # lawecse = max_score(nd1, post_order_main1, nd2, post_order_main2)
+    # w1 = max_score(nd1, post_order_main1, nd1, post_order_main1)
+    # w2 = max_score(nd2, post_order_main2, nd2, post_order_main2)
