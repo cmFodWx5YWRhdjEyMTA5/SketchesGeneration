@@ -26,25 +26,36 @@ TIME_OUT = 300
 
 def remove_dir(path):
     if os.path.exists(path) and os.path.isdir(path):
-        shutil.rmtree(path)
+        shutil.rmtree(path, ignore_errors=True)
 
 
 if __name__ == '__main__':
 
     log = Loggers(level='debug', log_dir=log_dir)
 
-    files = [f for f in os.listdir(apk_dir)
-             if os.path.isfile(os.path.join(apk_dir, f)) and f.endswith('.apk') and not f.startswith('.')]
+    file_abps = []
 
-    log.logger.info('Layout extraction on ' + str(len(files)) + ' APK(s) started.')
+    for f in os.listdir(apk_dir):
+        category_dir = os.path.join(apk_dir, f)
+        if os.path.isdir(category_dir):  # category
+            for sub_dir in os.listdir(category_dir):
+                sub_dp = os.path.join(category_dir, sub_dir)
+                if os.path.isdir(sub_dp):  # apk_subdir
+                    for package_name in os.listdir(os.path.join(sub_dp)):
+                        fp = os.path.join(sub_dp, package_name)
+                        if os.path.isfile(fp) and fp.endswith('.apk') and not fp.startswith('.'):
+                            file_abps.append(fp)
 
-    for i, file in enumerate(files):
-        file_name = os.path.splitext(file)[0]
-        apk_path = os.path.join(apk_dir, file)
-        apktool_out_path = os.path.join(temp_dir, file_name)
+    log.logger.info('Layout extraction on ' + str(len(file_abps)) + ' APK(s) started.')
+
+    for i, apk_path in enumerate(file_abps):
+        # file_name = os.path.splitext(file)[0]
+        # apk_path = os.path.join(apk_dir, file)
+        _, filename = os.path.split(apk_path)
+        apktool_out_path = os.path.join(temp_dir, filename)
 
         start_time = time.time()
-        log.logger.info('(' + str(i + 1) + '/' + str(len(files)) + ') Analysis started on ' + file)
+        log.logger.info('(' + str(i + 1) + '/' + str(len(file_abps)) + ') Analysis started on ' + apk_path)
 
         # 执行 apktool 命令
         if platform.system() == 'Windows':
@@ -57,7 +68,6 @@ if __name__ == '__main__':
             log.logger.error('Apktool decoding failed.')
             continue
 
-        # todo 获取 APK 包名
         package = None
         manifest_fp = os.path.join(apktool_out_path, 'AndroidManifest.xml')
         if os.path.isfile(manifest_fp):
@@ -73,7 +83,7 @@ if __name__ == '__main__':
         cmd = ['java', '-jar', soot_jar,
                '-d', soot_output,
                '-android-jars', android_jars,
-               '-package', package if package else file_name,
+               '-package', package if package else filename,
                '-process-dir', apk_path,
                '-apktool-dir', apktool_out_path,
                '-token-dir', apk_tokens_dir,
@@ -87,7 +97,7 @@ if __name__ == '__main__':
             out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=TIME_OUT)
         except subprocess.TimeoutExpired as e:
             # 处理超时异常
-            log.logger.error(str(type(e)) + ' Soot analysis times out >>> Skip ' + file)
+            log.logger.error(str(type(e)) + ' Soot analysis times out >>> Skip ' + apk_path)
             log.logger.error(e.output)
         except subprocess.CalledProcessError as e:
             # 处理调用失败异常
@@ -99,9 +109,9 @@ if __name__ == '__main__':
             log.logger.info('Soot finished. The layout sequences are saved in ' + apk_tokens_dir)
         finally:
             remove_dir(apktool_out_path)  # 删除 apktool 生成目录，如果需要可以注释这一行
-            # remove_dir(soot_output)
+            remove_dir(soot_output)
             log.logger.info('Intermediate files produced by Soot and Apktool are removed.')
             log.logger.info(
-                'Analysis on ' + file + ' finished. It has run for {:.2f} s.'.format(time.time() - start_time))
+                'Analysis on ' + apk_path + ' finished. It has run for {:.2f} s.'.format(time.time() - start_time))
 
-    log.logger.info('Layout extraction on ' + str(len(files)) + ' APK(s) finished.')
+    log.logger.info('Layout extraction on ' + str(len(file_abps)) + ' APK(s) finished.')
