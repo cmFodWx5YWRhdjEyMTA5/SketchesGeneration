@@ -57,11 +57,35 @@ def gen_training_lists(train_fp, val_fp, test_fp, dataset_size, test_prop, val_p
     size_train = size_valid_indexes - size_test - size_val
 
     # 随机选取 indexes 作为三者组成
-    test_indexes = random.sample(valid_indexes, size_test)
-    train_val_indexes = [x for x in valid_indexes if x not in test_indexes]
-    val_indexes = random.sample(train_val_indexes, size_val)
+    random.seed(1)
+    # 去除不适合作为测试集和验证集的图像
+    unsuitable_indexes = [336, 4333, 4519, 4352, 4948, 5796, 9999, 10076, 10357, 10330, 11527, 11508, 12034, 12350,
+                          13722, 13809, 13810, 13820, 13821, 14483, 14397, 14655, 14868, 15078, 15116, 15272, 15404,
+                          16816, 17542, 17704, 17852, 17866, 18524, 18584, 18585, 19871, 20181, 20413, 20624, 21508,
+                          22155, 23129, 23131, 23234, 23662, 23713, 23912, 23967, 24163, 24594, 25249, 25768, 26129,
+                          26266, 27006, 27083, 27252, 27946, 27954, 28098, 28073, 28388, 29034, 29555, 29752, 30885,
+                          31932, 32927, 33060, 33260, 58661, 58763, 60640, 61127, 61230, 63554, 69384, 69518, 57487,
+                          34581, 34600, 34698, 36504, 37025, 37146, 37961, 39665, 40040, 41656, 41569, 41552, 41745,
+                          41878, 43053, 44246, 48473, 50958, 51310, 52371, 52627, 52637, 52942, 54562, 59037, 59703,
+                          59644, 59640, 60429, 60807, 61285, 61934, 62124, 63843, 63902, 64917, 65001, 65130, 65233,
+                          65289, 66558, 66595, 67065, 67850, 68172, 68666, 68953, 69443, 69790, 69841, 69857, 70443,
+                          71153, 72169, 71958, 1191, 1800, 1396, 1829, 2351, 3072, 5236, 6079, 6905, 8245, 8683, 9364,
+                          9461, 9543, 11045, 11107, 11169, 12545, 12614, 12658, 12670, 12776, 13010, 13796, 14287,
+                          15014, 15095, 15766, 15978, 16247, 16250, 16412, 16545, 16896, 18280, 19093, 21281, 21510,
+                          22123, 23760, 23761, 24248, 27594, 27549, 30618, 31070, 31006, 33630, 33979, 34562, 34846,
+                          35920, 35196, 36616, 37482, 37718, 38308, 39526, 41707, 42221, 42286, 42859, 43353, 43448,
+                          43475, 43524, 44294, 46106, 46460, 47312, 48248, 50280, 50896, 53346, 54548, 56257]
+    test_indexes_random = random.sample(valid_indexes, size_test)
+    test_indexes = [x for x in test_indexes_random if x not in unsuitable_indexes]
+    test_indexes.sort()
+
+    train_val_indexes = [x for x in valid_indexes if x not in test_indexes_random]
+
+    val_indexes_random = random.sample(train_val_indexes, size_val)
+    val_indexes = [x for x in val_indexes_random if x not in unsuitable_indexes]
     val_indexes.sort()
-    train_indexes = [x for x in train_val_indexes if x not in val_indexes]
+
+    train_indexes = [x for x in train_val_indexes if x not in val_indexes_random and x not in unsuitable_indexes]
 
     print('OK')
     print('>>>', size_valid_indexes, 'valid samples are divided into:')
@@ -116,15 +140,19 @@ def get_invalid_lineno_list(seq_fp, max_num_tokens, min_num_tokens):
         lines = f.readlines()
         inv_lineno_list = []
         for i, line in enumerate(lines):
-            len_tokens = len(line.split())
-            if len_tokens > max_num_tokens or len_tokens < min_num_tokens and not (
-                    len_tokens == 1 and line != 'Layout'):
+            tokens = line.split()
+            len_tokens = len(tokens)
+            if len_tokens > max_num_tokens or len_tokens == 0 or \
+                    (Widget.TextView.name not in tokens and Widget.ImageView.name not in tokens and
+                     Widget.EditText.name not in tokens and Widget.Button.name not in tokens and
+                     Widget.CheckBox.name not in tokens and Widget.Switch.name not in tokens and
+                     Widget.RadioButton.name not in tokens and Widget.Toolbar.name not in tokens):
                 inv_lineno_list.append(i)
             if i % 3000 == 0:
                 print('.', end='')
     print(' OK')
     print('### Cleaning ended.', len(inv_lineno_list), 'lines have more than', max_num_tokens,
-          'or less than', min_num_tokens, 'tokens which are excluded from training samples set.')
+          'or tokens only contain only container are excluded from training samples set.')
 
     return inv_lineno_list
 

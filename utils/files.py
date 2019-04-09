@@ -1,11 +1,10 @@
 import os
-import random
 import shutil
 import time
 from configparser import ConfigParser, ExtendedInterpolation
 from os import walk
 
-MODE = 'merge_sketches'  # divide_rico merge_sketches test_analysis
+MODE = 'file_copy'  # divide_rico merge_sketches file_copy
 
 NUM_PER_DIR = 1000
 
@@ -102,28 +101,23 @@ def merge_dirs(src_dir, dst_dir):
     print('<<<', str(file_cnt), 'PNGs in sub directories copied to', dst_dir)
 
 
-def make_test_sketches_dir(test_lst_path, rico_dir, sketches_dir, output_dir, num_samples):
+def make_test_sketches_dir(test_lst_path, rico_dir, sketches_dir, output_dir):
     check_make_dir(output_dir)
     print('### Checking/Making directory to save all test sketches ... OK')
 
-    with open(test_lst_path, 'w') as f:
+    with open(test_lst_path, 'r') as f:
         lines = f.readlines()
         print('>>> Copying files to directory', output_dir, '...', end=' ')
-        files = []
+        check_make_dir(os.path.join(output_dir, 'samples'))
+
         for line in lines:
-            file_name = line.split()[0]
-            files.append(file_name)
-            copy_file(os.path.join(sketches_dir, file_name), os.path.join(output_dir, file_name))
-        if num_samples > 0:
-            check_make_dir(os.path.join(output_dir, 'samples'))
-            random.seed(0)
-            sample_files = random.sample(files, num_samples)
-            for file in sample_files:
-                copy_file(os.path.join(sketches_dir, file), os.path.join(output_dir, 'samples', file))
-                jpg = file.split('.')[0] + '.jpg'
-                copy_file(os.path.join(rico_dir, jpg), os.path.join(output_dir, 'samples', jpg))
-                json = file.split('.')[0] + '.json'
-                copy_file(os.path.join(rico_dir, json), os.path.join(output_dir, 'samples', json))
+            file_name = line.split()[0].split('.')[0]
+            copy_file(os.path.join(sketches_dir, file_name + '.png'), os.path.join(output_dir, file_name + '.png'))
+            copy_file(os.path.join(sketches_dir, file_name + '.png'),
+                      os.path.join(output_dir, 'samples', file_name + '.png'))
+            copy_file(os.path.join(rico_dir, file_name + '.jpg'), os.path.join(output_dir, file_name + '.jpg'))
+            copy_file(os.path.join(rico_dir, file_name + '.json'), os.path.join(output_dir, file_name + '.json'))
+
         print('OK')
 
 
@@ -136,13 +130,11 @@ if __name__ == '__main__':
         make_sub_dir(rico_combined_dir, rico_divided_dir)
     if MODE == 'merge_sketches':
         merge_dirs(colored_pics_divided_dir, colored_pics_combined_dir)
-    if MODE == 'test_analysis':
+    if MODE == 'file_copy':
         # 根据需要调整参数
         make_test_sketches_dir(test_lst_path='E:\\sketches-test\\data\\test_shuffle.lst',
-                               rico_dir=rico_combined_dir,
-                               sketches_dir=colored_pics_combined_dir,
-                               output_dir='C:\\Users\\Xiaofei\\Desktop\\test-sketches',
-                               num_samples=30)
+                               rico_dir=rico_combined_dir, sketches_dir=colored_pics_combined_dir,
+                               output_dir='C:\\Users\\Xiaofei\\Desktop\\test-set')
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
