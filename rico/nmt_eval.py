@@ -4,7 +4,7 @@ from nltk.translate.bleu_score import sentence_bleu
 from decomp.layout_utils import optimize_sequence, create_layout_tree, get_tree_details
 from utils.widget import Widget
 
-result_fp = '/Users/gexiaofei/Desktop/results.txt'
+result_fp = 'C:\\Users\\Xiaofei\\Desktop\\results.txt'
 
 if __name__ == '__main__':
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     print()
     print('### depth analysis ###')
-    for i in range(10):
+    for i in range(15):
         indices = np.where(depths == i)[0]
         if len(indices) != 0:
             print('indices number:', len(indices))
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     print()
     print('### num of components analysis ###')
-    for i in range(25):
+    for i in range(30):
         indices = np.where(total_counts == i)[0]
         if len(indices) != 0:
             print('indices number:', len(indices))

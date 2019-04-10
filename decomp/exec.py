@@ -71,11 +71,14 @@ if __name__ == '__main__':
         package = None
         manifest_fp = os.path.join(apktool_out_path, 'AndroidManifest.xml')
         if os.path.isfile(manifest_fp):
-            e = ET.parse(manifest_fp).getroot()
-            if e.tag == 'manifest':
-                package = e.attrib['package']
-        log.logger.info('APK package is ' +
-                        ('parsed: ' + package if package else 'not parsed, using hashcode to substitute.'))
+            try:
+                e = ET.parse(manifest_fp).getroot()
+                if e.tag == 'manifest':
+                    package = e.attrib['package']
+                log.logger.info('APK package is ' +
+                                ('parsed: ' + package if package else 'not parsed, using hashcode to substitute.'))
+            except ET.ParseError as e:
+                log.logger.error('AndroidManifest.xml parsed error.')
 
         if not os.path.exists(soot_output):
             os.makedirs(soot_output)
