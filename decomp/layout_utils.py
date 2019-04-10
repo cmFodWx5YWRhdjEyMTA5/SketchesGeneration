@@ -1,3 +1,5 @@
+from queue import Queue
+
 from anytree import Node, RenderTree
 from anytree.exporter import DotExporter
 
@@ -22,6 +24,24 @@ def post_order_traversal(root):
     post_order = []
     post_order_sweep(root, post_order)
     return post_order
+
+
+def get_tree_details(root, nd):
+    depth = 0
+    widget_count = [0 for w in Widget]
+    queue = Queue()
+    queue.put(root.children[0])
+    while not queue.empty():
+        size = queue.qsize()
+        while size > 0:
+            node = queue.get()
+            widget_count[nd[node.name].widget_type.value] += 1
+            for child in node.children:
+                queue.put(child)
+            size -= 1
+        depth += 1
+
+    return depth, widget_count
 
 
 def create_layout_tree(seq):
