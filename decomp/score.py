@@ -6,7 +6,8 @@ from configparser import ConfigParser
 import networkx as nx
 import numpy as np
 
-from decomp.layout_utils import optimize_sequence, create_layout_tree, post_order_traversal, split_list_item_subtree
+from decomp.layout_utils import optimize_sequence, create_layout_tree, post_order_traversal, split_list_item_subtree, \
+    dfs_make_tokens
 
 cfg = ConfigParser()
 cfg.read('../config.ini')
@@ -109,83 +110,104 @@ def create_tree(sequence):
     return root, nd, post_order
 
 
-def cal_common_score(tree_root, nd, post_order, layout_dir):
+def cal_simi_score(tree_root, nd, post_order):
     """
     将 layout_dir 中的每个文件中每个布局与输入的布局树进行比较，返回一个按相似度排序的有序字典
     :param tree_root: 待匹配布局树根节点
     :param nd: 待匹配布局树节点字典
     :param post_order: 待匹配布局树后序遍历
-    :param layout_dir: 布局序列文件文件夹
     :return: 按相似度排序的字典（key: layout id, value: similarity score）
     """
     scores_map = {}
 
     item_roots = []
     split_list_item_subtree(tree_root, nd, item_roots)
+    tks_main = []
+    tks_item = []
+
+    dfs_make_tokens(tree_root.children[0], nd, tks_main)
+    len_tks_main = len(tks_main)
+    len_tks_item = 0
+    print(tks_main, len_tks_main)
+
     contains_list = len(item_roots) > 0
 
     # 新建变量代表待匹配 item 树根节点及其后序遍历，仅当 contains_list 为真时有效
     post_order_item = None
 
-    self_score = max_score(nd, post_order, nd, post_order)  # 自身得分/最大可能得分
-    item_self_score = 0
+    total_self_score_i = max_score(nd, post_order, nd, post_order)  # 自身得分/最大可能得分
+    item_self_score_i = 0
 
     if contains_list:
         # todo 目前只处理了所有表项的第一个
         item_root = item_roots[0]
         post_order_item = post_order_traversal(item_root)
-        item_self_score = max_score(nd, post_order_item, nd, post_order_item)
-        self_score += item_self_score * 1.5
+        item_self_score_i = max_score(nd, post_order_item, nd, post_order_item)
+        total_self_score_i += item_self_score_i * 1.5
+        dfs_make_tokens(item_root, nd, tks_item)
+        len_tks_item = len(tks_item)
+        print(tks_item, len_tks_item)
 
-    for file_name in os.listdir(layout_dir):
+    for file_name in os.listdir(seq_dir):
         if file_name.endswith('.lst'):
-            with open(os.path.join(layout_dir, file_name), 'r') as f:
+            with open(os.path.join(seq_dir, file_name), 'r') as f:
 
                 # 新建变量代表当需要 item 匹配时记录当前最大近似的 item 文件名和分值
                 max_match_item_self_score = 0
-                max_match_item_score = 0
+                max_match_item_lawecse_score = 0
                 max_match_item_simi_score = 0
-                max_item_fname = None
+                max_match_item_fname = None
 
-                for line in f:
+                for i, line in enumerate(f):
                     line_sp = line.split()
+                    layout_type = int(line_sp[1])
+                    len_tokens_c = int(line_sp[2])
+
+                    if layout_type == 1 and (len_tokens_c > len_tks_main * 2 or len_tokens_c < len_tks_main * 0.5):
+                        # print(1)
+                        continue
+
                     package = line_sp[0]
-                    type = int(line_sp[1])
-                    file_name = line_sp[2]
-                    tokens = line_sp[3:]
+                    file_name = line_sp[3]
+                    tokens = line_sp[4:]
                     layout_id = package + ':' + file_name
 
                     # 优化树结构
                     cfile_tree_root, cfile_nd, cfile_pot = create_tree(' '.join(tokens))
 
                     # 文件中 2(item) 总是放在 1(layout) 前面
-                    if contains_list and type == 2:
-                        current_item_common_score = max_score(nd, post_order_item, cfile_nd, cfile_pot)
-                        current_item_self_score = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
+                    if contains_list and layout_type == 2:
 
-                        current_item_simi_score = 2 * current_item_common_score * current_item_common_score / current_item_self_score / (
-                                current_item_self_score + item_self_score) if current_item_self_score > 0 else 0
+                        if len_tokens_c > len_tks_item * 2 or len_tokens_c < len_tks_item * 0.5:
+                            # print(1)
+                            continue
 
-                        if current_item_simi_score > max_match_item_simi_score:
-                            max_match_item_self_score = current_item_self_score
-                            max_match_item_score = current_item_common_score
-                            max_match_item_simi_score = current_item_simi_score
-                            max_item_fname = file_name
+                        item_lawecse_score_c = max_score(nd, post_order_item, cfile_nd, cfile_pot)
+                        item_self_score_c = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
+
+                        item_simi_score_c = item_lawecse_score_c * item_lawecse_score_c / \
+                                            item_self_score_c / item_self_score_i if item_self_score_c > 0 else 0
+
+                        if item_simi_score_c > max_match_item_simi_score:
+                            max_match_item_self_score = item_self_score_c
+                            max_match_item_lawecse_score = item_lawecse_score_c
+                            max_match_item_simi_score = item_simi_score_c
+                            max_match_item_fname = file_name
 
                     # 将每一行代表的 layout 所对应的近似得分保存到 map 中
-                    if type == 1 and len(cfile_nd) < 200:
+                    if layout_type == 1 and len(cfile_nd) < 200:
                         # 用 package name + main layout + item layout 作为索引
-                        key_id = layout_id + '/' + max_item_fname if contains_list and max_item_fname is not None else layout_id
-                        current_layout_self_score = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
-                        current_layout_score = max_score(nd, post_order, cfile_nd, cfile_pot)
+                        key_id = layout_id + '/' + max_match_item_fname if contains_list and max_match_item_fname is not None else layout_id
+                        layout_self_score_c = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
+                        layout_lawecse_score_c = max_score(nd, post_order, cfile_nd, cfile_pot)
 
                         # 放到 map 中的是计算后的 "近似度得分"
-                        common_score = current_layout_score + max_match_item_score * 1.5
-                        scores_map[key_id] = 2 * common_score * common_score / self_score / \
-                                             (self_score + current_layout_self_score + max_match_item_self_score * 1.5)
+                        total_lawecse_score = layout_lawecse_score_c + max_match_item_lawecse_score * 1.5
+                        scores_map[key_id] = total_lawecse_score * total_lawecse_score / total_self_score_i / \
+                                             (layout_self_score_c + max_match_item_self_score * 1.5)
 
-                        print(key_id, current_layout_score, current_layout_self_score, max_match_item_score,
-                              max_match_item_self_score, self_score)
+                        print(key_id, layout_lawecse_score_c, layout_self_score_c, max_match_item_lawecse_score,
+                              max_match_item_self_score, total_self_score_i)
 
     return sorted(scores_map.items(), key=operator.itemgetter(1), reverse=True)
 
@@ -195,7 +217,7 @@ def search_similar_seq(seq):
     print('---------------------------------')
 
     tree_root, nd, post_order_main = create_tree(seq)
-    sorted_map = cal_common_score(tree_root, nd, post_order_main, seq_dir)
+    sorted_map = cal_simi_score(tree_root, nd, post_order_main)
 
     print('---------------------------------')
     print('Matched results:')
@@ -208,7 +230,7 @@ def search_similar_seq(seq):
 
 
 if __name__ == '__main__':
-    seq = 'Layout { ImageView Layout { Layout { Layout { Layout { TextView TextView } Layout { EditText ImageView } Layout { EditText ImageView } Layout { Button Button } } } } }'
+    seq = 'Layout { Toolbar List { TextView } }'
     search_similar_seq(seq)
 
     # seq1 = 'Layout { Layout { EditText EditText TextView } Layout { Button Button } }'
