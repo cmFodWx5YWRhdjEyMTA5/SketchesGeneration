@@ -1,10 +1,24 @@
+import os
+from configparser import ConfigParser, ExtendedInterpolation
+
 import numpy as np
 from nltk.translate.bleu_score import sentence_bleu
 
 from decomp.layout_utils import optimize_sequence, create_layout_tree, get_tree_details
+from utils.files import copy_file
 from utils.widget import Widget
 
-result_fp = 'C:\\Users\\Xiaofei\\Desktop\\results.txt'
+cfg = ConfigParser(interpolation=ExtendedInterpolation())
+cfg.read('../config.ini')
+
+rico_combined_dir = cfg.get('dirs', 'rico_combined')
+rico_divided_dir = cfg.get('dirs', 'rico_divided')
+colored_pics_combined_dir = cfg.get('dirs', 'colored_pics_combined')
+
+result_fp = 'C:\\Users\\Xiaofei\\Desktop\\final-results.txt'
+correct_dp = 'C:\\Users\\Xiaofei\\Desktop\\correct'
+incorrect_dp = 'C:\\Users\\Xiaofei\\Desktop\\incorrect'
+
 
 if __name__ == '__main__':
 
@@ -21,7 +35,7 @@ if __name__ == '__main__':
         for i, line in enumerate(f):
             line_sp = line.split('\t')
             sketch_name = line_sp[0]
-            file_indices[sketch_name] = i
+            # file_indices[sketch_name] = i
             true_tokens = line_sp[1].split()
             gen_tokens = line_sp[2].split()
             if true_tokens == gen_tokens:
@@ -69,3 +83,18 @@ if __name__ == '__main__':
             print('indices number:', len(indices))
             print('num of components = ' + str(i) + ', multi-gram score:', np.mean(scores[indices], axis=0))
             print('num of components = ' + str(i) + ', exact match rate:', np.mean(exact_matches[indices]))
+
+    print('Splitting true/false labeled images and files ...')
+    with open(result_fp, 'r') as f:
+        for i, line in enumerate(f):
+            rico_index = line.split('\t')[0].split('.')[0]
+            if exact_matches[i] == 1:
+                copy_file(os.path.join(colored_pics_combined_dir, rico_index + '.png'),
+                          os.path.join(correct_dp, rico_index + '.png'))
+                copy_file(os.path.join(rico_combined_dir, rico_index + '.jpg'),
+                          os.path.join(correct_dp, rico_index + '.jpg'))
+            else:
+                copy_file(os.path.join(colored_pics_combined_dir, rico_index + '.png'),
+                          os.path.join(incorrect_dp, rico_index + '.png'))
+                copy_file(os.path.join(rico_combined_dir, rico_index + '.jpg'),
+                          os.path.join(incorrect_dp, rico_index + '.jpg'))
