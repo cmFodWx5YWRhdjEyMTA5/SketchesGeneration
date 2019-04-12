@@ -42,7 +42,7 @@ weights = [[5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0],  # 0
            [0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 0],  # 9
            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 10
            [10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0],  # 11
-           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20]]  # 12
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15]]  # 12
 
 dist_penalty = 5
 num_children_penalty = 5
@@ -161,11 +161,13 @@ def cal_simi_score(tree_root, nd, post_order):
                 for i, line in enumerate(f):
                     line_sp = line.split()
                     layout_type = int(line_sp[1])
-                    len_tokens_c = int(line_sp[2])
+                    len_tks_c = int(line_sp[2])
 
-                    if layout_type == 1 and (len_tokens_c > len_tks_main * 2 or len_tokens_c < len_tks_main * 0.5):
-                        # print(1)
-                        continue
+                    if layout_type == 1:
+                        if abs(
+                                len_tks_c - len_tks_main) > 10 + len_tks_main / 3 or contains_list and 'List' not in tks_main:
+                            # print('layout skipped')
+                            continue
 
                     package = line_sp[0]
                     file_name = line_sp[3]
@@ -178,8 +180,8 @@ def cal_simi_score(tree_root, nd, post_order):
                     # 文件中 2(item) 总是放在 1(layout) 前面
                     if contains_list and layout_type == 2:
 
-                        if len_tokens_c > len_tks_item * 2 or len_tokens_c < len_tks_item * 0.5:
-                            # print(1)
+                        if abs(len_tks_c - len_tks_item) > 10:
+                            # print('item skipped')
                             continue
 
                         item_lawecse_score_c = max_score(nd, post_order_item, cfile_nd, cfile_pot)
@@ -206,8 +208,8 @@ def cal_simi_score(tree_root, nd, post_order):
                         scores_map[key_id] = total_lawecse_score * total_lawecse_score / total_self_score_i / \
                                              (layout_self_score_c + max_match_item_self_score * 1.5)
 
-                        print(key_id, layout_lawecse_score_c, layout_self_score_c, max_match_item_lawecse_score,
-                              max_match_item_self_score, total_self_score_i)
+                        # print(key_id, layout_lawecse_score_c, layout_self_score_c, max_match_item_lawecse_score,
+                        #       max_match_item_self_score, total_self_score_i)
 
     return sorted(scores_map.items(), key=operator.itemgetter(1), reverse=True)
 
@@ -216,6 +218,7 @@ def search_similar_seq(seq):
     start_time = time.time()
     print('---------------------------------')
 
+    print('Searching ...')
     tree_root, nd, post_order_main = create_tree(seq)
     sorted_map = cal_simi_score(tree_root, nd, post_order_main)
 
@@ -223,14 +226,14 @@ def search_similar_seq(seq):
     print('Matched results:')
 
     for i, (key, value) in enumerate(sorted_map[:30]):
-        print(i + 1, key, '| similarity: %.2f' % (value * 100) + '%')
+        print(i + 1, key, '| %.2f' % (value * 100) + '%')
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
 
 
 if __name__ == '__main__':
-    seq = 'Layout { Toolbar List { TextView } }'
+    seq = 'Layout { Toolbar Layout { ImageView TextView TextView } Layout { TextView ImageView } Layout { TextView ImageView } Layout { TextView ImageView } }'
     search_similar_seq(seq)
 
     # seq1 = 'Layout { Layout { EditText EditText TextView } Layout { Button Button } }'
