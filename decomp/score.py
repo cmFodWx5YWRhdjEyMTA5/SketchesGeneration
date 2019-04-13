@@ -233,7 +233,7 @@ def search_similar_seq(seq):
 
 
 if __name__ == '__main__':
-    seq = 'Layout { Toolbar Layout { ImageView TextView TextView } Layout { TextView ImageView } Layout { TextView ImageView } Layout { TextView ImageView } }'
+    seq = 'replace_here'
     search_similar_seq(seq)
 
     # seq1 = 'Layout { Layout { EditText EditText TextView } Layout { Button Button } }'
