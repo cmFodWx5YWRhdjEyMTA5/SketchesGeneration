@@ -6,6 +6,7 @@ import time
 import xml.etree.ElementTree as ET
 from configparser import ConfigParser
 
+from decomp.layout_utils import optimize_sequence
 from utils.logging import Loggers
 
 cfg = ConfigParser()
@@ -51,8 +52,8 @@ if __name__ == '__main__':
     for i, apk_path in enumerate(file_abps):
         # file_name = os.path.splitext(file)[0]
         # apk_path = os.path.join(apk_dir, file)
-        _, filename = os.path.split(apk_path)
-        apktool_out_path = os.path.join(temp_dir, filename)
+        _, apk_name = os.path.split(apk_path)
+        apktool_out_path = os.path.join(temp_dir, apk_name)
 
         start_time = time.time()
         log.logger.info('(' + str(i + 1) + '/' + str(len(file_abps)) + ') Analysis started on ' + apk_path)
@@ -68,6 +69,7 @@ if __name__ == '__main__':
             log.logger.error('Apktool decoding failed.')
             continue
 
+        # 获取包名作为标识符
         package = None
         manifest_fp = os.path.join(apktool_out_path, 'AndroidManifest.xml')
         if os.path.isfile(manifest_fp):
@@ -75,10 +77,14 @@ if __name__ == '__main__':
                 e = ET.parse(manifest_fp).getroot()
                 if e.tag == 'manifest':
                     package = e.attrib['package']
-                log.logger.info('APK package is ' +
-                                ('parsed: ' + package if package else 'not parsed, using hashcode to substitute.'))
+                    log.logger.info('APK package is parsed: ' + package)
             except ET.ParseError as e:
+                # 解析错误跳过
                 log.logger.error('AndroidManifest.xml parsed error.')
+                continue
+        if package is None:
+            package = apk_name
+            log.logger.info('APK package is not parsed, using ' + package + ' to substitute.')
 
         if not os.path.exists(soot_output):
             os.makedirs(soot_output)
@@ -86,14 +92,14 @@ if __name__ == '__main__':
         cmd = ['java', '-jar', soot_jar,
                '-d', soot_output,
                '-android-jars', android_jars,
-               '-package', package if package else filename,
+               '-package', package,
                '-process-dir', apk_path,
                '-apktool-dir', apktool_out_path,
                '-token-dir', apk_tokens_dir,
                '-process-multiple-dex', '-allow-phantom-refs']
 
         log.logger.info('Soot analysis is running (time out = ' + str(TIME_OUT) +
-                        's). The execution output will display in the console after the subprocess ended.')
+                        's). The output will display after the subprocess ended.')
 
         # 执行 soot 程序并处理返回
         try:
@@ -109,7 +115,25 @@ if __name__ == '__main__':
             log.logger.error(e.output)
         else:
             print(out_bytes.decode('utf-8', 'ignore'))
-            log.logger.info('Soot finished. The layout sequences are saved in ' + apk_tokens_dir)
+            tmp_tokens_fp = os.path.join(apk_tokens_dir, package + '-layout.tmp.lst')
+            tokens_fp = os.path.join(apk_tokens_dir, package + '-layout.lst')
+            log.logger.info('Soot finished. Start optimizing soot outputted layout.')
+            if os.path.isfile(tmp_tokens_fp):
+                with open(tokens_fp, 'w') as wf:
+                    line_cnt = 0
+                    with open(tmp_tokens_fp, 'r') as rf:
+                        for j, line in enumerate(rf):
+                            line_sp = line.split()
+                            layout_type = int(line_sp[0])
+                            xml_name = line_sp[1]
+                            tokens = line_sp[2:]
+                            opt_tokens, opt_seq = optimize_sequence(' '.join(tokens))
+                            wf.write(
+                                str(layout_type) + ' ' + xml_name + ' ' + str(len(opt_tokens)) + ' ' + opt_seq + '\n')
+                            line_cnt = j + 1
+                if line_cnt == 0:
+                    os.remove(tokens_fp)
+                os.remove(tmp_tokens_fp)
         finally:
             remove_dir(apktool_out_path)  # 删除 apktool 生成目录，如果需要可以注释这一行
             remove_dir(soot_output)
