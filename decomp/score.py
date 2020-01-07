@@ -12,6 +12,7 @@ from decomp.layout_utils import optimize_sequence, create_layout_tree, post_orde
 cfg = ConfigParser()
 cfg.read('../config.ini')
 
+# Notice: 将 config.ini 中的 apk_tokens_dir 路径改为所有 layout 文件所在的目录文件夹地址，然后替换最下面的 'replace_here'
 seq_dir = cfg.get('decode', 'apk_tokens_dir')
 
 # Layout = 0
