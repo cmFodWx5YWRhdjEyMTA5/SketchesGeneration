@@ -6,7 +6,7 @@ from configparser import ConfigParser
 import networkx as nx
 import numpy as np
 
-from decomp.layout_utils import optimize_sequence, create_layout_tree, post_order_traversal, split_list_item_subtree, \
+from decomp.layout_utils import create_layout_tree, post_order_traversal, split_list_item_subtree, \
     dfs_make_tokens
 
 cfg = ConfigParser()
@@ -102,11 +102,11 @@ def max_score(nd1, post_order1, nd2, post_order2):
 
 def create_tree(sequence):
     """
-    优化输入布局序列，输出该序列的根节点（用于遍历）、节点字典、后序遍历（用于依次比较）
+    输出该序列的根节点（用于遍历）、节点字典、后序遍历（用于依次比较）
     :param sequence: 布局序列
     :return:
     """
-    root, nd = create_layout_tree(optimize_sequence(sequence))
+    root, nd = create_layout_tree(sequence)
     post_order = post_order_traversal(root)
     return root, nd, post_order
 
@@ -129,7 +129,8 @@ def cal_simi_score(tree_root, nd, post_order):
     dfs_make_tokens(tree_root.children[0], nd, tks_main)
     len_tks_main = len(tks_main)
     len_tks_item = 0
-    print(tks_main, len_tks_main)
+    print('Input: ' + str(tks_main), len_tks_main)
+    print('Searching ...')
 
     contains_list = len(item_roots) > 0
 
@@ -160,8 +161,9 @@ def cal_simi_score(tree_root, nd, post_order):
                 max_match_item_fname = None
 
                 for i, line in enumerate(f):
+                    package = str(file_name.split('-')[0])
                     line_sp = line.split()
-                    layout_type = int(line_sp[1])
+                    layout_type = int(line_sp[0])
                     len_tks_c = int(line_sp[2])
 
                     if layout_type == 1:
@@ -170,21 +172,17 @@ def cal_simi_score(tree_root, nd, post_order):
                             # print('layout skipped')
                             continue
 
-                    package = line_sp[0]
-                    file_name = line_sp[3]
-                    tokens = line_sp[4:]
+                    file_name = line_sp[1]
                     layout_id = package + ':' + file_name
+                    tokens = line_sp[3:]
 
-                    # 优化树结构
                     cfile_tree_root, cfile_nd, cfile_pot = create_tree(' '.join(tokens))
 
                     # 文件中 2(item) 总是放在 1(layout) 前面
                     if contains_list and layout_type == 2:
-
                         if abs(len_tks_c - len_tks_item) > 10:
                             # print('item skipped')
                             continue
-
                         item_lawecse_score_c = max_score(nd, post_order_item, cfile_nd, cfile_pot)
                         item_self_score_c = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
 
@@ -219,7 +217,6 @@ def search_similar_seq(seq):
     start_time = time.time()
     print('---------------------------------')
 
-    print('Searching ...')
     tree_root, nd, post_order_main = create_tree(seq)
     sorted_map = cal_simi_score(tree_root, nd, post_order_main)
 

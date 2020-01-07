@@ -157,7 +157,7 @@ def optimize_sequence(seq):
     for child in root.children:
         dfs_make_tokens(child, nodes_dict, new_tokens)
 
-    return " ".join(new_tokens)
+    return new_tokens, ' '.join(new_tokens)
 
 
 def analyze(seq, file1, file2, print_mode):
