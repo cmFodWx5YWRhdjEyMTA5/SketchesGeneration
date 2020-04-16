@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 清理 RICO 布局文件（JSON 文件），输出清理后结果到 cleaned_jsons_dir。
+    接受的输入是 RICO 数据集中经过拆分（utils/files.py）后的文件目录地址。
+"""
+
 import json
 import os
 import time

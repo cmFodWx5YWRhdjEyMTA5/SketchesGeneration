@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 针对 apk 文件夹进行基于 SOOT 的布局序列提取，将结果输出到 apk_tokens_dir 目录中（该方法即将废弃）。
+"""
+
 import os
 import platform
 import shutil

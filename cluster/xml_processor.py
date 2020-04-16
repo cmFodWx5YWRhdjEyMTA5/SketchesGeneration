@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 针对 RICO 数据集执行 kmeans 算法（已废弃）
+"""
+
 try:
     import xml.etree.cElementTree as ET
 except ImportError:
@@ -18,7 +24,7 @@ cfg.read('../config.ini')
 
 KM_MODEL_PATH = cfg.get('debug', 'km_model')
 GATOR_XML_DIR = cfg.get('debug', 'gator_xml')
-GATOR_OUT_DIR = cfg.get('dirs', 'intermediate')
+GATOR_OUT_DIR = cfg.get('debug', 'intermediate')
 
 kmeans = joblib.load(KM_MODEL_PATH)
 

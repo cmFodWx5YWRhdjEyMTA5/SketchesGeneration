@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 一些全局用到的枚举类
+"""
+
 from enum import Enum
 
 

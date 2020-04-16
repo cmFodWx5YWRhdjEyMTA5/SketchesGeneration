@@ -1,0 +1,4 @@
+Layout { Toolbar Layout { TextView Layout { Layout { Layout { TextView TextView } Switch } Layout { Layout { TextView TextView } Switch } Layout { Layout { TextView TextView } Switch } Layout { Layout { TextView TextView } Switch } } TextView TextView Button Button } }
+Layout { Toolbar Layout { Layout { Layout { ImageView TextView } Layout { Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } } TextView } Layout { Layout { EditText EditText } Button } } }
+Layout { Layout { ImageView TextView } Layout { Button Button } }
+Layout { Layout { Layout { TextView TextView } Toolbar Button } Layout { ImageView Button } }

@@ -1,0 +1,1238 @@
+{
+  "activity_name": "com.quizlet.quizletandroid/com.quizlet.quizletandroid.intro.IntroActivity",
+  "activity": {
+    "root": {
+      "scrollable-horizontal": false,
+      "draw": true,
+      "ancestors": [
+        "android.widget.FrameLayout",
+        "android.view.ViewGroup",
+        "android.view.View",
+        "java.lang.Object"
+      ],
+      "clickable": false,
+      "pressed": "not_pressed",
+      "focusable": false,
+      "long-clickable": false,
+      "enabled": true,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "visibility": "visible",
+      "content-desc": [
+        null
+      ],
+      "rel-bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "focused": false,
+      "selected": false,
+      "scrollable-vertical": false,
+      "children": [
+        {
+          "scrollable-horizontal": false,
+          "draw": true,
+          "ancestors": [
+            "android.view.ViewGroup",
+            "android.view.View",
+            "java.lang.Object"
+          ],
+          "clickable": false,
+          "pressed": "not_pressed",
+          "focusable": false,
+          "long-clickable": false,
+          "enabled": true,
+          "bounds": [
+            0,
+            0,
+            1440,
+            2392
+          ],
+          "visibility": "visible",
+          "content-desc": [
+            null
+          ],
+          "rel-bounds": [
+            0,
+            0,
+            1440,
+            2392
+          ],
+          "focused": false,
+          "selected": false,
+          "scrollable-vertical": false,
+          "children": [
+            {
+              "resource-id": "android:id/action_mode_bar_stub",
+              "adapter-view": false,
+              "pointer": "4d8d5a0",
+              "scrollable-horizontal": false,
+              "ancestors": [
+                "android.view.View",
+                "java.lang.Object"
+              ],
+              "selected": false,
+              "content-desc": [
+                null
+              ],
+              "rel-bounds": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "draw": true,
+              "focusable": false,
+              "long-clickable": false,
+              "visibility": "gone",
+              "focused": false,
+              "clickable": false,
+              "abs-pos": true,
+              "class": "android.view.ViewStub",
+              "visible-to-user": false,
+              "package": "android",
+              "enabled": true,
+              "bounds": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "pressed": "not_pressed",
+              "scrollable-vertical": false
+            },
+            {
+              "scrollable-horizontal": false,
+              "draw": true,
+              "ancestors": [
+                "android.view.ViewGroup",
+                "android.view.View",
+                "java.lang.Object"
+              ],
+              "clickable": false,
+              "pressed": "not_pressed",
+              "focusable": false,
+              "long-clickable": false,
+              "enabled": true,
+              "bounds": [
+                0,
+                0,
+                1440,
+                2392
+              ],
+              "visibility": "visible",
+              "content-desc": [
+                null
+              ],
+              "rel-bounds": [
+                0,
+                0,
+                1440,
+                2392
+              ],
+              "focused": false,
+              "selected": false,
+              "scrollable-vertical": false,
+              "children": [
+                {
+                  "resource-id": "com.quizlet.quizletandroid:id/action_bar_root",
+                  "adapter-view": false,
+                  "pointer": "b0a7e15",
+                  "children": [
+                    {
+                      "resource-id": "android:id/content",
+                      "adapter-view": false,
+                      "pointer": "e4c6f1b",
+                      "children": [
+                        {
+                          "resource-id": "com.quizlet.quizletandroid:id/account_layout",
+                          "adapter-view": false,
+                          "pointer": "4d589f6",
+                          "children": [
+                            {
+                              "resource-id": "com.quizlet.quizletandroid:id/intro_bg",
+                              "adapter-view": false,
+                              "pointer": "938e1f7",
+                              "scrollable-horizontal": false,
+                              "ancestors": [
+                                "android.widget.ImageView",
+                                "android.view.View",
+                                "java.lang.Object"
+                              ],
+                              "selected": false,
+                              "content-desc": [
+                                null
+                              ],
+                              "rel-bounds": [
+                                0,
+                                0,
+                                1440,
+                                2392
+                              ],
+                              "draw": false,
+                              "focusable": false,
+                              "long-clickable": false,
+                              "visibility": "visible",
+                              "focused": false,
+                              "clickable": false,
+                              "abs-pos": true,
+                              "class": "android.support.v7.widget.AppCompatImageView",
+                              "visible-to-user": true,
+                              "package": "com.quizlet.quizletandroid",
+                              "enabled": true,
+                              "bounds": [
+                                0,
+                                0,
+                                1440,
+                                2392
+                              ],
+                              "pressed": "not_pressed",
+                              "scrollable-vertical": false
+                            },
+                            {
+                              "resource-id": "com.quizlet.quizletandroid:id/view_content",
+                              "adapter-view": false,
+                              "pointer": "e1ba864",
+                              "children": [
+                                {
+                                  "resource-id": "com.quizlet.quizletandroid:id/fixed_login_bar",
+                                  "adapter-view": false,
+                                  "pointer": "6d5acd",
+                                  "children": [
+                                    {
+                                      "text": "Sign up for free",
+                                      "resource-id": "com.quizlet.quizletandroid:id/account_signup_button",
+                                      "adapter-view": false,
+                                      "pointer": "eebf294",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "android.support.v7.widget.AppCompatButton",
+                                        "android.widget.Button",
+                                        "android.widget.TextView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        0,
+                                        0,
+                                        1328,
+                                        245
+                                      ],
+                                      "draw": false,
+                                      "focusable": true,
+                                      "long-clickable": false,
+                                      "visibility": "visible",
+                                      "focused": false,
+                                      "clickable": true,
+                                      "abs-pos": true,
+                                      "font-family": "default",
+                                      "class": "com.quizlet.quizletandroid.views.QButton",
+                                      "visible-to-user": true,
+                                      "package": "com.quizlet.quizletandroid",
+                                      "enabled": true,
+                                      "bounds": [
+                                        56,
+                                        1884,
+                                        1384,
+                                        2129
+                                      ],
+                                      "pressed": "not_pressed",
+                                      "scrollable-vertical": false
+                                    },
+                                    {
+                                      "text": "Or log in",
+                                      "resource-id": "com.quizlet.quizletandroid:id/account_login_button",
+                                      "adapter-view": false,
+                                      "pointer": "79b002c",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "android.support.v7.widget.AppCompatButton",
+                                        "android.widget.Button",
+                                        "android.widget.TextView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        0,
+                                        245,
+                                        1328,
+                                        452
+                                      ],
+                                      "draw": false,
+                                      "focusable": true,
+                                      "long-clickable": false,
+                                      "visibility": "visible",
+                                      "focused": false,
+                                      "clickable": true,
+                                      "abs-pos": true,
+                                      "font-family": "default",
+                                      "class": "com.quizlet.quizletandroid.views.QButton",
+                                      "visible-to-user": true,
+                                      "package": "com.quizlet.quizletandroid",
+                                      "enabled": true,
+                                      "bounds": [
+                                        56,
+                                        2129,
+                                        1384,
+                                        2336
+                                      ],
+                                      "pressed": "not_pressed",
+                                      "scrollable-vertical": false
+                                    }
+                                  ],
+                                  "scrollable-horizontal": false,
+                                  "ancestors": [
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "selected": false,
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    56,
+                                    1884,
+                                    1384,
+                                    2336
+                                  ],
+                                  "draw": true,
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "visibility": "visible",
+                                  "focused": false,
+                                  "clickable": false,
+                                  "abs-pos": true,
+                                  "class": "android.widget.LinearLayout",
+                                  "visible-to-user": true,
+                                  "package": "com.quizlet.quizletandroid",
+                                  "enabled": true,
+                                  "bounds": [
+                                    56,
+                                    1884,
+                                    1384,
+                                    2336
+                                  ],
+                                  "pressed": "not_pressed",
+                                  "scrollable-vertical": false
+                                },
+                                {
+                                  "resource-id": "com.quizlet.quizletandroid:id/view_pager_indicator",
+                                  "adapter-view": false,
+                                  "pointer": "461a08a",
+                                  "children": [
+                                    {
+                                      "text": "",
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "pointer": "97e6da9",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "android.widget.RadioButton",
+                                        "android.widget.CompoundButton",
+                                        "android.widget.Button",
+                                        "android.widget.TextView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        0,
+                                        0,
+                                        28,
+                                        28
+                                      ],
+                                      "draw": false,
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "visibility": "visible",
+                                      "focused": false,
+                                      "clickable": false,
+                                      "abs-pos": true,
+                                      "font-family": "sans-serif",
+                                      "class": "android.support.v7.widget.AppCompatRadioButton",
+                                      "visible-to-user": true,
+                                      "enabled": true,
+                                      "bounds": [
+                                        622,
+                                        1800,
+                                        650,
+                                        1828
+                                      ],
+                                      "pressed": "not_pressed"
+                                    },
+                                    {
+                                      "text": "",
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "pointer": "da0bacf",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "android.widget.RadioButton",
+                                        "android.widget.CompoundButton",
+                                        "android.widget.Button",
+                                        "android.widget.TextView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        56,
+                                        0,
+                                        84,
+                                        28
+                                      ],
+                                      "draw": false,
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "visibility": "visible",
+                                      "focused": false,
+                                      "clickable": false,
+                                      "abs-pos": true,
+                                      "font-family": "sans-serif",
+                                      "class": "android.support.v7.widget.AppCompatRadioButton",
+                                      "visible-to-user": true,
+                                      "enabled": true,
+                                      "bounds": [
+                                        678,
+                                        1800,
+                                        706,
+                                        1828
+                                      ],
+                                      "pressed": "not_pressed"
+                                    },
+                                    {
+                                      "text": "",
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "pointer": "174cc5c",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "android.widget.RadioButton",
+                                        "android.widget.CompoundButton",
+                                        "android.widget.Button",
+                                        "android.widget.TextView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        112,
+                                        0,
+                                        140,
+                                        28
+                                      ],
+                                      "draw": false,
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "visibility": "visible",
+                                      "focused": false,
+                                      "clickable": false,
+                                      "abs-pos": true,
+                                      "font-family": "sans-serif",
+                                      "class": "android.support.v7.widget.AppCompatRadioButton",
+                                      "visible-to-user": true,
+                                      "enabled": true,
+                                      "bounds": [
+                                        734,
+                                        1800,
+                                        762,
+                                        1828
+                                      ],
+                                      "pressed": "not_pressed"
+                                    },
+                                    {
+                                      "text": "",
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "pointer": "273b65",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "android.widget.RadioButton",
+                                        "android.widget.CompoundButton",
+                                        "android.widget.Button",
+                                        "android.widget.TextView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        168,
+                                        0,
+                                        196,
+                                        28
+                                      ],
+                                      "draw": false,
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "visibility": "visible",
+                                      "focused": false,
+                                      "clickable": false,
+                                      "abs-pos": true,
+                                      "font-family": "sans-serif",
+                                      "class": "android.support.v7.widget.AppCompatRadioButton",
+                                      "visible-to-user": true,
+                                      "enabled": true,
+                                      "bounds": [
+                                        790,
+                                        1800,
+                                        818,
+                                        1828
+                                      ],
+                                      "pressed": "not_pressed"
+                                    }
+                                  ],
+                                  "scrollable-horizontal": false,
+                                  "ancestors": [
+                                    "android.widget.RadioGroup",
+                                    "android.widget.LinearLayout",
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "selected": false,
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    622,
+                                    1800,
+                                    818,
+                                    1828
+                                  ],
+                                  "draw": false,
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "visibility": "visible",
+                                  "focused": false,
+                                  "clickable": false,
+                                  "abs-pos": true,
+                                  "class": "com.quizlet.quizletandroid.views.ViewPagerIndicator",
+                                  "visible-to-user": true,
+                                  "package": "com.quizlet.quizletandroid",
+                                  "enabled": true,
+                                  "bounds": [
+                                    622,
+                                    1800,
+                                    818,
+                                    1828
+                                  ],
+                                  "pressed": "not_pressed",
+                                  "scrollable-vertical": false
+                                },
+                                {
+                                  "resource-id": "com.quizlet.quizletandroid:id/signup_viewpager",
+                                  "adapter-view": false,
+                                  "pointer": "5cdf318",
+                                  "children": [
+                                    {
+                                      "scrollable-horizontal": false,
+                                      "draw": true,
+                                      "ancestors": [
+                                        "android.view.ViewGroup",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "clickable": false,
+                                      "pressed": "not_pressed",
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "enabled": true,
+                                      "bounds": [
+                                        0,
+                                        0,
+                                        1440,
+                                        1632
+                                      ],
+                                      "visibility": "visible",
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        0,
+                                        0,
+                                        1440,
+                                        1800
+                                      ],
+                                      "focused": false,
+                                      "selected": false,
+                                      "scrollable-vertical": false,
+                                      "children": [
+                                        {
+                                          "text": "Simple tools that let you learn\nanything \u2014 for free.",
+                                          "resource-id": "com.quizlet.quizletandroid:id/itemText",
+                                          "adapter-view": false,
+                                          "pointer": "91d406f",
+                                          "scrollable-horizontal": false,
+                                          "ancestors": [
+                                            "android.widget.TextView",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "selected": false,
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            279,
+                                            821,
+                                            1160,
+                                            978
+                                          ],
+                                          "draw": false,
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "visibility": "visible",
+                                          "focused": false,
+                                          "clickable": false,
+                                          "abs-pos": true,
+                                          "font-family": "default",
+                                          "class": "com.quizlet.quizletandroid.views.QTextView",
+                                          "visible-to-user": true,
+                                          "package": "com.quizlet.quizletandroid",
+                                          "enabled": true,
+                                          "bounds": [
+                                            279,
+                                            653,
+                                            1160,
+                                            810
+                                          ],
+                                          "pressed": "not_pressed",
+                                          "scrollable-vertical": false
+                                        },
+                                        {
+                                          "scrollable-horizontal": false,
+                                          "draw": false,
+                                          "ancestors": [
+                                            "android.widget.ImageView",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "clickable": false,
+                                          "pressed": "not_pressed",
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "enabled": true,
+                                          "bounds": [
+                                            291,
+                                            443,
+                                            1148,
+                                            569
+                                          ],
+                                          "visibility": "visible",
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            291,
+                                            611,
+                                            1148,
+                                            737
+                                          ],
+                                          "focused": false,
+                                          "selected": false,
+                                          "scrollable-vertical": false,
+                                          "adapter-view": false,
+                                          "abs-pos": true,
+                                          "pointer": "ff0717c",
+                                          "class": "android.support.v7.widget.AppCompatImageView",
+                                          "visible-to-user": true
+                                        }
+                                      ],
+                                      "adapter-view": false,
+                                      "abs-pos": true,
+                                      "pointer": "15ef74e",
+                                      "class": "android.widget.RelativeLayout",
+                                      "visible-to-user": true
+                                    },
+                                    {
+                                      "scrollable-horizontal": false,
+                                      "draw": true,
+                                      "ancestors": [
+                                        "android.view.ViewGroup",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "clickable": false,
+                                      "pressed": "not_pressed",
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "enabled": true,
+                                      "bounds": [
+                                        1440,
+                                        0,
+                                        1440,
+                                        1632
+                                      ],
+                                      "visibility": "visible",
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        1440,
+                                        0,
+                                        2880,
+                                        1800
+                                      ],
+                                      "focused": false,
+                                      "selected": false,
+                                      "scrollable-vertical": false,
+                                      "children": [
+                                        {
+                                          "text": "Learn in four different ways \u2014 choose\nwhat works for you!",
+                                          "resource-id": "com.quizlet.quizletandroid:id/itemText",
+                                          "adapter-view": false,
+                                          "pointer": "a037414",
+                                          "scrollable-horizontal": false,
+                                          "ancestors": [
+                                            "android.widget.TextView",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "selected": false,
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            175,
+                                            821,
+                                            1265,
+                                            978
+                                          ],
+                                          "draw": false,
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "visibility": "visible",
+                                          "focused": false,
+                                          "clickable": false,
+                                          "abs-pos": true,
+                                          "font-family": "default",
+                                          "class": "com.quizlet.quizletandroid.views.QTextView",
+                                          "visible-to-user": false,
+                                          "package": "com.quizlet.quizletandroid",
+                                          "enabled": true,
+                                          "bounds": [
+                                            1615,
+                                            653,
+                                            1440,
+                                            810
+                                          ],
+                                          "pressed": "not_pressed",
+                                          "scrollable-vertical": false
+                                        },
+                                        {
+                                          "scrollable-horizontal": false,
+                                          "draw": false,
+                                          "ancestors": [
+                                            "android.view.ViewGroup",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "clickable": false,
+                                          "pressed": "not_pressed",
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "enabled": true,
+                                          "bounds": [
+                                            1440,
+                                            443,
+                                            1440,
+                                            569
+                                          ],
+                                          "visibility": "visible",
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            0,
+                                            611,
+                                            1440,
+                                            737
+                                          ],
+                                          "focused": false,
+                                          "selected": false,
+                                          "scrollable-vertical": false,
+                                          "children": [
+                                            {
+                                              "scrollable-horizontal": false,
+                                              "draw": false,
+                                              "ancestors": [
+                                                "android.widget.ImageView",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "clickable": false,
+                                              "pressed": "not_pressed",
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "enabled": true,
+                                              "bounds": [
+                                                1691,
+                                                464,
+                                                1440,
+                                                548
+                                              ],
+                                              "visibility": "visible",
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                251,
+                                                21,
+                                                377,
+                                                105
+                                              ],
+                                              "focused": false,
+                                              "selected": false,
+                                              "scrollable-vertical": false,
+                                              "adapter-view": false,
+                                              "abs-pos": true,
+                                              "pointer": "277ea03",
+                                              "class": "android.support.v7.widget.AppCompatImageView",
+                                              "visible-to-user": false
+                                            },
+                                            {
+                                              "scrollable-horizontal": false,
+                                              "draw": false,
+                                              "ancestors": [
+                                                "android.widget.ImageView",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "clickable": false,
+                                              "pressed": "not_pressed",
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "enabled": true,
+                                              "bounds": [
+                                                1957,
+                                                443,
+                                                1440,
+                                                569
+                                              ],
+                                              "visibility": "visible",
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                517,
+                                                0,
+                                                657,
+                                                126
+                                              ],
+                                              "focused": false,
+                                              "selected": false,
+                                              "scrollable-vertical": false,
+                                              "adapter-view": false,
+                                              "abs-pos": true,
+                                              "pointer": "5b6dfb9",
+                                              "class": "android.support.v7.widget.AppCompatImageView",
+                                              "visible-to-user": false
+                                            },
+                                            {
+                                              "scrollable-horizontal": false,
+                                              "draw": false,
+                                              "ancestors": [
+                                                "android.widget.ImageView",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "clickable": false,
+                                              "pressed": "not_pressed",
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "enabled": true,
+                                              "bounds": [
+                                                2237,
+                                                464,
+                                                1440,
+                                                548
+                                              ],
+                                              "visibility": "visible",
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                797,
+                                                21,
+                                                951,
+                                                105
+                                              ],
+                                              "focused": false,
+                                              "selected": false,
+                                              "scrollable-vertical": false,
+                                              "adapter-view": false,
+                                              "abs-pos": true,
+                                              "pointer": "385235f",
+                                              "class": "android.support.v7.widget.AppCompatImageView",
+                                              "visible-to-user": false
+                                            },
+                                            {
+                                              "scrollable-horizontal": false,
+                                              "draw": false,
+                                              "ancestors": [
+                                                "android.widget.ImageView",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "clickable": false,
+                                              "pressed": "not_pressed",
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "enabled": true,
+                                              "bounds": [
+                                                2531,
+                                                443,
+                                                1440,
+                                                569
+                                              ],
+                                              "visibility": "visible",
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                1091,
+                                                0,
+                                                1189,
+                                                126
+                                              ],
+                                              "focused": false,
+                                              "selected": false,
+                                              "scrollable-vertical": false,
+                                              "adapter-view": false,
+                                              "abs-pos": true,
+                                              "pointer": "cdcbe75",
+                                              "class": "android.support.v7.widget.AppCompatImageView",
+                                              "visible-to-user": false
+                                            }
+                                          ],
+                                          "adapter-view": false,
+                                          "abs-pos": true,
+                                          "pointer": "c4eb4bd",
+                                          "class": "android.widget.LinearLayout",
+                                          "visible-to-user": false
+                                        }
+                                      ],
+                                      "adapter-view": false,
+                                      "abs-pos": true,
+                                      "pointer": "5d6ce67",
+                                      "class": "android.widget.RelativeLayout",
+                                      "visible-to-user": false
+                                    }
+                                  ],
+                                  "scrollable-horizontal": false,
+                                  "ancestors": [
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "selected": false,
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    0,
+                                    0,
+                                    1440,
+                                    1800
+                                  ],
+                                  "draw": false,
+                                  "focusable": true,
+                                  "long-clickable": false,
+                                  "visibility": "visible",
+                                  "focused": false,
+                                  "clickable": false,
+                                  "abs-pos": true,
+                                  "class": "android.support.v4.view.ViewPager",
+                                  "visible-to-user": true,
+                                  "package": "com.quizlet.quizletandroid",
+                                  "enabled": true,
+                                  "bounds": [
+                                    0,
+                                    0,
+                                    1440,
+                                    1800
+                                  ],
+                                  "pressed": "not_pressed",
+                                  "scrollable-vertical": false
+                                }
+                              ],
+                              "scrollable-horizontal": false,
+                              "ancestors": [
+                                "android.view.ViewGroup",
+                                "android.view.View",
+                                "java.lang.Object"
+                              ],
+                              "selected": false,
+                              "content-desc": [
+                                null
+                              ],
+                              "rel-bounds": [
+                                0,
+                                0,
+                                1440,
+                                2392
+                              ],
+                              "draw": true,
+                              "focusable": false,
+                              "long-clickable": false,
+                              "visibility": "visible",
+                              "focused": false,
+                              "clickable": false,
+                              "abs-pos": true,
+                              "class": "android.widget.RelativeLayout",
+                              "visible-to-user": true,
+                              "package": "com.quizlet.quizletandroid",
+                              "enabled": true,
+                              "bounds": [
+                                0,
+                                0,
+                                1440,
+                                2392
+                              ],
+                              "pressed": "not_pressed",
+                              "scrollable-vertical": false
+                            }
+                          ],
+                          "scrollable-horizontal": false,
+                          "ancestors": [
+                            "android.view.ViewGroup",
+                            "android.view.View",
+                            "java.lang.Object"
+                          ],
+                          "selected": false,
+                          "content-desc": [
+                            null
+                          ],
+                          "rel-bounds": [
+                            0,
+                            0,
+                            1440,
+                            2392
+                          ],
+                          "draw": true,
+                          "focusable": false,
+                          "long-clickable": false,
+                          "visibility": "visible",
+                          "focused": false,
+                          "clickable": false,
+                          "abs-pos": true,
+                          "class": "android.widget.FrameLayout",
+                          "visible-to-user": true,
+                          "package": "com.quizlet.quizletandroid",
+                          "enabled": true,
+                          "bounds": [
+                            0,
+                            0,
+                            1440,
+                            2392
+                          ],
+                          "pressed": "not_pressed",
+                          "scrollable-vertical": false
+                        }
+                      ],
+                      "scrollable-horizontal": false,
+                      "ancestors": [
+                        "android.widget.FrameLayout",
+                        "android.view.ViewGroup",
+                        "android.view.View",
+                        "java.lang.Object"
+                      ],
+                      "selected": false,
+                      "content-desc": [
+                        null
+                      ],
+                      "rel-bounds": [
+                        0,
+                        0,
+                        1440,
+                        2392
+                      ],
+                      "draw": true,
+                      "focusable": false,
+                      "long-clickable": false,
+                      "visibility": "visible",
+                      "focused": false,
+                      "clickable": false,
+                      "abs-pos": true,
+                      "class": "android.support.v7.widget.ContentFrameLayout",
+                      "visible-to-user": true,
+                      "package": "android",
+                      "enabled": true,
+                      "bounds": [
+                        0,
+                        0,
+                        1440,
+                        2392
+                      ],
+                      "pressed": "not_pressed",
+                      "scrollable-vertical": false
+                    },
+                    {
+                      "resource-id": "com.quizlet.quizletandroid:id/action_mode_bar_stub",
+                      "adapter-view": false,
+                      "pointer": "a47b8b8",
+                      "scrollable-horizontal": false,
+                      "ancestors": [
+                        "android.view.View",
+                        "java.lang.Object"
+                      ],
+                      "selected": false,
+                      "content-desc": [
+                        null
+                      ],
+                      "rel-bounds": [
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "draw": true,
+                      "focusable": false,
+                      "long-clickable": false,
+                      "visibility": "gone",
+                      "focused": false,
+                      "clickable": false,
+                      "abs-pos": true,
+                      "class": "android.support.v7.widget.ViewStubCompat",
+                      "visible-to-user": false,
+                      "package": "com.quizlet.quizletandroid",
+                      "enabled": true,
+                      "bounds": [
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "pressed": "not_pressed",
+                      "scrollable-vertical": false
+                    }
+                  ],
+                  "scrollable-horizontal": false,
+                  "ancestors": [
+                    "android.widget.FrameLayout",
+                    "android.view.ViewGroup",
+                    "android.view.View",
+                    "java.lang.Object"
+                  ],
+                  "selected": false,
+                  "content-desc": [
+                    null
+                  ],
+                  "rel-bounds": [
+                    0,
+                    0,
+                    1440,
+                    2392
+                  ],
+                  "draw": true,
+                  "focusable": false,
+                  "long-clickable": false,
+                  "visibility": "visible",
+                  "focused": false,
+                  "clickable": false,
+                  "abs-pos": true,
+                  "class": "android.support.v7.widget.FitWindowsFrameLayout",
+                  "visible-to-user": true,
+                  "package": "com.quizlet.quizletandroid",
+                  "enabled": true,
+                  "bounds": [
+                    0,
+                    0,
+                    1440,
+                    2392
+                  ],
+                  "pressed": "not_pressed",
+                  "scrollable-vertical": false
+                }
+              ],
+              "adapter-view": false,
+              "abs-pos": true,
+              "pointer": "b29e559",
+              "class": "android.widget.FrameLayout",
+              "visible-to-user": true
+            }
+          ],
+          "adapter-view": false,
+          "abs-pos": true,
+          "pointer": "2bdcea3",
+          "class": "android.widget.LinearLayout",
+          "visible-to-user": true
+        },
+        {
+          "resource-id": "android:id/navigationBarBackground",
+          "adapter-view": false,
+          "pointer": "668d4b5",
+          "scrollable-horizontal": false,
+          "ancestors": [
+            "java.lang.Object"
+          ],
+          "selected": false,
+          "content-desc": [
+            null
+          ],
+          "rel-bounds": [
+            0,
+            2392,
+            1440,
+            2560
+          ],
+          "draw": false,
+          "focusable": false,
+          "long-clickable": false,
+          "visibility": "visible",
+          "focused": false,
+          "clickable": false,
+          "abs-pos": true,
+          "class": "android.view.View",
+          "visible-to-user": true,
+          "package": "android",
+          "enabled": true,
+          "bounds": [
+            0,
+            2392,
+            1440,
+            2560
+          ],
+          "pressed": "not_pressed",
+          "scrollable-vertical": false
+        }
+      ],
+      "adapter-view": false,
+      "abs-pos": true,
+      "pointer": "db9a907",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "visible-to-user": true
+    },
+    "added_fragments": [],
+    "active_fragments": []
+  },
+  "is_keyboard_deployed": false,
+  "request_id": "2"
+}

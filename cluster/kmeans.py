@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 针对 RICO 数据集执行 kmeans 算法（已废弃）
+"""
+
 import csv
 import json
 import os

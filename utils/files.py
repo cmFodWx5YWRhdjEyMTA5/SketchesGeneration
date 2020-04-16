@@ -1,12 +1,23 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 几个文件处理相关的操作
+    可以调整的 MODE 参数：
+        divide_rico: 将完整的 RICO 数据集文件*拆分*为包含 NUM_PER_DIR 个文件的子文件夹
+        merge_sketches: 将包含 NUM_PER_DIR 个文件的草图子文件夹*合并*为完整文件夹供训练
+        make_test_sketches_dir: 将测试集数据从 NMT 训练数据文件夹中单独提取出来供后续分析（可能不会用到）
+"""
+
 import os
 import shutil
 import time
 from configparser import ConfigParser, ExtendedInterpolation
 from os import walk
 
-MODE = 'file_copy'  # divide_rico merge_sketches file_copy
+MODE = 'divide_rico'  # divide_rico merge_sketches file_copy
 
-NUM_PER_DIR = 1000
+# NUM_PER_DIR = 1000
+NUM_PER_DIR = 2
 
 cfg = ConfigParser(interpolation=ExtendedInterpolation())
 cfg.read('../config.ini')

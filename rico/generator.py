@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 基于 RICO 数据集构造 NMT 模型训练数据 <组件块着色图，布局序列>
+"""
+
 import csv
 import hashlib
 import json

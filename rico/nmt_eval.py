@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" SKETCHOID 评估实验（以后应该不会用到）
+"""
+
 from configparser import ConfigParser, ExtendedInterpolation
 
 import numpy as np

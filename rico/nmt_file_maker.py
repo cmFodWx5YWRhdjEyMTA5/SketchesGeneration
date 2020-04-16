@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 将基于 RICO 数据集构造好的训练数据<组件块着色图，布局序列>拆分成训练集、验证集、测试集。
+    （应该不会用到）
+"""
+
 import random
 import time
 from configparser import ConfigParser, ExtendedInterpolation
@@ -115,7 +122,7 @@ def gen_training_lists(train_fp, val_fp, test_fp, dataset_size, test_prop, val_p
 
 def gen_i2l_dict(index_map_fp):
     """
-    构造 index seq_line_no 字典用于构造训练集等时确定每张图所对应的行号
+    构造 {rico_index: seq_line_number} 字典用于构造训练集等时确定每张图所对应的行号
     :return: 字典 {rico_index: line_number}
     """
     #

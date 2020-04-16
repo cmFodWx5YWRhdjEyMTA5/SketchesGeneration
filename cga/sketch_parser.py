@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 解析草图识别结果，生成 NMT 测试所需的必要文件（着色图、图像/序号映射文件、dummy布局序列文件）。
+"""
+
 import os
 from configparser import ConfigParser, ExtendedInterpolation
 from enum import Enum
@@ -11,21 +17,25 @@ from utils.widget import Widget
 cfg = ConfigParser(interpolation=ExtendedInterpolation())
 cfg.read('../config.ini')
 
-# 画布长宽
+# NMT 接收图像的尺寸宽高
 SKETCH_WIDTH = cfg.getint('nmt', 'sketch_width')
 SKETCH_HEIGHT = cfg.getint('nmt', 'sketch_height')
 
-coord_dir = cfg.get('sketch', 'coord_dir')
-colored_dir = cfg.get('sketch', 'colored_dir')
-nmt_file_dir = cfg.get('sketch', 'nmt_files_dir')
+coord_dir = cfg.get('sketch', 'coord_dir')  # 五元组文件目录
+colored_dir = cfg.get('sketch', 'colored_dir')  # 生成的着色图目录
+nmt_file_dir = cfg.get('sketch', 'nmt_files_dir')  # 生成的 NMT 模型运行用文件目录
 
+# 检查并创建两个文件夹
 check_make_dir(colored_dir)
 check_make_dir(nmt_file_dir)
 
+# NMT 运行所需的文件：布局序列列表文件，但里面不填充内容（而是由 NMT 模型生成）
 sketch_sequences_fp = cfg.get('sketch', 'sequences')
+# NMT 运行所需的文件：图像、编号的映射文件
 sketch_lst_fp = cfg.get('sketch', 'dummy_lst')
 
 
+# 草图形状编号
 class Shape(Enum):
     VLINE = 1
     CIRCLE = 2
@@ -37,6 +47,7 @@ class Shape(Enum):
     ARROW = 8
 
 
+# 草图识别结果五元组定义
 class Component(object):
     def __init__(self, shape, x0, y0, x1, y1):
         self.shape = shape
@@ -49,6 +60,7 @@ class Component(object):
         return (self.x1 - self.x0) * (self.y1 - self.y0)
 
 
+# 草图识别结果中的 "组件矩形" 定义（用矩形区域内各种形状的数目推断组件类型）
 class Rectangle(Component):
     def __init__(self, shape, x0, y0, x1, y1):
         super().__init__(shape, x0, y0, x1, y1)
@@ -84,6 +96,12 @@ class Rectangle(Component):
 
 
 def create_colored_pic(sketch_data_fp, out_fp):
+    """
+    生成草图对应的组件块着色图
+    :param sketch_data_fp: 草图识别结果五元组文件路径（单个）
+    :param out_fp: 生成的组件块着色图路径
+    :return:
+    """
     with open(sketch_data_fp, 'r') as f:
         non_rectangles = []  # 保存非矩形形状的列表
         rectangles = []  # 保存矩形的列表
@@ -147,6 +165,14 @@ def create_colored_pic(sketch_data_fp, out_fp):
 
 
 def create_nmt_files(sketch_lst_fp, sketch_lst_content, layout_seq_fp, num_lines):
+    """
+    生成 NMT 模型测试所需的两个文件
+    :param sketch_lst_fp: 图像/序号映射文件路径
+    :param sketch_lst_content: 图像/序号映射文件填充内容
+    :param layout_seq_fp: dummy 布局序列文件路径
+    :param num_lines: dummy 布局文件填充行数
+    :return:
+    """
     with open(sketch_lst_fp, 'w') as f:
         f.write(sketch_lst_content)
     with open(layout_seq_fp, 'w') as f:
@@ -157,7 +183,7 @@ def create_nmt_files(sketch_lst_fp, sketch_lst_content, layout_seq_fp, num_lines
 if __name__ == '__main__':
     files = list(listdir_nohidden(coord_dir))
     files.sort()
-    sketch_nmt = ''
+    sketch_nmt = ''  # 图像/序号映射文件填充内容
 
     for i, coord_file in enumerate(files):
         if coord_file.endswith('.lst'):

@@ -1,0 +1,15 @@
+{
+}
+Layout
+TextView
+TextLink
+EditText
+ImageView
+ImageLink
+Button
+RadioButton
+Switch
+CheckBox
+Unclassified
+List
+Toolbar

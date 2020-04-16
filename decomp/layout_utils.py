@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" "布局树结构<->布局序列" 相互转换的 utils 方法
+"""
+
 from queue import Queue
 
 from anytree import Node, RenderTree
@@ -12,18 +18,6 @@ def render_tree(tree_node, nodes_dict, pic_name=None):
 
     if pic_name is not None:
         DotExporter(tree_node).to_picture(pic_name)
-
-
-def post_order_sweep(node, order):
-    for child in node.children:
-        post_order_sweep(child, order)
-    order.append(node.name)
-
-
-def post_order_traversal(root):
-    post_order = []
-    post_order_sweep(root, post_order)
-    return post_order
 
 
 def get_tree_details(root, nd):
@@ -44,10 +38,27 @@ def get_tree_details(root, nd):
     return depth, widget_count
 
 
+def post_order_sweep(node, order):
+    for child in node.children:
+        post_order_sweep(child, order)
+    order.append(node.name)
+
+
+def post_order_traversal(root):
+    """
+    输出布局树结构的后序遍历序列
+    :param root: 布局树结构根节点
+    :return: 后续遍历序列
+    """
+    post_order = []
+    post_order_sweep(root, post_order)
+    return post_order
+
+
 def create_layout_tree(seq):
     """
-    解析 DFS 序列 sequence 为树，返回根节点和字典 { idx(str): MatchTreeNode(WidgetType, TreeNode) }
-    :param seq: tokens 序列
+    解析 DFS 布局序列为布局树结构，返回根节点和字典 { idx(str): MatchTreeNode(WidgetType, TreeNode) }
+    :param seq: 布局序列
     :return:
     """
     tokens = seq.split()
@@ -83,7 +94,7 @@ def split_list_item_subtree(tree_node, nd, item_roots):
     """
     解除待匹配的输入布局树 tree_node 中类型为 List 的节点的子项。目前处理是默认选择 List 的第一个子项作为所有子项的结构
     :param tree_node: 输入布局树节点（开始递归遍历）
-    :param nd: node dict
+    :param nd: node dict（布局树节点字典）
     :param item_roots: 输入布局树中的所有表项根节点（可能有多个）
     :return:
     """
@@ -102,6 +113,13 @@ def split_list_item_subtree(tree_node, nd, item_roots):
 
 
 def dfs_compress_tree(tree_node, idx, nd):
+    """
+    压缩布局树结构（清理只有单个子节点的 Layout 节点）
+    :param tree_node: 待遍历树节点
+    :param idx: 节点编号
+    :param nd: 布局树节点字典
+    :return:
+    """
     node_parent = tree_node.parent
     if nd[tree_node.name].widget_type == Widget.Layout and len(tree_node.children) == 1:
         alt_node = tree_node.children[0]
@@ -121,7 +139,7 @@ def dfs_remove_invalid_leaf(tree_node, nodes_dict):
     """
     清理孤立 Layout/Unclassified 节点（与清理 Rico 数据集不同）
     :param tree_node:
-    :param nodes_dict:
+    :param nodes_dict: 布局树节点字典
     :return:
     """
     widget_node = nodes_dict[tree_node.name]
@@ -135,6 +153,13 @@ def dfs_remove_invalid_leaf(tree_node, nodes_dict):
 
 
 def dfs_make_tokens(tree_node, nodes_dict, new_tokens):
+    """
+    将布局树结构转换为布局序列
+    :param tree_node: 布局树根节点
+    :param nodes_dict: 布局树节点字典
+    :param new_tokens: 待生成的布局序列字符串
+    :return:
+    """
     new_tokens.append(nodes_dict[tree_node.name].widget_type.name)
     if len(tree_node.children) > 0:
         new_tokens.append('{')
@@ -144,8 +169,12 @@ def dfs_make_tokens(tree_node, nodes_dict, new_tokens):
 
 
 def optimize_sequence(seq):
+    """
+    优化布局树结构（压缩树规模、清除无效节点）
+    :param seq: 输入的布局序列
+    :return: 优化后的布局序列
+    """
     root, nodes_dict = create_layout_tree(seq)
-
     for i in range(3):
         if len(root.children) > 0:
             dfs_compress_tree(root.children[0], 0, nodes_dict)
@@ -156,11 +185,18 @@ def optimize_sequence(seq):
     new_tokens = []
     for child in root.children:
         dfs_make_tokens(child, nodes_dict, new_tokens)
-
     return new_tokens, ' '.join(new_tokens)
 
 
 def analyze(seq, file1, file2, print_mode):
+    """
+    输出布局树（原来的/优化过的）的可视化图像（unused）
+    :param seq: 布局序列
+    :param file1: 原结构图像
+    :param file2: 优化后结构图像
+    :param print_mode: 输出文件标志位
+    :return:
+    """
     root, nodes_dict = create_layout_tree(seq)
 
     if print_mode:

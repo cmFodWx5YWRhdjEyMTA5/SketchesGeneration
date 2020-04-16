@@ -1,0 +1,1924 @@
+{
+  "scrollable-horizontal": false,
+  "draw": true,
+  "ancestors": [
+    "android.widget.FrameLayout",
+    "android.view.ViewGroup",
+    "android.view.View",
+    "java.lang.Object"
+  ],
+  "clickable": false,
+  "pressed": "not_pressed",
+  "focusable": false,
+  "long-clickable": false,
+  "enabled": true,
+  "bounds": [
+    0,
+    0,
+    1440,
+    2560
+  ],
+  "visibility": "visible",
+  "content-desc": [
+    null
+  ],
+  "rel-bounds": [
+    0,
+    0,
+    1440,
+    2560
+  ],
+  "focused": false,
+  "selected": false,
+  "scrollable-vertical": false,
+  "adapter-view": false,
+  "abs-pos": true,
+  "pointer": "8c2df25",
+  "class": "com.android.internal.policy.PhoneWindow$DecorView",
+  "visible-to-user": true,
+  "children": [
+    {
+      "scrollable-horizontal": false,
+      "draw": true,
+      "ancestors": [
+        "android.view.ViewGroup",
+        "android.view.View",
+        "java.lang.Object"
+      ],
+      "clickable": false,
+      "pressed": "not_pressed",
+      "focusable": false,
+      "long-clickable": false,
+      "enabled": true,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "visibility": "visible",
+      "content-desc": [
+        null
+      ],
+      "rel-bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "focused": false,
+      "selected": false,
+      "scrollable-vertical": false,
+      "adapter-view": false,
+      "abs-pos": true,
+      "pointer": "69478fa",
+      "class": "android.widget.LinearLayout",
+      "visible-to-user": true,
+      "children": [
+        {
+          "scrollable-horizontal": false,
+          "draw": true,
+          "ancestors": [
+            "android.view.ViewGroup",
+            "android.view.View",
+            "java.lang.Object"
+          ],
+          "clickable": false,
+          "pressed": "not_pressed",
+          "focusable": false,
+          "long-clickable": false,
+          "enabled": true,
+          "bounds": [
+            0,
+            84,
+            1440,
+            2392
+          ],
+          "visibility": "visible",
+          "content-desc": [
+            null
+          ],
+          "rel-bounds": [
+            0,
+            84,
+            1440,
+            2392
+          ],
+          "focused": false,
+          "selected": false,
+          "scrollable-vertical": false,
+          "adapter-view": false,
+          "abs-pos": true,
+          "pointer": "9bc1908",
+          "class": "android.widget.FrameLayout",
+          "visible-to-user": true,
+          "children": [
+            {
+              "resource-id": "com.mo2o.vueling:id/decor_content_parent",
+              "adapter-view": false,
+              "pointer": "8e748a1",
+              "scrollable-horizontal": false,
+              "ancestors": [
+                "android.view.ViewGroup",
+                "android.view.View",
+                "java.lang.Object"
+              ],
+              "selected": false,
+              "content-desc": [
+                null
+              ],
+              "rel-bounds": [
+                0,
+                0,
+                1440,
+                2308
+              ],
+              "draw": true,
+              "focusable": false,
+              "long-clickable": false,
+              "visibility": "visible",
+              "focused": false,
+              "clickable": false,
+              "abs-pos": true,
+              "class": "android.support.v7.widget.ActionBarOverlayLayout",
+              "visible-to-user": true,
+              "package": "com.mo2o.vueling",
+              "enabled": true,
+              "bounds": [
+                0,
+                84,
+                1440,
+                2392
+              ],
+              "pressed": "not_pressed",
+              "scrollable-vertical": false,
+              "children": [
+                {
+                  "resource-id": "android:id/content",
+                  "adapter-view": false,
+                  "pointer": "212ac6",
+                  "scrollable-horizontal": false,
+                  "ancestors": [
+                    "android.widget.FrameLayout",
+                    "android.view.ViewGroup",
+                    "android.view.View",
+                    "java.lang.Object"
+                  ],
+                  "selected": false,
+                  "content-desc": [
+                    null
+                  ],
+                  "rel-bounds": [
+                    0,
+                    196,
+                    1440,
+                    2308
+                  ],
+                  "draw": true,
+                  "focusable": false,
+                  "long-clickable": false,
+                  "visibility": "visible",
+                  "focused": false,
+                  "clickable": false,
+                  "abs-pos": true,
+                  "class": "android.support.v7.widget.ContentFrameLayout",
+                  "visible-to-user": true,
+                  "package": "android",
+                  "enabled": true,
+                  "bounds": [
+                    0,
+                    280,
+                    1440,
+                    2392
+                  ],
+                  "pressed": "not_pressed",
+                  "scrollable-vertical": false,
+                  "children": [
+                    {
+                      "resource-id": "com.mo2o.vueling:id/drawer_layout",
+                      "adapter-view": false,
+                      "pointer": "44bba87",
+                      "scrollable-horizontal": false,
+                      "ancestors": [
+                        "android.view.ViewGroup",
+                        "android.view.View",
+                        "java.lang.Object"
+                      ],
+                      "selected": false,
+                      "content-desc": [
+                        null
+                      ],
+                      "rel-bounds": [
+                        0,
+                        0,
+                        1440,
+                        2112
+                      ],
+                      "draw": true,
+                      "focusable": true,
+                      "long-clickable": false,
+                      "visibility": "visible",
+                      "focused": false,
+                      "clickable": false,
+                      "abs-pos": true,
+                      "class": "android.support.v4.widget.DrawerLayout",
+                      "visible-to-user": true,
+                      "package": "com.mo2o.vueling",
+                      "enabled": true,
+                      "bounds": [
+                        0,
+                        280,
+                        1440,
+                        2392
+                      ],
+                      "pressed": "not_pressed",
+                      "scrollable-vertical": false,
+                      "children": [
+                        {
+                          "resource-id": "com.mo2o.vueling:id/content_frame",
+                          "adapter-view": false,
+                          "pointer": "27dbdb4",
+                          "scrollable-horizontal": false,
+                          "ancestors": [
+                            "android.view.ViewGroup",
+                            "android.view.View",
+                            "java.lang.Object"
+                          ],
+                          "selected": false,
+                          "content-desc": [
+                            null
+                          ],
+                          "rel-bounds": [
+                            0,
+                            0,
+                            1440,
+                            2112
+                          ],
+                          "draw": true,
+                          "focusable": false,
+                          "long-clickable": false,
+                          "visibility": "visible",
+                          "focused": false,
+                          "clickable": false,
+                          "abs-pos": true,
+                          "class": "android.widget.FrameLayout",
+                          "visible-to-user": true,
+                          "package": "com.mo2o.vueling",
+                          "enabled": true,
+                          "bounds": [
+                            0,
+                            280,
+                            1440,
+                            2392
+                          ],
+                          "pressed": "not_pressed",
+                          "scrollable-vertical": false,
+                          "children": [
+                            {
+                              "resource-id": "com.mo2o.vueling:id/bookings_root_layout",
+                              "adapter-view": false,
+                              "pointer": "af6e5d3",
+                              "scrollable-horizontal": false,
+                              "ancestors": [
+                                "android.view.ViewGroup",
+                                "android.view.View",
+                                "java.lang.Object"
+                              ],
+                              "selected": false,
+                              "content-desc": [
+                                null
+                              ],
+                              "rel-bounds": [
+                                0,
+                                0,
+                                1440,
+                                2112
+                              ],
+                              "draw": true,
+                              "focusable": false,
+                              "long-clickable": false,
+                              "visibility": "visible",
+                              "focused": false,
+                              "clickable": false,
+                              "abs-pos": true,
+                              "class": "android.widget.RelativeLayout",
+                              "visible-to-user": true,
+                              "package": "com.mo2o.vueling",
+                              "enabled": true,
+                              "bounds": [
+                                0,
+                                280,
+                                1440,
+                                2392
+                              ],
+                              "pressed": "not_pressed",
+                              "scrollable-vertical": false,
+                              "children": [
+                                {
+                                  "resource-id": "com.mo2o.vueling:id/bookings_header_provider",
+                                  "adapter-view": false,
+                                  "pointer": "9585510",
+                                  "scrollable-horizontal": false,
+                                  "ancestors": [
+                                    "android.widget.LinearLayout",
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "selected": false,
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    0,
+                                    0,
+                                    1440,
+                                    2112
+                                  ],
+                                  "draw": true,
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "visibility": "visible",
+                                  "focused": false,
+                                  "clickable": false,
+                                  "abs-pos": true,
+                                  "class": "com.vueling.ui.customview.BookingsHeader_Provider",
+                                  "visible-to-user": true,
+                                  "package": "com.mo2o.vueling",
+                                  "enabled": true,
+                                  "bounds": [
+                                    0,
+                                    280,
+                                    1440,
+                                    2392
+                                  ],
+                                  "pressed": "not_pressed",
+                                  "scrollable-vertical": false,
+                                  "children": [
+                                    {
+                                      "scrollable-horizontal": false,
+                                      "draw": true,
+                                      "ancestors": [
+                                        "android.widget.LinearLayout",
+                                        "android.view.ViewGroup",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "clickable": false,
+                                      "pressed": "not_pressed",
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "enabled": true,
+                                      "bounds": [
+                                        0,
+                                        280,
+                                        1440,
+                                        1350
+                                      ],
+                                      "visibility": "visible",
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        0,
+                                        0,
+                                        1440,
+                                        1070
+                                      ],
+                                      "focused": false,
+                                      "selected": false,
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "abs-pos": true,
+                                      "pointer": "458a4f1",
+                                      "class": "com.vueling.ui.customview.yellow_assistant.YaHomeContent",
+                                      "visible-to-user": true,
+                                      "children": [
+                                        {
+                                          "scrollable-horizontal": false,
+                                          "draw": true,
+                                          "ancestors": [
+                                            "android.view.ViewGroup",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "clickable": false,
+                                          "pressed": "not_pressed",
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "enabled": true,
+                                          "bounds": [
+                                            0,
+                                            280,
+                                            1440,
+                                            1350
+                                          ],
+                                          "visibility": "visible",
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            0,
+                                            0,
+                                            1440,
+                                            1070
+                                          ],
+                                          "focused": false,
+                                          "selected": false,
+                                          "scrollable-vertical": false,
+                                          "adapter-view": false,
+                                          "abs-pos": true,
+                                          "pointer": "ee74809",
+                                          "class": "android.widget.LinearLayout",
+                                          "visible-to-user": true,
+                                          "children": [
+                                            {
+                                              "scrollable-horizontal": false,
+                                              "draw": true,
+                                              "ancestors": [
+                                                "android.view.ViewGroup",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "clickable": false,
+                                              "pressed": "not_pressed",
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "enabled": true,
+                                              "bounds": [
+                                                0,
+                                                280,
+                                                1440,
+                                                600
+                                              ],
+                                              "visibility": "visible",
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                0,
+                                                0,
+                                                1440,
+                                                320
+                                              ],
+                                              "focused": false,
+                                              "selected": false,
+                                              "scrollable-vertical": false,
+                                              "adapter-view": false,
+                                              "abs-pos": true,
+                                              "pointer": "629a0e",
+                                              "class": "android.widget.LinearLayout",
+                                              "visible-to-user": true,
+                                              "children": [
+                                                {
+                                                  "resource-id": "com.mo2o.vueling:id/imageView21",
+                                                  "adapter-view": false,
+                                                  "pointer": "9c00c2f",
+                                                  "scrollable-horizontal": false,
+                                                  "ancestors": [
+                                                    "android.widget.ImageView",
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "selected": false,
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    53,
+                                                    53,
+                                                    1387,
+                                                    148
+                                                  ],
+                                                  "draw": false,
+                                                  "focusable": false,
+                                                  "long-clickable": false,
+                                                  "visibility": "visible",
+                                                  "focused": false,
+                                                  "clickable": false,
+                                                  "abs-pos": true,
+                                                  "class": "android.support.v7.widget.AppCompatImageView",
+                                                  "visible-to-user": true,
+                                                  "package": "com.mo2o.vueling",
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    53,
+                                                    333,
+                                                    1387,
+                                                    428
+                                                  ],
+                                                  "pressed": "not_pressed",
+                                                  "scrollable-vertical": false
+                                                },
+                                                {
+                                                  "text": "Hi! I will help you with your preparations:",
+                                                  "resource-id": "com.mo2o.vueling:id/ya_home_title2",
+                                                  "adapter-view": false,
+                                                  "pointer": "eb35bc5",
+                                                  "scrollable-horizontal": false,
+                                                  "ancestors": [
+                                                    "android.widget.TextView",
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "selected": false,
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    293,
+                                                    201,
+                                                    1146,
+                                                    267
+                                                  ],
+                                                  "draw": false,
+                                                  "focusable": false,
+                                                  "long-clickable": false,
+                                                  "visibility": "visible",
+                                                  "focused": false,
+                                                  "clickable": false,
+                                                  "abs-pos": true,
+                                                  "font-family": "sans-serif-light",
+                                                  "class": "android.support.v7.widget.AppCompatTextView",
+                                                  "visible-to-user": true,
+                                                  "package": "com.mo2o.vueling",
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    293,
+                                                    481,
+                                                    1146,
+                                                    547
+                                                  ],
+                                                  "pressed": "not_pressed",
+                                                  "scrollable-vertical": false
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "resource-id": "com.mo2o.vueling:id/imageView22",
+                                              "adapter-view": false,
+                                              "pointer": "7b2491a",
+                                              "scrollable-horizontal": false,
+                                              "ancestors": [
+                                                "android.widget.ImageView",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "selected": false,
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                0,
+                                                320,
+                                                1440,
+                                                339
+                                              ],
+                                              "draw": false,
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "visibility": "visible",
+                                              "focused": false,
+                                              "clickable": false,
+                                              "abs-pos": true,
+                                              "class": "android.support.v7.widget.AppCompatImageView",
+                                              "visible-to-user": true,
+                                              "package": "com.mo2o.vueling",
+                                              "enabled": true,
+                                              "bounds": [
+                                                0,
+                                                600,
+                                                1440,
+                                                619
+                                              ],
+                                              "pressed": "not_pressed",
+                                              "scrollable-vertical": false
+                                            },
+                                            {
+                                              "scrollable-horizontal": false,
+                                              "draw": true,
+                                              "ancestors": [
+                                                "android.view.ViewGroup",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "clickable": false,
+                                              "pressed": "not_pressed",
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "enabled": true,
+                                              "bounds": [
+                                                0,
+                                                619,
+                                                1440,
+                                                1130
+                                              ],
+                                              "visibility": "visible",
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                0,
+                                                339,
+                                                1440,
+                                                850
+                                              ],
+                                              "focused": false,
+                                              "selected": false,
+                                              "scrollable-vertical": false,
+                                              "adapter-view": false,
+                                              "abs-pos": true,
+                                              "pointer": "d4b3c4b",
+                                              "class": "android.widget.LinearLayout",
+                                              "visible-to-user": true,
+                                              "children": [
+                                                {
+                                                  "scrollable-horizontal": false,
+                                                  "draw": true,
+                                                  "ancestors": [
+                                                    "android.view.ViewGroup",
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "clickable": false,
+                                                  "pressed": "not_pressed",
+                                                  "focusable": false,
+                                                  "long-clickable": false,
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    105,
+                                                    689,
+                                                    1335,
+                                                    801
+                                                  ],
+                                                  "visibility": "visible",
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    105,
+                                                    70,
+                                                    1335,
+                                                    182
+                                                  ],
+                                                  "focused": false,
+                                                  "selected": false,
+                                                  "scrollable-vertical": false,
+                                                  "adapter-view": false,
+                                                  "abs-pos": true,
+                                                  "pointer": "269b628",
+                                                  "class": "android.widget.LinearLayout",
+                                                  "visible-to-user": true,
+                                                  "children": [
+                                                    {
+                                                      "scrollable-horizontal": false,
+                                                      "draw": false,
+                                                      "ancestors": [
+                                                        "android.widget.ImageView",
+                                                        "android.view.View",
+                                                        "java.lang.Object"
+                                                      ],
+                                                      "clickable": false,
+                                                      "pressed": "not_pressed",
+                                                      "focusable": false,
+                                                      "long-clickable": false,
+                                                      "enabled": true,
+                                                      "bounds": [
+                                                        105,
+                                                        689,
+                                                        217,
+                                                        801
+                                                      ],
+                                                      "visibility": "visible",
+                                                      "content-desc": [
+                                                        null
+                                                      ],
+                                                      "rel-bounds": [
+                                                        0,
+                                                        0,
+                                                        112,
+                                                        112
+                                                      ],
+                                                      "focused": false,
+                                                      "selected": false,
+                                                      "scrollable-vertical": false,
+                                                      "adapter-view": false,
+                                                      "abs-pos": true,
+                                                      "pointer": "772ef41",
+                                                      "class": "android.support.v7.widget.AppCompatImageView",
+                                                      "visible-to-user": true
+                                                    },
+                                                    {
+                                                      "text": "Notifications about your flight",
+                                                      "resource-id": "com.mo2o.vueling:id/ya_home_info1",
+                                                      "adapter-view": false,
+                                                      "pointer": "e1bdce6",
+                                                      "scrollable-horizontal": false,
+                                                      "ancestors": [
+                                                        "android.widget.TextView",
+                                                        "android.view.View",
+                                                        "java.lang.Object"
+                                                      ],
+                                                      "selected": false,
+                                                      "content-desc": [
+                                                        null
+                                                      ],
+                                                      "rel-bounds": [
+                                                        147,
+                                                        23,
+                                                        790,
+                                                        89
+                                                      ],
+                                                      "draw": false,
+                                                      "focusable": false,
+                                                      "long-clickable": false,
+                                                      "visibility": "visible",
+                                                      "focused": false,
+                                                      "clickable": false,
+                                                      "abs-pos": true,
+                                                      "font-family": "sans-serif-light",
+                                                      "class": "android.support.v7.widget.AppCompatTextView",
+                                                      "visible-to-user": true,
+                                                      "package": "com.mo2o.vueling",
+                                                      "enabled": true,
+                                                      "bounds": [
+                                                        252,
+                                                        712,
+                                                        895,
+                                                        778
+                                                      ],
+                                                      "pressed": "not_pressed",
+                                                      "scrollable-vertical": false
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "scrollable-horizontal": false,
+                                                  "draw": true,
+                                                  "ancestors": [
+                                                    "android.view.ViewGroup",
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "clickable": false,
+                                                  "pressed": "not_pressed",
+                                                  "focusable": false,
+                                                  "long-clickable": false,
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    105,
+                                                    836,
+                                                    1335,
+                                                    948
+                                                  ],
+                                                  "visibility": "visible",
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    105,
+                                                    217,
+                                                    1335,
+                                                    329
+                                                  ],
+                                                  "focused": false,
+                                                  "selected": false,
+                                                  "scrollable-vertical": false,
+                                                  "adapter-view": false,
+                                                  "abs-pos": true,
+                                                  "pointer": "f0f5227",
+                                                  "class": "android.widget.LinearLayout",
+                                                  "visible-to-user": true,
+                                                  "children": [
+                                                    {
+                                                      "scrollable-horizontal": false,
+                                                      "draw": false,
+                                                      "ancestors": [
+                                                        "android.widget.ImageView",
+                                                        "android.view.View",
+                                                        "java.lang.Object"
+                                                      ],
+                                                      "clickable": false,
+                                                      "pressed": "not_pressed",
+                                                      "focusable": false,
+                                                      "long-clickable": false,
+                                                      "enabled": true,
+                                                      "bounds": [
+                                                        105,
+                                                        836,
+                                                        217,
+                                                        948
+                                                      ],
+                                                      "visibility": "visible",
+                                                      "content-desc": [
+                                                        null
+                                                      ],
+                                                      "rel-bounds": [
+                                                        0,
+                                                        0,
+                                                        112,
+                                                        112
+                                                      ],
+                                                      "focused": false,
+                                                      "selected": false,
+                                                      "scrollable-vertical": false,
+                                                      "adapter-view": false,
+                                                      "abs-pos": true,
+                                                      "pointer": "5b80cd4",
+                                                      "class": "android.support.v7.widget.AppCompatImageView",
+                                                      "visible-to-user": true
+                                                    },
+                                                    {
+                                                      "text": "Personalised Travel List",
+                                                      "resource-id": "com.mo2o.vueling:id/ya_home_info2",
+                                                      "adapter-view": false,
+                                                      "pointer": "33e3e7d",
+                                                      "scrollable-horizontal": false,
+                                                      "ancestors": [
+                                                        "android.widget.TextView",
+                                                        "android.view.View",
+                                                        "java.lang.Object"
+                                                      ],
+                                                      "selected": false,
+                                                      "content-desc": [
+                                                        null
+                                                      ],
+                                                      "rel-bounds": [
+                                                        147,
+                                                        23,
+                                                        661,
+                                                        89
+                                                      ],
+                                                      "draw": false,
+                                                      "focusable": false,
+                                                      "long-clickable": false,
+                                                      "visibility": "visible",
+                                                      "focused": false,
+                                                      "clickable": false,
+                                                      "abs-pos": true,
+                                                      "font-family": "sans-serif-light",
+                                                      "class": "android.support.v7.widget.AppCompatTextView",
+                                                      "visible-to-user": true,
+                                                      "package": "com.mo2o.vueling",
+                                                      "enabled": true,
+                                                      "bounds": [
+                                                        252,
+                                                        859,
+                                                        766,
+                                                        925
+                                                      ],
+                                                      "pressed": "not_pressed",
+                                                      "scrollable-vertical": false
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "scrollable-horizontal": false,
+                                                  "draw": true,
+                                                  "ancestors": [
+                                                    "android.view.ViewGroup",
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "clickable": false,
+                                                  "pressed": "not_pressed",
+                                                  "focusable": false,
+                                                  "long-clickable": false,
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    105,
+                                                    983,
+                                                    1335,
+                                                    1095
+                                                  ],
+                                                  "visibility": "visible",
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    105,
+                                                    364,
+                                                    1335,
+                                                    476
+                                                  ],
+                                                  "focused": false,
+                                                  "selected": false,
+                                                  "scrollable-vertical": false,
+                                                  "adapter-view": false,
+                                                  "abs-pos": true,
+                                                  "pointer": "a38e172",
+                                                  "class": "android.widget.LinearLayout",
+                                                  "visible-to-user": true,
+                                                  "children": [
+                                                    {
+                                                      "scrollable-horizontal": false,
+                                                      "draw": false,
+                                                      "ancestors": [
+                                                        "android.widget.ImageView",
+                                                        "android.view.View",
+                                                        "java.lang.Object"
+                                                      ],
+                                                      "clickable": false,
+                                                      "pressed": "not_pressed",
+                                                      "focusable": false,
+                                                      "long-clickable": false,
+                                                      "enabled": true,
+                                                      "bounds": [
+                                                        105,
+                                                        983,
+                                                        217,
+                                                        1095
+                                                      ],
+                                                      "visibility": "visible",
+                                                      "content-desc": [
+                                                        null
+                                                      ],
+                                                      "rel-bounds": [
+                                                        0,
+                                                        0,
+                                                        112,
+                                                        112
+                                                      ],
+                                                      "focused": false,
+                                                      "selected": false,
+                                                      "scrollable-vertical": false,
+                                                      "adapter-view": false,
+                                                      "abs-pos": true,
+                                                      "pointer": "f14e9c3",
+                                                      "class": "android.support.v7.widget.AppCompatImageView",
+                                                      "visible-to-user": true
+                                                    },
+                                                    {
+                                                      "text": "Useful info at the airport",
+                                                      "resource-id": "com.mo2o.vueling:id/ya_home_info3",
+                                                      "adapter-view": false,
+                                                      "pointer": "af32240",
+                                                      "scrollable-horizontal": false,
+                                                      "ancestors": [
+                                                        "android.widget.TextView",
+                                                        "android.view.View",
+                                                        "java.lang.Object"
+                                                      ],
+                                                      "selected": false,
+                                                      "content-desc": [
+                                                        null
+                                                      ],
+                                                      "rel-bounds": [
+                                                        147,
+                                                        23,
+                                                        679,
+                                                        89
+                                                      ],
+                                                      "draw": false,
+                                                      "focusable": false,
+                                                      "long-clickable": false,
+                                                      "visibility": "visible",
+                                                      "focused": false,
+                                                      "clickable": false,
+                                                      "abs-pos": true,
+                                                      "font-family": "sans-serif-light",
+                                                      "class": "android.support.v7.widget.AppCompatTextView",
+                                                      "visible-to-user": true,
+                                                      "package": "com.mo2o.vueling",
+                                                      "enabled": true,
+                                                      "bounds": [
+                                                        252,
+                                                        1006,
+                                                        784,
+                                                        1072
+                                                      ],
+                                                      "pressed": "not_pressed",
+                                                      "scrollable-vertical": false
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "resource-id": "com.mo2o.vueling:id/demoButton",
+                                              "adapter-view": false,
+                                              "pointer": "c08226c",
+                                              "scrollable-horizontal": false,
+                                              "ancestors": [
+                                                "android.view.ViewGroup",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "selected": false,
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                35,
+                                                885,
+                                                1405,
+                                                1035
+                                              ],
+                                              "draw": true,
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "visibility": "visible",
+                                              "focused": false,
+                                              "clickable": true,
+                                              "abs-pos": true,
+                                              "class": "android.widget.FrameLayout",
+                                              "visible-to-user": true,
+                                              "package": "com.mo2o.vueling",
+                                              "enabled": true,
+                                              "bounds": [
+                                                35,
+                                                1165,
+                                                1405,
+                                                1315
+                                              ],
+                                              "pressed": "not_pressed",
+                                              "scrollable-vertical": false,
+                                              "children": [
+                                                {
+                                                  "text": "Would you like to learn more? Let's go!",
+                                                  "resource-id": "com.mo2o.vueling:id/ya_home_go_to",
+                                                  "adapter-view": false,
+                                                  "pointer": "57bc035",
+                                                  "scrollable-horizontal": false,
+                                                  "ancestors": [
+                                                    "android.widget.TextView",
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "selected": false,
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    276,
+                                                    42,
+                                                    1093,
+                                                    108
+                                                  ],
+                                                  "draw": false,
+                                                  "focusable": false,
+                                                  "long-clickable": false,
+                                                  "visibility": "visible",
+                                                  "focused": false,
+                                                  "clickable": false,
+                                                  "abs-pos": true,
+                                                  "font-family": "sans-serif-light",
+                                                  "class": "android.support.v7.widget.AppCompatTextView",
+                                                  "visible-to-user": true,
+                                                  "package": "com.mo2o.vueling",
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    311,
+                                                    1207,
+                                                    1128,
+                                                    1273
+                                                  ],
+                                                  "pressed": "not_pressed",
+                                                  "scrollable-vertical": false
+                                                },
+                                                {
+                                                  "resource-id": "com.mo2o.vueling:id/imageView23",
+                                                  "adapter-view": false,
+                                                  "pointer": "83f2cca",
+                                                  "scrollable-horizontal": false,
+                                                  "ancestors": [
+                                                    "android.widget.ImageView",
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "selected": false,
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    1282,
+                                                    51,
+                                                    1328,
+                                                    98
+                                                  ],
+                                                  "draw": false,
+                                                  "focusable": false,
+                                                  "long-clickable": false,
+                                                  "visibility": "visible",
+                                                  "focused": false,
+                                                  "clickable": false,
+                                                  "abs-pos": true,
+                                                  "class": "android.support.v7.widget.AppCompatImageView",
+                                                  "visible-to-user": true,
+                                                  "package": "com.mo2o.vueling",
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    1317,
+                                                    1216,
+                                                    1363,
+                                                    1263
+                                                  ],
+                                                  "pressed": "not_pressed",
+                                                  "scrollable-vertical": false
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "resource-id": "com.mo2o.vueling:id/bookings_scrollView",
+                                  "adapter-view": false,
+                                  "pointer": "f352ab1",
+                                  "scrollable-horizontal": false,
+                                  "ancestors": [
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "selected": false,
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    0,
+                                    0,
+                                    1440,
+                                    2112
+                                  ],
+                                  "draw": false,
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "visibility": "visible",
+                                  "focused": false,
+                                  "clickable": false,
+                                  "abs-pos": true,
+                                  "class": "android.support.v4.widget.SwipeRefreshLayout",
+                                  "visible-to-user": true,
+                                  "package": "com.mo2o.vueling",
+                                  "enabled": false,
+                                  "bounds": [
+                                    0,
+                                    280,
+                                    1440,
+                                    2392
+                                  ],
+                                  "pressed": "not_pressed",
+                                  "scrollable-vertical": false,
+                                  "children": []
+                                },
+                                {
+                                  "resource-id": "com.mo2o.vueling:id/bookings_buttons_container",
+                                  "adapter-view": false,
+                                  "pointer": "3645c7a",
+                                  "scrollable-horizontal": false,
+                                  "ancestors": [
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "selected": false,
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    0,
+                                    1539,
+                                    1440,
+                                    2112
+                                  ],
+                                  "draw": true,
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "visibility": "visible",
+                                  "focused": false,
+                                  "clickable": false,
+                                  "abs-pos": true,
+                                  "class": "android.widget.LinearLayout",
+                                  "visible-to-user": true,
+                                  "package": "com.mo2o.vueling",
+                                  "enabled": true,
+                                  "bounds": [
+                                    0,
+                                    1819,
+                                    1440,
+                                    2392
+                                  ],
+                                  "pressed": "not_pressed",
+                                  "scrollable-vertical": false,
+                                  "children": [
+                                    {
+                                      "scrollable-horizontal": false,
+                                      "draw": true,
+                                      "ancestors": [
+                                        "android.view.ViewGroup",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "clickable": false,
+                                      "pressed": "not_pressed",
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "enabled": true,
+                                      "bounds": [
+                                        35,
+                                        1854,
+                                        1405,
+                                        2171
+                                      ],
+                                      "visibility": "visible",
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        35,
+                                        35,
+                                        1405,
+                                        352
+                                      ],
+                                      "focused": false,
+                                      "selected": false,
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "abs-pos": true,
+                                      "pointer": "644bc2b",
+                                      "class": "android.widget.LinearLayout",
+                                      "visible-to-user": true,
+                                      "children": [
+                                        {
+                                          "scrollable-horizontal": false,
+                                          "draw": true,
+                                          "ancestors": [
+                                            "android.view.ViewGroup",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "clickable": false,
+                                          "pressed": "not_pressed",
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "enabled": true,
+                                          "bounds": [
+                                            35,
+                                            1854,
+                                            1405,
+                                            2000
+                                          ],
+                                          "visibility": "visible",
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            0,
+                                            0,
+                                            1370,
+                                            146
+                                          ],
+                                          "focused": false,
+                                          "selected": false,
+                                          "scrollable-vertical": false,
+                                          "adapter-view": false,
+                                          "abs-pos": true,
+                                          "pointer": "db6888",
+                                          "class": "android.widget.LinearLayout",
+                                          "visible-to-user": true,
+                                          "children": [
+                                            {
+                                              "resource-id": "com.mo2o.vueling:id/otherBookings_referenceId",
+                                              "adapter-view": false,
+                                              "pointer": "8752221",
+                                              "scrollable-horizontal": false,
+                                              "ancestors": [
+                                                "android.widget.LinearLayout",
+                                                "android.view.ViewGroup",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "selected": false,
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                0,
+                                                0,
+                                                1370,
+                                                146
+                                              ],
+                                              "draw": true,
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "visibility": "visible",
+                                              "focused": false,
+                                              "clickable": false,
+                                              "abs-pos": true,
+                                              "class": "com.vueling.ui.customview.VuelingEditText",
+                                              "visible-to-user": true,
+                                              "package": "com.mo2o.vueling",
+                                              "enabled": true,
+                                              "bounds": [
+                                                35,
+                                                1854,
+                                                1405,
+                                                2000
+                                              ],
+                                              "pressed": "not_pressed",
+                                              "scrollable-vertical": false,
+                                              "children": [
+                                                {
+                                                  "text": "",
+                                                  "scrollable-vertical": false,
+                                                  "adapter-view": false,
+                                                  "pointer": "cbc646",
+                                                  "scrollable-horizontal": false,
+                                                  "ancestors": [
+                                                    "android.widget.AutoCompleteTextView",
+                                                    "android.widget.EditText",
+                                                    "android.widget.TextView",
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "selected": false,
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    35,
+                                                    0,
+                                                    1370,
+                                                    146
+                                                  ],
+                                                  "draw": false,
+                                                  "focusable": true,
+                                                  "long-clickable": true,
+                                                  "visibility": "visible",
+                                                  "text-hint": "Booking code",
+                                                  "focused": true,
+                                                  "clickable": true,
+                                                  "abs-pos": true,
+                                                  "font-family": "sans-serif-light",
+                                                  "class": "com.vueling.ui.customview.ClearableEditText",
+                                                  "visible-to-user": true,
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    70,
+                                                    1854,
+                                                    1405,
+                                                    2000
+                                                  ],
+                                                  "pressed": "not_pressed"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "resource-id": "com.mo2o.vueling:id/otherBookingsAirport",
+                                          "adapter-view": false,
+                                          "pointer": "20285a3",
+                                          "scrollable-horizontal": false,
+                                          "ancestors": [
+                                            "android.view.ViewGroup",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "selected": false,
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            0,
+                                            171,
+                                            1370,
+                                            317
+                                          ],
+                                          "draw": true,
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "visibility": "visible",
+                                          "focused": false,
+                                          "clickable": true,
+                                          "abs-pos": true,
+                                          "class": "android.widget.LinearLayout",
+                                          "visible-to-user": true,
+                                          "package": "com.mo2o.vueling",
+                                          "enabled": true,
+                                          "bounds": [
+                                            35,
+                                            2025,
+                                            1405,
+                                            2171
+                                          ],
+                                          "pressed": "not_pressed",
+                                          "scrollable-vertical": false,
+                                          "children": [
+                                            {
+                                              "resource-id": "com.mo2o.vueling:id/otherBookings_departureAirport_TV",
+                                              "adapter-view": false,
+                                              "pointer": "edcc0a0",
+                                              "scrollable-horizontal": false,
+                                              "ancestors": [
+                                                "android.widget.LinearLayout",
+                                                "android.view.ViewGroup",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "selected": false,
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                0,
+                                                0,
+                                                1370,
+                                                146
+                                              ],
+                                              "draw": true,
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "visibility": "visible",
+                                              "focused": false,
+                                              "clickable": false,
+                                              "abs-pos": true,
+                                              "class": "com.vueling.ui.customview.VuelingEditText",
+                                              "visible-to-user": true,
+                                              "package": "com.mo2o.vueling",
+                                              "enabled": true,
+                                              "bounds": [
+                                                35,
+                                                2025,
+                                                1405,
+                                                2171
+                                              ],
+                                              "pressed": "not_pressed",
+                                              "scrollable-vertical": false,
+                                              "children": [
+                                                {
+                                                  "text": "",
+                                                  "scrollable-vertical": false,
+                                                  "adapter-view": false,
+                                                  "pointer": "26ef459",
+                                                  "scrollable-horizontal": false,
+                                                  "ancestors": [
+                                                    "android.widget.AutoCompleteTextView",
+                                                    "android.widget.EditText",
+                                                    "android.widget.TextView",
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "selected": false,
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    35,
+                                                    0,
+                                                    1370,
+                                                    146
+                                                  ],
+                                                  "draw": false,
+                                                  "focusable": true,
+                                                  "long-clickable": true,
+                                                  "visibility": "visible",
+                                                  "text-hint": "Airport",
+                                                  "focused": false,
+                                                  "clickable": true,
+                                                  "abs-pos": true,
+                                                  "font-family": "sans-serif-light",
+                                                  "class": "com.vueling.ui.customview.ComboEditText",
+                                                  "visible-to-user": true,
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    70,
+                                                    2025,
+                                                    1405,
+                                                    2171
+                                                  ],
+                                                  "pressed": "not_pressed"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "scrollable-horizontal": false,
+                                      "draw": true,
+                                      "ancestors": [
+                                        "android.view.ViewGroup",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "clickable": false,
+                                      "pressed": "not_pressed",
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "enabled": true,
+                                      "bounds": [
+                                        35,
+                                        2196,
+                                        1405,
+                                        2357
+                                      ],
+                                      "visibility": "visible",
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        35,
+                                        377,
+                                        1405,
+                                        538
+                                      ],
+                                      "focused": false,
+                                      "selected": false,
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "abs-pos": true,
+                                      "pointer": "a5d46cc",
+                                      "class": "android.widget.LinearLayout",
+                                      "visible-to-user": true,
+                                      "children": [
+                                        {
+                                          "text": "Access",
+                                          "resource-id": "com.mo2o.vueling:id/otherBookings_button_continue",
+                                          "adapter-view": false,
+                                          "pointer": "c91061b",
+                                          "scrollable-horizontal": false,
+                                          "ancestors": [
+                                            "android.widget.Button",
+                                            "android.widget.TextView",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "selected": false,
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            0,
+                                            0,
+                                            1370,
+                                            161
+                                          ],
+                                          "draw": false,
+                                          "focusable": true,
+                                          "long-clickable": false,
+                                          "visibility": "visible",
+                                          "focused": false,
+                                          "clickable": true,
+                                          "abs-pos": true,
+                                          "font-family": "sans-serif",
+                                          "class": "android.support.v7.widget.AppCompatButton",
+                                          "visible-to-user": true,
+                                          "package": "com.mo2o.vueling",
+                                          "enabled": true,
+                                          "bounds": [
+                                            35,
+                                            2196,
+                                            1405,
+                                            2357
+                                          ],
+                                          "pressed": "not_pressed",
+                                          "scrollable-vertical": false
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "resource-id": "com.mo2o.vueling:id/action_bar_container",
+                  "adapter-view": false,
+                  "pointer": "91408f2",
+                  "scrollable-horizontal": false,
+                  "ancestors": [
+                    "android.widget.FrameLayout",
+                    "android.view.ViewGroup",
+                    "android.view.View",
+                    "java.lang.Object"
+                  ],
+                  "selected": false,
+                  "content-desc": [
+                    null
+                  ],
+                  "rel-bounds": [
+                    0,
+                    0,
+                    1440,
+                    196
+                  ],
+                  "draw": false,
+                  "focusable": false,
+                  "long-clickable": false,
+                  "visibility": "visible",
+                  "focused": false,
+                  "clickable": false,
+                  "abs-pos": true,
+                  "class": "android.support.v7.widget.ActionBarContainer",
+                  "visible-to-user": true,
+                  "package": "com.mo2o.vueling",
+                  "enabled": true,
+                  "bounds": [
+                    0,
+                    84,
+                    1440,
+                    280
+                  ],
+                  "pressed": "not_pressed",
+                  "scrollable-vertical": false,
+                  "children": [
+                    {
+                      "resource-id": "com.mo2o.vueling:id/action_bar",
+                      "adapter-view": false,
+                      "pointer": "56dbb43",
+                      "scrollable-horizontal": false,
+                      "ancestors": [
+                        "android.view.ViewGroup",
+                        "android.view.View",
+                        "java.lang.Object"
+                      ],
+                      "selected": false,
+                      "content-desc": [
+                        null
+                      ],
+                      "rel-bounds": [
+                        0,
+                        0,
+                        1440,
+                        196
+                      ],
+                      "draw": true,
+                      "focusable": false,
+                      "long-clickable": false,
+                      "visibility": "visible",
+                      "focused": false,
+                      "clickable": false,
+                      "abs-pos": true,
+                      "class": "android.support.v7.widget.Toolbar",
+                      "visible-to-user": true,
+                      "package": "com.mo2o.vueling",
+                      "enabled": true,
+                      "bounds": [
+                        0,
+                        84,
+                        1440,
+                        280
+                      ],
+                      "pressed": "not_pressed",
+                      "scrollable-vertical": false,
+                      "children": [
+                        {
+                          "scrollable-horizontal": false,
+                          "draw": false,
+                          "ancestors": [
+                            "android.widget.ImageView",
+                            "android.view.View",
+                            "java.lang.Object"
+                          ],
+                          "clickable": true,
+                          "pressed": "not_pressed",
+                          "focusable": true,
+                          "long-clickable": false,
+                          "enabled": true,
+                          "bounds": [
+                            0,
+                            84,
+                            196,
+                            280
+                          ],
+                          "visibility": "visible",
+                          "content-desc": [
+                            "Open navigation drawer"
+                          ],
+                          "rel-bounds": [
+                            0,
+                            0,
+                            196,
+                            196
+                          ],
+                          "focused": false,
+                          "selected": false,
+                          "scrollable-vertical": false,
+                          "adapter-view": false,
+                          "abs-pos": true,
+                          "pointer": "79955c0",
+                          "class": "android.widget.ImageButton",
+                          "visible-to-user": true
+                        },
+                        {
+                          "scrollable-horizontal": false,
+                          "draw": true,
+                          "ancestors": [
+                            "android.support.v7.widget.LinearLayoutCompat",
+                            "android.view.ViewGroup",
+                            "android.view.View",
+                            "java.lang.Object"
+                          ],
+                          "clickable": false,
+                          "pressed": "not_pressed",
+                          "focusable": false,
+                          "long-clickable": false,
+                          "enabled": true,
+                          "bounds": [
+                            1272,
+                            84,
+                            1440,
+                            280
+                          ],
+                          "visibility": "visible",
+                          "content-desc": [
+                            null
+                          ],
+                          "rel-bounds": [
+                            1272,
+                            0,
+                            1440,
+                            196
+                          ],
+                          "focused": false,
+                          "selected": false,
+                          "scrollable-vertical": false,
+                          "adapter-view": false,
+                          "abs-pos": true,
+                          "pointer": "2d5c23e",
+                          "class": "android.support.v7.widget.ActionMenuView",
+                          "visible-to-user": true,
+                          "children": [
+                            {
+                              "text": "",
+                              "resource-id": "com.mo2o.vueling:id/actionbar_menu_notifications",
+                              "adapter-view": false,
+                              "pointer": "26c89f",
+                              "scrollable-horizontal": false,
+                              "ancestors": [
+                                "android.support.v7.widget.AppCompatTextView",
+                                "android.widget.TextView",
+                                "android.view.View",
+                                "java.lang.Object"
+                              ],
+                              "selected": false,
+                              "content-desc": [
+                                "Mobile notifications"
+                              ],
+                              "rel-bounds": [
+                                0,
+                                14,
+                                168,
+                                182
+                              ],
+                              "draw": false,
+                              "focusable": true,
+                              "long-clickable": true,
+                              "visibility": "visible",
+                              "focused": false,
+                              "clickable": true,
+                              "abs-pos": true,
+                              "font-family": "sans-serif-medium",
+                              "class": "android.support.v7.view.menu.ActionMenuItemView",
+                              "visible-to-user": true,
+                              "package": "com.mo2o.vueling",
+                              "enabled": true,
+                              "bounds": [
+                                1272,
+                                98,
+                                1440,
+                                266
+                              ],
+                              "pressed": "not_pressed",
+                              "scrollable-vertical": false
+                            }
+                          ]
+                        },
+                        {
+                          "text": "Travel assistant",
+                          "scrollable-vertical": false,
+                          "adapter-view": false,
+                          "pointer": "d7e03b8",
+                          "scrollable-horizontal": false,
+                          "ancestors": [
+                            "android.view.View",
+                            "java.lang.Object"
+                          ],
+                          "selected": false,
+                          "content-desc": [
+                            null
+                          ],
+                          "rel-bounds": [
+                            210,
+                            51,
+                            706,
+                            144
+                          ],
+                          "draw": false,
+                          "focusable": false,
+                          "long-clickable": false,
+                          "visibility": "visible",
+                          "focused": false,
+                          "clickable": false,
+                          "abs-pos": true,
+                          "font-family": "sans-serif-medium",
+                          "class": "android.widget.TextView",
+                          "visible-to-user": true,
+                          "enabled": true,
+                          "bounds": [
+                            210,
+                            135,
+                            706,
+                            228
+                          ],
+                          "pressed": "not_pressed"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource-id": "android:id/navigationBarBackground",
+      "adapter-view": false,
+      "pointer": "b1205b5",
+      "scrollable-horizontal": false,
+      "ancestors": [
+        "java.lang.Object"
+      ],
+      "selected": false,
+      "content-desc": [
+        null
+      ],
+      "rel-bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ],
+      "draw": false,
+      "focusable": false,
+      "long-clickable": false,
+      "visibility": "visible",
+      "focused": false,
+      "clickable": false,
+      "abs-pos": true,
+      "class": "android.view.View",
+      "visible-to-user": true,
+      "package": "android",
+      "enabled": true,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ],
+      "pressed": "not_pressed",
+      "scrollable-vertical": false
+    },
+    {
+      "resource-id": "android:id/statusBarBackground",
+      "adapter-view": false,
+      "pointer": "367c44a",
+      "scrollable-horizontal": false,
+      "ancestors": [
+        "java.lang.Object"
+      ],
+      "selected": false,
+      "content-desc": [
+        null
+      ],
+      "rel-bounds": [
+        0,
+        0,
+        1440,
+        84
+      ],
+      "draw": false,
+      "focusable": false,
+      "long-clickable": false,
+      "visibility": "visible",
+      "focused": false,
+      "clickable": false,
+      "abs-pos": true,
+      "class": "android.view.View",
+      "visible-to-user": true,
+      "package": "android",
+      "enabled": true,
+      "bounds": [
+        0,
+        0,
+        1440,
+        84
+      ],
+      "pressed": "not_pressed",
+      "scrollable-vertical": false
+    }
+  ]
+}

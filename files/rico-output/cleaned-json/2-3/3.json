@@ -1,0 +1,1420 @@
+{
+  "scrollable-horizontal": false,
+  "draw": true,
+  "ancestors": [
+    "android.widget.FrameLayout",
+    "android.view.ViewGroup",
+    "android.view.View",
+    "java.lang.Object"
+  ],
+  "clickable": false,
+  "pressed": "not_pressed",
+  "focusable": false,
+  "long-clickable": false,
+  "enabled": true,
+  "bounds": [
+    0,
+    0,
+    1440,
+    2560
+  ],
+  "visibility": "visible",
+  "content-desc": [
+    null
+  ],
+  "rel-bounds": [
+    0,
+    0,
+    1440,
+    2560
+  ],
+  "focused": false,
+  "selected": false,
+  "scrollable-vertical": false,
+  "adapter-view": false,
+  "abs-pos": true,
+  "pointer": "caffe",
+  "class": "com.android.internal.policy.PhoneWindow$DecorView",
+  "visible-to-user": true,
+  "children": [
+    {
+      "scrollable-horizontal": false,
+      "draw": true,
+      "ancestors": [
+        "android.view.ViewGroup",
+        "android.view.View",
+        "java.lang.Object"
+      ],
+      "clickable": false,
+      "pressed": "not_pressed",
+      "focusable": false,
+      "long-clickable": false,
+      "enabled": true,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "visibility": "visible",
+      "content-desc": [
+        null
+      ],
+      "rel-bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "focused": false,
+      "selected": false,
+      "scrollable-vertical": false,
+      "adapter-view": false,
+      "abs-pos": true,
+      "pointer": "f7a835f",
+      "class": "android.widget.LinearLayout",
+      "visible-to-user": true,
+      "children": [
+        {
+          "scrollable-horizontal": false,
+          "draw": true,
+          "ancestors": [
+            "android.view.ViewGroup",
+            "android.view.View",
+            "java.lang.Object"
+          ],
+          "clickable": false,
+          "pressed": "not_pressed",
+          "focusable": false,
+          "long-clickable": false,
+          "enabled": true,
+          "bounds": [
+            0,
+            84,
+            1440,
+            2392
+          ],
+          "visibility": "visible",
+          "content-desc": [
+            null
+          ],
+          "rel-bounds": [
+            0,
+            84,
+            1440,
+            2392
+          ],
+          "focused": false,
+          "selected": false,
+          "scrollable-vertical": false,
+          "adapter-view": false,
+          "abs-pos": true,
+          "pointer": "411e75",
+          "class": "android.widget.FrameLayout",
+          "visible-to-user": true,
+          "children": [
+            {
+              "resource-id": "com.yum.pizzahut:id/action_bar_root",
+              "adapter-view": false,
+              "pointer": "67fce0a",
+              "scrollable-horizontal": false,
+              "ancestors": [
+                "android.widget.LinearLayout",
+                "android.view.ViewGroup",
+                "android.view.View",
+                "java.lang.Object"
+              ],
+              "selected": false,
+              "content-desc": [
+                null
+              ],
+              "rel-bounds": [
+                0,
+                0,
+                1440,
+                2308
+              ],
+              "draw": true,
+              "focusable": false,
+              "long-clickable": false,
+              "visibility": "visible",
+              "focused": false,
+              "clickable": false,
+              "abs-pos": true,
+              "class": "android.support.v7.widget.FitWindowsLinearLayout",
+              "visible-to-user": true,
+              "package": "com.yum.pizzahut",
+              "enabled": true,
+              "bounds": [
+                0,
+                84,
+                1440,
+                2392
+              ],
+              "pressed": "not_pressed",
+              "scrollable-vertical": false,
+              "children": [
+                {
+                  "resource-id": "android:id/content",
+                  "adapter-view": false,
+                  "pointer": "68d9c98",
+                  "scrollable-horizontal": false,
+                  "ancestors": [
+                    "android.widget.FrameLayout",
+                    "android.view.ViewGroup",
+                    "android.view.View",
+                    "java.lang.Object"
+                  ],
+                  "selected": false,
+                  "content-desc": [
+                    null
+                  ],
+                  "rel-bounds": [
+                    0,
+                    0,
+                    1440,
+                    2308
+                  ],
+                  "draw": true,
+                  "focusable": false,
+                  "long-clickable": false,
+                  "visibility": "visible",
+                  "focused": false,
+                  "clickable": false,
+                  "abs-pos": true,
+                  "class": "android.support.v7.widget.ContentFrameLayout",
+                  "visible-to-user": true,
+                  "package": "android",
+                  "enabled": true,
+                  "bounds": [
+                    0,
+                    84,
+                    1440,
+                    2392
+                  ],
+                  "pressed": "not_pressed",
+                  "scrollable-vertical": false,
+                  "children": [
+                    {
+                      "scrollable-horizontal": false,
+                      "draw": true,
+                      "ancestors": [
+                        "android.view.ViewGroup",
+                        "android.view.View",
+                        "java.lang.Object"
+                      ],
+                      "clickable": false,
+                      "pressed": "not_pressed",
+                      "focusable": false,
+                      "long-clickable": false,
+                      "enabled": true,
+                      "bounds": [
+                        0,
+                        84,
+                        1440,
+                        2392
+                      ],
+                      "visibility": "visible",
+                      "content-desc": [
+                        null
+                      ],
+                      "rel-bounds": [
+                        0,
+                        0,
+                        1440,
+                        2308
+                      ],
+                      "focused": false,
+                      "selected": false,
+                      "scrollable-vertical": false,
+                      "adapter-view": false,
+                      "abs-pos": true,
+                      "pointer": "5922cf1",
+                      "class": "android.support.design.widget.CoordinatorLayout",
+                      "visible-to-user": true,
+                      "children": [
+                        {
+                          "scrollable-horizontal": false,
+                          "draw": true,
+                          "ancestors": [
+                            "android.view.ViewGroup",
+                            "android.view.View",
+                            "java.lang.Object"
+                          ],
+                          "clickable": false,
+                          "pressed": "not_pressed",
+                          "focusable": false,
+                          "long-clickable": false,
+                          "enabled": true,
+                          "bounds": [
+                            0,
+                            84,
+                            1440,
+                            2392
+                          ],
+                          "visibility": "visible",
+                          "content-desc": [
+                            null
+                          ],
+                          "rel-bounds": [
+                            0,
+                            0,
+                            1440,
+                            2308
+                          ],
+                          "focused": false,
+                          "selected": false,
+                          "scrollable-vertical": false,
+                          "adapter-view": false,
+                          "abs-pos": true,
+                          "pointer": "c54c0d6",
+                          "class": "android.widget.RelativeLayout",
+                          "visible-to-user": true,
+                          "children": [
+                            {
+                              "resource-id": "com.yum.pizzahut:id/fragment1",
+                              "adapter-view": false,
+                              "pointer": "e5b7f57",
+                              "scrollable-horizontal": false,
+                              "ancestors": [
+                                "android.view.ViewGroup",
+                                "android.view.View",
+                                "java.lang.Object"
+                              ],
+                              "selected": false,
+                              "content-desc": [
+                                null
+                              ],
+                              "rel-bounds": [
+                                0,
+                                0,
+                                1440,
+                                2308
+                              ],
+                              "draw": true,
+                              "focusable": false,
+                              "long-clickable": false,
+                              "visibility": "visible",
+                              "focused": false,
+                              "clickable": false,
+                              "abs-pos": true,
+                              "class": "android.widget.FrameLayout",
+                              "visible-to-user": true,
+                              "package": "com.yum.pizzahut",
+                              "enabled": true,
+                              "bounds": [
+                                0,
+                                84,
+                                1440,
+                                2392
+                              ],
+                              "pressed": "not_pressed",
+                              "scrollable-vertical": false,
+                              "children": [
+                                {
+                                  "scrollable-horizontal": false,
+                                  "draw": true,
+                                  "ancestors": [
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "clickable": false,
+                                  "pressed": "not_pressed",
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "enabled": true,
+                                  "bounds": [
+                                    0,
+                                    84,
+                                    1440,
+                                    2392
+                                  ],
+                                  "visibility": "visible",
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    0,
+                                    0,
+                                    1440,
+                                    2308
+                                  ],
+                                  "focused": false,
+                                  "selected": false,
+                                  "scrollable-vertical": false,
+                                  "adapter-view": false,
+                                  "abs-pos": true,
+                                  "pointer": "20bea44",
+                                  "class": "android.widget.RelativeLayout",
+                                  "visible-to-user": true,
+                                  "children": [
+                                    {
+                                      "resource-id": "com.yum.pizzahut:id/map_view",
+                                      "adapter-view": false,
+                                      "pointer": "50ba72d",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "com.google.android.gms.maps.MapView",
+                                        "android.widget.FrameLayout",
+                                        "android.view.ViewGroup",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        0,
+                                        0,
+                                        1440,
+                                        2308
+                                      ],
+                                      "draw": true,
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "visibility": "visible",
+                                      "focused": false,
+                                      "clickable": true,
+                                      "abs-pos": true,
+                                      "class": "com.yum.pizzahut.maps.StoreLocatorMapView",
+                                      "visible-to-user": true,
+                                      "package": "com.yum.pizzahut",
+                                      "enabled": true,
+                                      "bounds": [
+                                        0,
+                                        84,
+                                        1440,
+                                        2392
+                                      ],
+                                      "pressed": "not_pressed",
+                                      "scrollable-vertical": false,
+                                      "children": [
+                                        {
+                                          "scrollable-horizontal": false,
+                                          "draw": true,
+                                          "ancestors": [
+                                            "android.view.ViewGroup",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "clickable": false,
+                                          "pressed": "not_pressed",
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "enabled": true,
+                                          "bounds": [
+                                            0,
+                                            84,
+                                            1440,
+                                            2392
+                                          ],
+                                          "visibility": "visible",
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            0,
+                                            0,
+                                            1440,
+                                            2308
+                                          ],
+                                          "focused": false,
+                                          "selected": false,
+                                          "scrollable-vertical": false,
+                                          "adapter-view": false,
+                                          "abs-pos": true,
+                                          "pointer": "cb41462",
+                                          "class": "android.widget.FrameLayout",
+                                          "visible-to-user": true,
+                                          "children": [
+                                            {
+                                              "scrollable-horizontal": false,
+                                              "draw": false,
+                                              "ancestors": [
+                                                "com.google.maps.api.android.lib6.gmm6.vector.af",
+                                                "com.google.maps.api.android.lib6.gmm6.vector.bb",
+                                                "android.view.TextureView",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "clickable": true,
+                                              "pressed": "not_pressed",
+                                              "focusable": true,
+                                              "long-clickable": false,
+                                              "enabled": true,
+                                              "bounds": [
+                                                0,
+                                                84,
+                                                1440,
+                                                2392
+                                              ],
+                                              "visibility": "visible",
+                                              "content-desc": [
+                                                "Google Map"
+                                              ],
+                                              "rel-bounds": [
+                                                0,
+                                                0,
+                                                1440,
+                                                2308
+                                              ],
+                                              "focused": false,
+                                              "selected": false,
+                                              "scrollable-vertical": false,
+                                              "adapter-view": false,
+                                              "abs-pos": true,
+                                              "pointer": "caeb9f3",
+                                              "class": "com.google.maps.api.android.lib6.gmm6.api.z",
+                                              "visible-to-user": true
+                                            },
+                                            {
+                                              "scrollable-horizontal": false,
+                                              "draw": true,
+                                              "ancestors": [
+                                                "android.widget.RelativeLayout",
+                                                "android.view.ViewGroup",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "clickable": false,
+                                              "pressed": "not_pressed",
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "enabled": true,
+                                              "bounds": [
+                                                0,
+                                                84,
+                                                1440,
+                                                2392
+                                              ],
+                                              "visibility": "visible",
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                0,
+                                                0,
+                                                1440,
+                                                2308
+                                              ],
+                                              "focused": false,
+                                              "selected": false,
+                                              "scrollable-vertical": false,
+                                              "adapter-view": false,
+                                              "abs-pos": true,
+                                              "pointer": "7ff66b0",
+                                              "class": "com.google.maps.api.android.lib6.impl.fr",
+                                              "visible-to-user": true,
+                                              "children": [
+                                                {
+                                                  "scrollable-horizontal": false,
+                                                  "draw": false,
+                                                  "ancestors": [
+                                                    "android.view.View",
+                                                    "java.lang.Object"
+                                                  ],
+                                                  "clickable": false,
+                                                  "pressed": "not_pressed",
+                                                  "focusable": false,
+                                                  "long-clickable": false,
+                                                  "enabled": true,
+                                                  "bounds": [
+                                                    18,
+                                                    2297,
+                                                    228,
+                                                    2374
+                                                  ],
+                                                  "visibility": "visible",
+                                                  "content-desc": [
+                                                    null
+                                                  ],
+                                                  "rel-bounds": [
+                                                    18,
+                                                    2213,
+                                                    228,
+                                                    2290
+                                                  ],
+                                                  "focused": false,
+                                                  "selected": false,
+                                                  "scrollable-vertical": false,
+                                                  "adapter-view": false,
+                                                  "abs-pos": true,
+                                                  "pointer": "5288929",
+                                                  "class": "android.widget.ImageView",
+                                                  "visible-to-user": true
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "scrollable-horizontal": false,
+                                              "draw": true,
+                                              "ancestors": [
+                                                "android.view.ViewGroup",
+                                                "android.view.View",
+                                                "java.lang.Object"
+                                              ],
+                                              "clickable": false,
+                                              "pressed": "not_pressed",
+                                              "focusable": false,
+                                              "long-clickable": false,
+                                              "enabled": true,
+                                              "bounds": [
+                                                0,
+                                                84,
+                                                1440,
+                                                2392
+                                              ],
+                                              "visibility": "visible",
+                                              "content-desc": [
+                                                null
+                                              ],
+                                              "rel-bounds": [
+                                                0,
+                                                0,
+                                                1440,
+                                                2308
+                                              ],
+                                              "focused": false,
+                                              "selected": false,
+                                              "scrollable-vertical": false,
+                                              "adapter-view": false,
+                                              "abs-pos": true,
+                                              "pointer": "1f1024f",
+                                              "class": "android.widget.RelativeLayout",
+                                              "visible-to-user": true,
+                                              "children": []
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "scrollable-horizontal": false,
+                                      "draw": false,
+                                      "ancestors": [
+                                        "android.widget.ImageView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "clickable": false,
+                                      "pressed": "not_pressed",
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "enabled": true,
+                                      "bounds": [
+                                        0,
+                                        84,
+                                        317,
+                                        317
+                                      ],
+                                      "visibility": "visible",
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        0,
+                                        0,
+                                        317,
+                                        233
+                                      ],
+                                      "focused": false,
+                                      "selected": false,
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "abs-pos": true,
+                                      "pointer": "b51b59d",
+                                      "class": "android.support.v7.widget.AppCompatImageView",
+                                      "visible-to-user": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "scrollable-horizontal": false,
+                          "draw": true,
+                          "ancestors": [
+                            "android.widget.LinearLayout",
+                            "android.view.ViewGroup",
+                            "android.view.View",
+                            "java.lang.Object"
+                          ],
+                          "clickable": true,
+                          "pressed": "not_pressed",
+                          "focusable": false,
+                          "long-clickable": false,
+                          "enabled": true,
+                          "bounds": [
+                            0,
+                            84,
+                            1440,
+                            592
+                          ],
+                          "visibility": "visible",
+                          "content-desc": [
+                            null
+                          ],
+                          "rel-bounds": [
+                            0,
+                            0,
+                            1440,
+                            508
+                          ],
+                          "focused": false,
+                          "selected": false,
+                          "scrollable-vertical": false,
+                          "adapter-view": false,
+                          "abs-pos": true,
+                          "pointer": "6d1dbe0",
+                          "class": "android.support.design.widget.AppBarLayout",
+                          "visible-to-user": true,
+                          "children": [
+                            {
+                              "resource-id": "com.yum.pizzahut:id/toolbar",
+                              "adapter-view": false,
+                              "pointer": "7990e99",
+                              "scrollable-horizontal": false,
+                              "ancestors": [
+                                "android.view.ViewGroup",
+                                "android.view.View",
+                                "java.lang.Object"
+                              ],
+                              "selected": false,
+                              "content-desc": [
+                                null
+                              ],
+                              "rel-bounds": [
+                                0,
+                                0,
+                                1440,
+                                196
+                              ],
+                              "draw": true,
+                              "focusable": false,
+                              "long-clickable": false,
+                              "visibility": "visible",
+                              "focused": false,
+                              "clickable": false,
+                              "abs-pos": true,
+                              "class": "android.support.v7.widget.Toolbar",
+                              "visible-to-user": true,
+                              "package": "com.yum.pizzahut",
+                              "enabled": true,
+                              "bounds": [
+                                0,
+                                84,
+                                1440,
+                                280
+                              ],
+                              "pressed": "not_pressed",
+                              "scrollable-vertical": false,
+                              "children": [
+                                {
+                                  "text": "Carryout",
+                                  "scrollable-vertical": false,
+                                  "adapter-view": false,
+                                  "pointer": "1f4055e",
+                                  "scrollable-horizontal": false,
+                                  "ancestors": [
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "selected": false,
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    252,
+                                    51,
+                                    522,
+                                    144
+                                  ],
+                                  "draw": false,
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "visibility": "visible",
+                                  "focused": false,
+                                  "clickable": false,
+                                  "abs-pos": true,
+                                  "font-family": "sans-serif-medium",
+                                  "class": "android.widget.TextView",
+                                  "visible-to-user": true,
+                                  "enabled": true,
+                                  "bounds": [
+                                    252,
+                                    135,
+                                    522,
+                                    228
+                                  ],
+                                  "pressed": "not_pressed"
+                                },
+                                {
+                                  "scrollable-horizontal": false,
+                                  "draw": false,
+                                  "ancestors": [
+                                    "android.widget.ImageView",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "clickable": true,
+                                  "pressed": "not_pressed",
+                                  "focusable": true,
+                                  "long-clickable": false,
+                                  "enabled": true,
+                                  "bounds": [
+                                    0,
+                                    84,
+                                    196,
+                                    280
+                                  ],
+                                  "visibility": "visible",
+                                  "content-desc": [
+                                    "Navigate up"
+                                  ],
+                                  "rel-bounds": [
+                                    0,
+                                    0,
+                                    196,
+                                    196
+                                  ],
+                                  "focused": false,
+                                  "selected": false,
+                                  "scrollable-vertical": false,
+                                  "adapter-view": false,
+                                  "abs-pos": true,
+                                  "pointer": "33d1d3f",
+                                  "class": "android.widget.ImageButton",
+                                  "visible-to-user": true
+                                },
+                                {
+                                  "scrollable-horizontal": false,
+                                  "draw": true,
+                                  "ancestors": [
+                                    "android.support.v7.widget.LinearLayoutCompat",
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "clickable": false,
+                                  "pressed": "not_pressed",
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "enabled": true,
+                                  "bounds": [
+                                    1272,
+                                    84,
+                                    1440,
+                                    280
+                                  ],
+                                  "visibility": "visible",
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    1272,
+                                    0,
+                                    1440,
+                                    196
+                                  ],
+                                  "focused": false,
+                                  "selected": false,
+                                  "scrollable-vertical": false,
+                                  "adapter-view": false,
+                                  "abs-pos": true,
+                                  "pointer": "da8d60c",
+                                  "class": "android.support.v7.widget.ActionMenuView",
+                                  "visible-to-user": true,
+                                  "children": [
+                                    {
+                                      "text": "",
+                                      "resource-id": "com.yum.pizzahut:id/menu_login",
+                                      "adapter-view": false,
+                                      "pointer": "b62fb55",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "android.support.v7.widget.AppCompatTextView",
+                                        "android.widget.TextView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        "Log in"
+                                      ],
+                                      "rel-bounds": [
+                                        0,
+                                        14,
+                                        168,
+                                        182
+                                      ],
+                                      "draw": false,
+                                      "focusable": true,
+                                      "long-clickable": true,
+                                      "visibility": "visible",
+                                      "focused": false,
+                                      "clickable": true,
+                                      "abs-pos": true,
+                                      "font-family": "sans-serif-medium",
+                                      "class": "android.support.v7.view.menu.ActionMenuItemView",
+                                      "visible-to-user": true,
+                                      "package": "com.yum.pizzahut",
+                                      "enabled": true,
+                                      "bounds": [
+                                        1272,
+                                        98,
+                                        1440,
+                                        266
+                                      ],
+                                      "pressed": "not_pressed",
+                                      "scrollable-vertical": false
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "resource-id": "com.yum.pizzahut:id/tabLayout",
+                              "adapter-view": false,
+                              "pointer": "a77196a",
+                              "scrollable-horizontal": false,
+                              "ancestors": [
+                                "android.widget.HorizontalScrollView",
+                                "android.widget.FrameLayout",
+                                "android.view.ViewGroup",
+                                "android.view.View",
+                                "java.lang.Object"
+                              ],
+                              "selected": false,
+                              "content-desc": [
+                                null
+                              ],
+                              "rel-bounds": [
+                                56,
+                                196,
+                                432,
+                                364
+                              ],
+                              "draw": false,
+                              "focusable": true,
+                              "long-clickable": false,
+                              "visibility": "visible",
+                              "focused": false,
+                              "clickable": false,
+                              "abs-pos": true,
+                              "class": "android.support.design.widget.TabLayout",
+                              "visible-to-user": true,
+                              "package": "com.yum.pizzahut",
+                              "enabled": true,
+                              "bounds": [
+                                56,
+                                280,
+                                432,
+                                448
+                              ],
+                              "pressed": "not_pressed",
+                              "scrollable-vertical": false,
+                              "children": [
+                                {
+                                  "scrollable-horizontal": false,
+                                  "draw": false,
+                                  "ancestors": [
+                                    "android.widget.LinearLayout",
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "clickable": false,
+                                  "pressed": "not_pressed",
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "enabled": true,
+                                  "bounds": [
+                                    56,
+                                    280,
+                                    432,
+                                    448
+                                  ],
+                                  "visibility": "visible",
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    0,
+                                    0,
+                                    376,
+                                    168
+                                  ],
+                                  "focused": false,
+                                  "selected": false,
+                                  "scrollable-vertical": false,
+                                  "adapter-view": false,
+                                  "abs-pos": true,
+                                  "pointer": "704e5b",
+                                  "class": "android.support.design.widget.TabLayout$SlidingTabStrip",
+                                  "visible-to-user": true,
+                                  "children": [
+                                    {
+                                      "scrollable-horizontal": false,
+                                      "draw": true,
+                                      "ancestors": [
+                                        "android.widget.LinearLayout",
+                                        "android.view.ViewGroup",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "clickable": true,
+                                      "pressed": "not_pressed",
+                                      "focusable": true,
+                                      "long-clickable": false,
+                                      "enabled": true,
+                                      "bounds": [
+                                        56,
+                                        280,
+                                        241,
+                                        448
+                                      ],
+                                      "visibility": "visible",
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        0,
+                                        0,
+                                        185,
+                                        168
+                                      ],
+                                      "focused": false,
+                                      "selected": false,
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "abs-pos": true,
+                                      "pointer": "d1346f8",
+                                      "class": "android.support.design.widget.TabLayout$TabView",
+                                      "visible-to-user": true,
+                                      "children": [
+                                        {
+                                          "text": "List",
+                                          "scrollable-vertical": false,
+                                          "adapter-view": false,
+                                          "pointer": "2656236",
+                                          "scrollable-horizontal": false,
+                                          "ancestors": [
+                                            "android.widget.TextView",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "selected": false,
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            42,
+                                            51,
+                                            143,
+                                            117
+                                          ],
+                                          "draw": false,
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "visibility": "visible",
+                                          "focused": false,
+                                          "clickable": false,
+                                          "abs-pos": true,
+                                          "font-family": "sans-serif-medium",
+                                          "class": "android.support.v7.widget.AppCompatTextView",
+                                          "visible-to-user": true,
+                                          "enabled": true,
+                                          "bounds": [
+                                            98,
+                                            331,
+                                            199,
+                                            397
+                                          ],
+                                          "pressed": "not_pressed"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "scrollable-horizontal": false,
+                                      "draw": true,
+                                      "ancestors": [
+                                        "android.widget.LinearLayout",
+                                        "android.view.ViewGroup",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "clickable": true,
+                                      "pressed": "not_pressed",
+                                      "focusable": true,
+                                      "long-clickable": false,
+                                      "enabled": true,
+                                      "bounds": [
+                                        241,
+                                        280,
+                                        432,
+                                        448
+                                      ],
+                                      "visibility": "visible",
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        185,
+                                        0,
+                                        376,
+                                        168
+                                      ],
+                                      "focused": false,
+                                      "selected": true,
+                                      "scrollable-vertical": false,
+                                      "adapter-view": false,
+                                      "abs-pos": true,
+                                      "pointer": "4db7537",
+                                      "class": "android.support.design.widget.TabLayout$TabView",
+                                      "visible-to-user": true,
+                                      "children": [
+                                        {
+                                          "text": "Map",
+                                          "scrollable-vertical": false,
+                                          "adapter-view": false,
+                                          "pointer": "130400d",
+                                          "scrollable-horizontal": false,
+                                          "ancestors": [
+                                            "android.widget.TextView",
+                                            "android.view.View",
+                                            "java.lang.Object"
+                                          ],
+                                          "selected": true,
+                                          "content-desc": [
+                                            null
+                                          ],
+                                          "rel-bounds": [
+                                            42,
+                                            51,
+                                            149,
+                                            117
+                                          ],
+                                          "draw": false,
+                                          "focusable": false,
+                                          "long-clickable": false,
+                                          "visibility": "visible",
+                                          "focused": false,
+                                          "clickable": false,
+                                          "abs-pos": true,
+                                          "font-family": "sans-serif-medium",
+                                          "class": "android.support.v7.widget.AppCompatTextView",
+                                          "visible-to-user": true,
+                                          "enabled": true,
+                                          "bounds": [
+                                            283,
+                                            331,
+                                            390,
+                                            397
+                                          ],
+                                          "pressed": "not_pressed"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "resource-id": "com.yum.pizzahut:id/search_layout",
+                              "adapter-view": false,
+                              "pointer": "c1d6bc2",
+                              "scrollable-horizontal": false,
+                              "ancestors": [
+                                "android.view.ViewGroup",
+                                "android.view.View",
+                                "java.lang.Object"
+                              ],
+                              "selected": false,
+                              "content-desc": [
+                                null
+                              ],
+                              "rel-bounds": [
+                                0,
+                                364,
+                                1440,
+                                508
+                              ],
+                              "draw": true,
+                              "focusable": true,
+                              "long-clickable": false,
+                              "visibility": "visible",
+                              "focused": false,
+                              "clickable": false,
+                              "abs-pos": true,
+                              "class": "android.widget.RelativeLayout",
+                              "visible-to-user": true,
+                              "package": "com.yum.pizzahut",
+                              "enabled": true,
+                              "bounds": [
+                                0,
+                                448,
+                                1440,
+                                592
+                              ],
+                              "pressed": "not_pressed",
+                              "scrollable-vertical": false,
+                              "children": [
+                                {
+                                  "scrollable-horizontal": false,
+                                  "draw": false,
+                                  "ancestors": [
+                                    "android.widget.ImageView",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "clickable": false,
+                                  "pressed": "not_pressed",
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "enabled": true,
+                                  "bounds": [
+                                    0,
+                                    448,
+                                    1440,
+                                    592
+                                  ],
+                                  "visibility": "visible",
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    0,
+                                    0,
+                                    1440,
+                                    144
+                                  ],
+                                  "focused": false,
+                                  "selected": false,
+                                  "scrollable-vertical": false,
+                                  "adapter-view": false,
+                                  "abs-pos": true,
+                                  "pointer": "9682dd3",
+                                  "class": "android.support.v7.widget.AppCompatImageView",
+                                  "visible-to-user": true
+                                },
+                                {
+                                  "scrollable-horizontal": false,
+                                  "draw": true,
+                                  "ancestors": [
+                                    "android.view.ViewGroup",
+                                    "android.view.View",
+                                    "java.lang.Object"
+                                  ],
+                                  "clickable": false,
+                                  "pressed": "not_pressed",
+                                  "focusable": false,
+                                  "long-clickable": false,
+                                  "enabled": true,
+                                  "bounds": [
+                                    0,
+                                    448,
+                                    1440,
+                                    592
+                                  ],
+                                  "visibility": "visible",
+                                  "content-desc": [
+                                    null
+                                  ],
+                                  "rel-bounds": [
+                                    0,
+                                    0,
+                                    1440,
+                                    144
+                                  ],
+                                  "focused": false,
+                                  "selected": false,
+                                  "scrollable-vertical": false,
+                                  "adapter-view": false,
+                                  "abs-pos": true,
+                                  "pointer": "add009",
+                                  "class": "android.widget.LinearLayout",
+                                  "visible-to-user": true,
+                                  "children": [
+                                    {
+                                      "text": "san francisco",
+                                      "resource-id": "com.yum.pizzahut:id/search_nearby",
+                                      "adapter-view": false,
+                                      "pointer": "39039e6",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "android.widget.AutoCompleteTextView",
+                                        "android.widget.EditText",
+                                        "android.widget.TextView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        56,
+                                        0,
+                                        1258,
+                                        144
+                                      ],
+                                      "draw": false,
+                                      "focusable": true,
+                                      "long-clickable": true,
+                                      "visibility": "visible",
+                                      "text-hint": "Enter address or ZIP",
+                                      "focused": true,
+                                      "clickable": true,
+                                      "abs-pos": true,
+                                      "font-family": "sans-serif",
+                                      "class": "android.support.v7.widget.AppCompatAutoCompleteTextView",
+                                      "visible-to-user": true,
+                                      "package": "com.yum.pizzahut",
+                                      "enabled": true,
+                                      "bounds": [
+                                        56,
+                                        448,
+                                        1258,
+                                        592
+                                      ],
+                                      "pressed": "not_pressed",
+                                      "scrollable-vertical": false
+                                    },
+                                    {
+                                      "resource-id": "com.yum.pizzahut:id/gps_toggle",
+                                      "adapter-view": false,
+                                      "pointer": "43066e4",
+                                      "scrollable-horizontal": false,
+                                      "ancestors": [
+                                        "android.widget.ImageView",
+                                        "android.view.View",
+                                        "java.lang.Object"
+                                      ],
+                                      "selected": false,
+                                      "content-desc": [
+                                        null
+                                      ],
+                                      "rel-bounds": [
+                                        1258,
+                                        5,
+                                        1440,
+                                        138
+                                      ],
+                                      "draw": false,
+                                      "focusable": false,
+                                      "long-clickable": false,
+                                      "visibility": "visible",
+                                      "focused": false,
+                                      "clickable": true,
+                                      "abs-pos": true,
+                                      "class": "android.support.v7.widget.AppCompatImageView",
+                                      "visible-to-user": true,
+                                      "package": "com.yum.pizzahut",
+                                      "enabled": true,
+                                      "bounds": [
+                                        1258,
+                                        453,
+                                        1440,
+                                        586
+                                      ],
+                                      "pressed": "not_pressed",
+                                      "scrollable-vertical": false
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource-id": "android:id/navigationBarBackground",
+      "adapter-view": false,
+      "pointer": "f5a820e",
+      "scrollable-horizontal": false,
+      "ancestors": [
+        "java.lang.Object"
+      ],
+      "selected": false,
+      "content-desc": [
+        null
+      ],
+      "rel-bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ],
+      "draw": false,
+      "focusable": false,
+      "long-clickable": false,
+      "visibility": "visible",
+      "focused": false,
+      "clickable": false,
+      "abs-pos": true,
+      "class": "android.view.View",
+      "visible-to-user": true,
+      "package": "android",
+      "enabled": true,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ],
+      "pressed": "not_pressed",
+      "scrollable-vertical": false
+    },
+    {
+      "resource-id": "android:id/statusBarBackground",
+      "adapter-view": false,
+      "pointer": "1fdd42f",
+      "scrollable-horizontal": false,
+      "ancestors": [
+        "java.lang.Object"
+      ],
+      "selected": false,
+      "content-desc": [
+        null
+      ],
+      "rel-bounds": [
+        0,
+        0,
+        1440,
+        84
+      ],
+      "draw": false,
+      "focusable": false,
+      "long-clickable": false,
+      "visibility": "visible",
+      "focused": false,
+      "clickable": false,
+      "abs-pos": true,
+      "class": "android.view.View",
+      "visible-to-user": true,
+      "package": "android",
+      "enabled": true,
+      "bounds": [
+        0,
+        0,
+        1440,
+        84
+      ],
+      "pressed": "not_pressed",
+      "scrollable-vertical": false
+    }
+  ]
+}

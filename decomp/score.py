@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" 计算输入的布局序列与资产库序列列表之间的相似度，降序输出相似度高的序列
+"""
+
 import operator
 import os
 import time
@@ -30,6 +36,7 @@ seq_dir = cfg.get('decode', 'apk_tokens_dir')
 # Toolbar = 12
 
 
+# 权重矩阵
 #           0  1  2  3  4  5  6  7  8  9  10 11 12
 weights = [[5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0],  # 0
            [0, 15, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 1
@@ -102,7 +109,7 @@ def max_score(nd1, post_order1, nd2, post_order2):
 
 def create_tree(sequence):
     """
-    输出该序列的根节点（用于遍历）、节点字典、后序遍历（用于依次比较）
+    输出布局序列的根节点（用于遍历）、节点字典、后序遍历（用于依次比较）
     :param sequence: 布局序列
     :return:
     """
@@ -113,11 +120,11 @@ def create_tree(sequence):
 
 def cal_simi_score(tree_root, nd, post_order):
     """
-    将 layout_dir 中的每个文件中每个布局与输入的布局树进行比较，返回一个按相似度排序的有序字典
+    将 seq_dir 中每个布局序列与输入布局序列进行相似度计算，返回相似度降序排列结果
     :param tree_root: 待匹配布局树根节点
     :param nd: 待匹配布局树节点字典
     :param post_order: 待匹配布局树后序遍历
-    :return: 按相似度排序的字典（key: layout id, value: similarity score）
+    :return: 按相似度排序的字典（key: layout_id, value: similarity_score）
     """
     scores_map = {}
 
@@ -166,11 +173,11 @@ def cal_simi_score(tree_root, nd, post_order):
                     layout_type = int(line_sp[0])
                     len_tks_c = int(line_sp[2])
 
-                    if layout_type == 1:
-                        if abs(
-                                len_tks_c - len_tks_main) > 10 + len_tks_main / 3 or contains_list and 'List' not in tks_main:
-                            # print('layout skipped')
-                            continue
+                    # if layout_type == 1:
+                    #     if abs(
+                    #             len_tks_c - len_tks_main) > 30 + len_tks_main / 3 or contains_list and 'List' not in tks_main:
+                    #         # print('layout skipped')
+                    #         continue
 
                     file_name = line_sp[1]
                     layout_id = package + ':' + file_name
@@ -213,7 +220,9 @@ def cal_simi_score(tree_root, nd, post_order):
     return sorted(scores_map.items(), key=operator.itemgetter(1), reverse=True)
 
 
-def search_similar_seq(seq):
+if __name__ == '__main__':
+    seq = 'Layout { Button }'
+
     start_time = time.time()
     print('---------------------------------')
 
@@ -228,11 +237,6 @@ def search_similar_seq(seq):
 
     print('---------------------------------')
     print('Duration: {:.2f} s'.format(time.time() - start_time))
-
-
-if __name__ == '__main__':
-    seq = 'replace_here'
-    search_similar_seq(seq)
 
     # seq1 = 'Layout { Layout { EditText EditText TextView } Layout { Button Button } }'
     # seq2 = 'Layout { Layout { EditText EditText } Layout { Layout { Button Button } Layout { TextView Button } } }'
