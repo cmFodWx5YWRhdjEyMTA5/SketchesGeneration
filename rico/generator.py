@@ -27,6 +27,8 @@ cfg.read('../config.ini')
 # 路径
 data_dir = cfg.get('dirs', 'nmt_data')
 layout_sequences_fp = cfg.get('files', 'sequences')
+layout_repo_dir = cfg.get('decode', 'apk_tokens_dir')
+rico_layout_repo_fp = os.path.join(layout_repo_dir, 'rico-layout.lst')
 index_map_fp = cfg.get('files', 'index_map')
 
 rico_divided_dir = cfg.get('dirs', 'rico_divided')
@@ -142,6 +144,8 @@ def sketch_samples_generation(rico_dir, json_dir, sketches_dir, rico_index, seq_
     # 保存草图/制作训练文件
     if TRAINING_DATA_MODE:
         im_sketch.rotate(90, expand=1).save(out_sketch_path)
+        open(rico_layout_repo_fp, 'a').write(
+            ' '.join(['1', str(rico_index), str(len(tokens)), ' '.join(tokens)]) + '\n')
         open(seq_file, 'a').write(' '.join(tokens) + '\n')
         open(i2l_map_file, 'a').write(str(rico_index) + ' ' + str(seq_line) + '\n')
         seq_line += 1
@@ -817,10 +821,12 @@ if __name__ == '__main__':
     if TRAINING_DATA_MODE:
         # 先创建/覆盖文件用于添加内容
         check_make_dir(data_dir)
+        check_make_dir(layout_repo_dir)
         print('### Checking data directory to save training related files:', data_dir, '... OK')
 
         open(layout_sequences_fp, 'w', newline='')
         open(index_map_fp, 'w', newline='')
+        open(rico_layout_repo_fp, 'w', newline='')
         print('### Creating training related files ... OK')
 
     if ANALYSIS_MODE:

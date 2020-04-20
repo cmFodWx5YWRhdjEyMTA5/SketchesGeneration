@@ -12,8 +12,7 @@ from configparser import ConfigParser
 import networkx as nx
 import numpy as np
 
-from decomp.layout_utils import create_layout_tree, post_order_traversal, split_list_item_subtree, \
-    dfs_make_tokens
+from decomp.layout_utils import create_layout_tree, post_order_traversal, dfs_make_tokens
 
 cfg = ConfigParser()
 cfg.read('../config.ini')
@@ -129,7 +128,7 @@ def cal_simi_score(tree_root, nd, post_order):
     scores_map = {}
 
     item_roots = []
-    split_list_item_subtree(tree_root, nd, item_roots)
+    # split_list_item_subtree(tree_root, nd, item_roots)
     tks_main = []
     tks_item = []
 
@@ -139,7 +138,8 @@ def cal_simi_score(tree_root, nd, post_order):
     print('Input: ' + str(tks_main), len_tks_main)
     print('Searching ...')
 
-    contains_list = len(item_roots) > 0
+    # contains_list = len(item_roots) > 0
+    contains_list = False
 
     # 新建变量代表待匹配 item 树根节点及其后序遍历，仅当 contains_list 为真时有效
     post_order_item = None
@@ -167,11 +167,14 @@ def cal_simi_score(tree_root, nd, post_order):
                 max_match_item_simi_score = 0
                 max_match_item_fname = None
 
+                package = str(file_name.split('-')[0])
+
                 for i, line in enumerate(f):
-                    package = str(file_name.split('-')[0])
                     line_sp = line.split()
                     layout_type = int(line_sp[0])
                     len_tks_c = int(line_sp[2])
+                    if len_tks_c == 0:
+                        continue
 
                     # if layout_type == 1:
                     #     if abs(
@@ -188,7 +191,6 @@ def cal_simi_score(tree_root, nd, post_order):
                     # 文件中 2(item) 总是放在 1(layout) 前面
                     if contains_list and layout_type == 2:
                         if abs(len_tks_c - len_tks_item) > 10:
-                            # print('item skipped')
                             continue
                         item_lawecse_score_c = max_score(nd, post_order_item, cfile_nd, cfile_pot)
                         item_self_score_c = max_score(cfile_nd, cfile_pot, cfile_nd, cfile_pot)
@@ -221,7 +223,7 @@ def cal_simi_score(tree_root, nd, post_order):
 
 
 if __name__ == '__main__':
-    seq = 'Layout { Button }'
+    seq = 'Layout { Toolbar Layout { TextView TextView List { Layout { ImageView TextView TextView } } } }'
 
     start_time = time.time()
     print('---------------------------------')

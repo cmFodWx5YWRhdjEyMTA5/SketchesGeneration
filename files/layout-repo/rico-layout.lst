@@ -1,0 +1,1000 @@
+1 729 10 Layout { Toolbar Layout { TextView ImageView TextView } }
+1 683 8 Layout { Toolbar List { TextView } }
+1 379 44 Layout { Layout { Layout { Button Layout { TextView Button } } Layout { TextView TextView TextView } } Layout { Layout { TextView EditText } List { Layout { Button Layout { TextView TextView TextView TextView } Button } } } }
+1 396 39 Layout { TextView TextView Layout { Layout { Layout { ImageView TextView } Layout { ImageView TextView } } Layout { Layout { ImageView TextView } Layout { ImageView TextView } } } Layout { Button Button } }
+1 816 5 Layout { TextView TextView }
+1 115 8 Layout { TextView List { TextView } }
+1 545 18 Layout { Toolbar Layout { TextView EditText TextView EditText Layout { TextView Button TextView Button } } }
+1 400 0 
+1 953 19 Layout { Toolbar Layout { ImageView TextView TextView TextView Layout { Button Button Button Button Button } } }
+1 284 0 
+1 791 5 Layout { Button Button }
+1 512 43 Layout { Layout { Toolbar Layout { Layout { ImageView TextView } Layout { TextView TextView } } } Layout { Layout { TextView TextView } TextView EditText EditText EditText Layout { CheckBox TextView } Layout { CheckBox TextView } Button } }
+1 142 18 Layout { Toolbar Layout { TextView TextView List { Layout { ImageView TextView TextView } } } }
+1 841 47 Layout { Layout { Toolbar List { Layout { Layout { Layout { TextView TextView TextView } Layout { TextView TextView TextView } } Layout { Layout { TextView TextView } Button } } } } Layout { TextView Layout { TextView TextView TextView } } }
+1 904 9 Layout { TextView List { CheckBox } Button }
+1 457 7 Layout { ImageView EditText EditText Button }
+1 292 64 Layout { Toolbar Layout { Layout { Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } TextView Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } } Layout { CheckBox Layout { TextView EditText TextView EditText } } } }
+1 768 64 Layout { Layout { TextView TextView EditText Layout { TextView TextView TextView } } Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } TextView }
+1 338 17 Layout { Toolbar Layout { Layout { Button EditText Button } List { TextView } } }
+1 787 12 Layout { Layout { Button TextView } List { TextView } }
+1 857 27 Layout { Layout { ImageView Layout { Layout { TextView TextView TextView } TextView } } Layout { Button Layout { Button Button Button } } }
+1 154 29 Layout { Toolbar Layout { List { Layout { CheckBox TextView Button } } Layout { TextView TextView List { Layout { TextView TextView } } } } }
+1 504 38 Layout { Toolbar Layout { Layout { Layout { Layout { ImageView TextView } Layout { Button Button } } Layout { TextView TextView TextView TextView } } List { Layout { ImageView TextView } } } }
+1 441 21 Layout { Layout { Button TextView } Layout { ImageView TextView } Layout { TextView TextView TextView } ImageView TextView }
+1 912 20 Layout { Toolbar TextView Layout { Layout { ImageView ImageView } TextView Layout { TextView TextView TextView } } }
+1 695 13 Layout { ImageView Layout { TextView Layout { Button Button } } }
+1 380 16 Layout { ImageView TextView TextView Layout { Layout { TextView TextView } Switch } Button }
+1 553 39 Layout { ImageView Layout { Layout { TextView Layout { TextView TextView } Layout { TextView TextView TextView } } Layout { TextView TextView TextView } TextView Layout { ImageView TextView } } Layout { Button Button } }
+1 103 10 Layout { Layout { Button EditText } Button Button }
+1 800 10 Layout { Toolbar Layout { Button EditText Button } }
+1 945 15 Layout { Toolbar TextView Layout { TextView TextView Layout { TextView TextView } } }
+1 416 41 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { ImageView Layout { TextView List { Layout { Button TextView } } TextView Layout { Button Button Button } } } } Layout { Button Button } }
+1 251 11 Layout { Button Button Layout { Button Button } ImageView }
+1 601 1 Toolbar
+1 314 20 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { ImageView TextView TextView Button } } }
+1 744 30 Layout { Layout { Button Layout { TextView TextView } } Layout { Layout { TextView Layout { Button TextView } TextView } Layout { Button Button } } }
+1 894 92 Layout { Layout { Button TextView Button } Layout { Layout { Layout { Layout { Layout { Layout { TextView TextView TextView TextView } Layout { TextView TextView TextView TextView } } TextView Layout { TextView ImageView } TextView } Layout { ImageView ImageView } } Layout { Layout { TextView Layout { TextView ImageView } TextView Layout { Layout { TextView TextView TextView TextView } Layout { TextView TextView TextView TextView } } } Layout { ImageView ImageView } } } Layout { Button Button Button Button } } }
+1 197 8 List { Layout { TextView Switch } }
+1 528 1 ImageView
+1 482 115 Layout { Toolbar Layout { Layout { Layout { TextView EditText } Layout { TextView EditText } Layout { TextView EditText } Layout { TextView EditText } } Layout { Layout { TextView TextView } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } } Layout { Layout { TextView TextView } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } } Layout { TextView Button Button Button Button Button } } }
+1 178 48 Layout { Layout { Layout { Layout { Button TextView } Layout { TextView Button } } Layout { TextView TextView TextView TextView } } Layout { Layout { Layout { Button Button Button } List { TextView } } Layout { TextView TextView } Button } }
+1 20 48 Layout { Layout { Layout { Button TextView Button } Layout { Layout { ImageView ImageView ImageView } Layout { ImageView ImageView ImageView } Layout { ImageView ImageView ImageView } Layout { ImageView ImageView ImageView } } ImageView } Layout { Button Button Button Button Button } }
+1 656 10 Layout { TextView Layout { Button Button Button } }
+1 206 29 Layout { Toolbar Layout { Layout { TextView TextView TextView } List { Layout { ImageView Layout { Layout { TextView Button } TextView } } } } }
+1 713 16 Layout { Layout { Button TextView } Layout { TextView List { TextView } } }
+1 343 6 Layout { TextView TextView Button }
+1 590 169 Layout { Layout { TextView Button Button Button Button Button } Layout { TextView Layout { Layout { TextView TextView Button Button } Layout { Layout { Button TextView } Layout { Button TextView } } } Layout { Layout { TextView TextView Button Button } Layout { Layout { Button TextView } Layout { Button TextView } } } Layout { Layout { TextView TextView Button Button } Layout { Layout { Button TextView } Layout { Button TextView } } } Layout { Layout { TextView TextView Button Button } Layout { Layout { Button TextView } Layout { Button TextView } } } Layout { Layout { TextView TextView Button Button } Layout { Layout { Button TextView } Layout { Button TextView } } } Layout { Layout { TextView TextView Button Button } Layout { Layout { Button TextView } Layout { Button TextView } } } } Layout { Button Button Button Button } Layout { Button Button Button Button Button } }
+1 98 5 Layout { TextView Button }
+1 969 16 Layout { Toolbar List { Layout { TextView Layout { TextView TextView } } } }
+1 986 25 Layout { Toolbar Layout { TextView TextView } Layout { Layout { TextView TextView } Layout { ImageView ImageView ImageView ImageView ImageView } } }
+1 77 62 Layout { Layout { Toolbar Layout { List { Layout { ImageView TextView TextView Button } } Layout { Layout { TextView TextView } List { Layout { ImageView TextView TextView Button } } } Layout { TextView Layout { ImageView ImageView ImageView } } } } Layout { Layout { Button TextView } TextView Layout { TextView TextView } } }
+1 210 29 Layout { Toolbar Layout { TextView Layout { Layout { TextView Button } TextView } Layout { TextView TextView TextView } ImageView Layout { Button TextView } } }
+1 640 10 Layout { Toolbar Layout { TextView Button TextView } }
+1 355 28 Layout { Toolbar Layout { ImageView Layout { Layout { TextView Layout { TextView TextView } TextView } Layout { Button Button Button Button } } } }
+1 705 17 Layout { Toolbar List { Layout { Button Layout { TextView TextView } Button } } }
+1 586 9 Layout { ImageView Layout { TextView TextView } }
+1 569 25 Layout { Layout { ImageView TextView } Layout { TextView Layout { TextView Button } EditText TextView TextView } Layout { TextView TextView } }
+1 139 18 Layout { Toolbar Layout { TextView TextView List { Layout { ImageView TextView TextView } } } }
+1 61 9 Layout { Toolbar Layout { Button Button } }
+1 990 21 Layout { Toolbar Layout { Layout { ImageView EditText Button } List { Layout { TextView TextView } } } }
+1 617 0 
+1 247 27 Layout { Toolbar Layout { Layout { ImageView TextView TextView } ImageView Layout { ImageView TextView } } Layout { Button Button Button Button Button } }
+1 752 14 Layout { Toolbar Layout { Layout { TextView TextView } TextView TextView } }
+1 302 21 Layout { Toolbar Layout { Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView Button } } }
+1 181 14 Layout { Layout { ImageView TextView ImageView } Layout { TextView Button } }
+1 928 26 Layout { Toolbar TextView Layout { Layout { Layout { ImageView ImageView } TextView Layout { TextView TextView TextView TextView TextView } } Button } }
+1 882 29 Layout { Toolbar Layout { Layout { TextView TextView } Layout { TextView Layout { EditText Button } } EditText EditText Layout { ImageView TextView Button } } }
+1 36 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 494 9 Layout { Toolbar Layout { TextView TextView } }
+1 549 19 Layout { Toolbar Layout { TextView EditText TextView EditText Layout { TextView EditText TextView TextView Button } } }
+1 119 27 Layout { Layout { TextView Button Button Button Button Button ImageView Button } Layout { TextView Layout { Button Button Button Button EditText Button } } }
+1 41 10 Layout { Toolbar Layout { TextView TextView TextView } }
+1 375 49 Layout { Layout { Layout { Layout { Button Button } Layout { TextView Button } } Layout { TextView TextView TextView } } Layout { Layout { ImageView TextView TextView TextView Layout { Button TextView } } Layout { Layout { TextView TextView } ImageView } } }
+1 725 21 Layout { Layout { Layout { TextView TextView } Layout { Button Button } } Layout { Button Button } }
+1 230 34 Layout { Layout { Button Button } Layout { Layout { ImageView Button ImageView } Layout { Layout { TextView TextView TextView TextView TextView TextView TextView } List { Button } } } }
+1 660 5 Layout { TextView Button }
+1 16 14 Layout { Layout { Toolbar Layout { TextView TextView TextView } } TextView }
+1 908 10 Layout { TextView Layout { TextView Button Button } }
+1 288 17 Layout { TextView Layout { Button Button Button } Layout { Button Button Button Button } }
+1 772 37 Layout { Toolbar Layout { TextView Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } TextView TextView TextView TextView Layout { TextView TextView } TextView } } }
+1 322 11 Layout { Toolbar Layout { ImageView TextView TextView Button } }
+1 637 15 Layout { Toolbar Layout { Layout { TextView Button TextView } Button Button } }
+1 267 4 List { TextView }
+1 508 12 Layout { Toolbar Layout { TextView EditText CheckBox CheckBox Button } }
+1 158 26 Layout { Layout { TextView Button } Layout { Layout { TextView TextView } Layout { TextView TextView } } Layout { Button TextView } }
+1 334 20 Layout { Toolbar List { Layout { ImageView Layout { Layout { TextView TextView } Button } } } }
+1 764 0 
+1 271 50 Layout { Layout { Button Layout { Button Button Button Button TextView } } Layout { Layout { Layout { TextView Button } Layout { TextView Button } } List { Layout { ImageView Layout { TextView Button } Layout { TextView TextView TextView TextView } } } } }
+1 621 0 
+1 57 12 Layout { Toolbar Layout { ImageView List { TextView } } }
+1 949 9 Layout { Toolbar Layout { TextView Button } }
+1 733 17 Layout { Toolbar Layout { ImageView TextView Layout { TextView TextView TextView } TextView TextView } }
+1 699 23 Layout { Toolbar Layout { Layout { ImageView TextView } TextView Layout { Button Layout { Button Button Button } } } }
+1 363 13 Layout { TextView Layout { TextView TextView TextView ImageView TextView TextView } }
+1 676 15 Layout { ImageView Button Layout { TextView TextView Layout { Button TextView } } }
+1 226 50 Layout { Layout { Layout { Button Button } TextView } Layout { TextView List { Layout { TextView List { Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView TextView TextView TextView } } } } } }
+1 461 27 Layout { Layout { Layout { Button EditText } Layout { Button Button } } Layout { Button TextView Layout { Button Button } Button } }
+1 932 16 Layout { Toolbar TextView Layout { ImageView TextView Layout { TextView TextView TextView } } }
+1 898 42 Layout { Layout { Button TextView Button } Layout { Layout { Layout { Button Layout { TextView TextView } } Layout { ImageView ImageView ImageView } Layout { Button TextView } } Layout { Button Button Button Button } } }
+1 877 5 Layout { Button ImageView }
+1 174 0 
+1 524 16 Layout { Toolbar List { Layout { Layout { TextView TextView } Button } } }
+1 748 12 Layout { Layout { Button TextView } List { TextView } }
+1 318 20 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { ImageView TextView TextView Button } } }
+1 965 22 Layout { Button Layout { TextView Layout { EditText EditText List { TextView } } } Layout { TextView Button } }
+1 94 17 Layout { Button Layout { Button Button } Layout { Button EditText Button Button } Button }
+1 436 9 Layout { TextView Layout { EditText Button } }
+1 573 18 Layout { Toolbar List { Layout { ImageView Layout { TextView TextView TextView Button } } } }
+1 123 40 Layout { Toolbar Layout { Layout { ImageView Layout { Layout { TextView Button } Layout { TextView Button } Layout { TextView Button } Layout { TextView Button } Layout { TextView Button } } } Button } }
+1 820 22 Layout { Layout { ImageView List { Layout { ImageView TextView } } } Layout { TextView TextView TextView TextView } }
+1 420 8 Layout { Toolbar List { TextView } }
+1 82 18 Layout { Toolbar Layout { List { Layout { TextView TextView Button TextView } } TextView } }
+1 6 17 Layout { Toolbar Layout { ImageView TextView Button Button Button Layout { Button Button } } }
+1 973 20 Layout { Layout { Button TextView } List { Layout { Layout { TextView TextView } CheckBox } } }
+1 836 14 Layout { Toolbar Layout { Layout { TextView TextView TextView } ImageView } }
+1 135 19 Layout { Toolbar Layout { TextView TextView TextView TextView TextView TextView TextView Layout { Button TextView } } }
+1 565 5 Layout { Button Button }
+1 709 30 Layout { Toolbar Layout { List { TextView } Layout { Layout { ImageView TextView } TextView Layout { Button Layout { Button Button Button } } } } }
+1 359 25 Layout { Layout { Button TextView Button } List { Layout { ImageView Layout { TextView Layout { TextView TextView } } } } }
+1 924 28 Layout { Toolbar Layout { Layout { TextView Button } List { Layout { Layout { Button Layout { TextView TextView } } Button } } } }
+1 477 22 Layout { Layout { Layout { ImageView TextView TextView } TextView TextView TextView TextView TextView } Layout { Button Button } }
+1 532 18 Layout { Layout { Button TextView Button Button } List { Layout { TextView TextView } } }
+1 498 15 Layout { Layout { ImageView TextView TextView } Layout { Button Button TextView } }
+1 162 1 Button
+1 861 37 Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Button } List { Layout { ImageView TextView TextView Button } } }
+1 925 23 Layout { Layout { TextView Layout { TextView TextView } TextView Layout { Button TextView } } Layout { Button Button } }
+1 476 17 Layout { Layout { Button Layout { Button Button } } Layout { TextView Button } }
+1 533 10 Layout { TextView Layout { TextView TextView } Button }
+1 499 9 Layout { Toolbar Layout { TextView TextView } }
+1 163 4 List { TextView }
+1 860 34 Layout { Layout { Toolbar Layout { Layout { ImageView TextView TextView TextView } TextView } } Layout { ImageView TextView Button } Layout { Button Layout { Button Button Button } } }
+1 708 8 Layout { Toolbar List { TextView } }
+1 358 25 Layout { Layout { Button TextView Button } Layout { TextView List { Layout { ImageView Layout { TextView TextView } } } } }
+1 421 8 Layout { Toolbar List { TextView } }
+1 972 50 Layout { Layout { Layout { Layout { Button TextView } Layout { TextView TextView Button } } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } Layout { List { Layout { ImageView TextView } } Button } }
+1 7 8 Layout { Toolbar List { TextView } }
+1 83 45 Layout { Toolbar Layout { List { Layout { ImageView TextView TextView Button } } Layout { Layout { TextView TextView } List { Layout { ImageView TextView TextView Button } } } Layout { TextView Layout { ImageView ImageView ImageView } } } }
+1 837 43 Layout { Toolbar Layout { TextView Layout { Button TextView TextView } Layout { Layout { TextView EditText } Layout { TextView EditText } Layout { TextView EditText } Layout { TextView EditText } } Layout { CheckBox Button TextView } } }
+1 134 13 Layout { Toolbar Layout { TextView TextView List { ImageView } } }
+1 564 58 Layout { Layout { Toolbar Layout { Layout { Layout { Button TextView } Layout { Button TextView Button } } Layout { Layout { Layout { Button TextView } Layout { EditText Button } } Layout { Layout { Button TextView TextView } List { Layout { ImageView TextView } } } } } } Button }
+1 95 0 
+1 964 8 Layout { Toolbar List { TextView } }
+1 437 12 Layout { Toolbar List { Layout { TextView CheckBox } } }
+1 572 26 Layout { List { Layout { Layout { TextView Button } TextView Layout { TextView TextView TextView } } } Layout { Button Button } }
+1 122 13 Layout { Layout { ImageView TextView } Layout { Button Button } }
+1 821 22 Layout { Layout { TextView List { Layout { ImageView TextView } } } Layout { TextView TextView TextView TextView } }
+1 749 17 Layout { Layout { Button TextView } Layout { Layout { EditText Button } TextView } }
+1 319 20 Layout { Toolbar List { Layout { ImageView Layout { Layout { TextView TextView } Button } } } }
+1 460 9 Layout { Layout { Button Button } EditText }
+1 933 24 Layout { Toolbar TextView Layout { Layout { Layout { ImageView ImageView } TextView Layout { TextView TextView TextView } } Button } }
+1 899 20 Layout { Layout { Button Layout { ImageView ImageView } } List { Layout { Button TextView } } }
+1 876 16 Layout { ImageView Layout { TextView List { Layout { Button TextView } } } }
+1 175 21 Layout { Layout { Layout { ImageView ImageView } Button } List { ImageView } Layout { Button Button } }
+1 525 59 Layout { Layout { Toolbar Layout { TextView TextView TextView } } Layout { Layout { Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { TextView Button } } } Button } }
+1 732 13 Layout { Toolbar List { Layout { Button TextView TextView } } }
+1 698 20 Layout { Toolbar Layout { TextView Layout { TextView EditText EditText Button } Layout { TextView Button } } }
+1 362 25 Layout { Layout { Button TextView Button } Layout { TextView List { Layout { ImageView Layout { TextView TextView } } } } }
+1 677 45 Layout { ImageView TextView TextView Layout { Layout { Button TextView TextView } Layout { Button Layout { TextView TextView } TextView } Layout { Button Layout { TextView TextView } TextView } Layout { Button Layout { TextView TextView } TextView } } }
+1 227 39 Layout { Layout { Layout { Button Button } TextView } List { Layout { TextView Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } } TextView TextView TextView } } } }
+1 56 12 Layout { Toolbar Layout { ImageView List { TextView } } }
+1 948 64 Layout { Toolbar Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { Layout { TextView TextView } Button } TextView TextView Layout { TextView Button Button } Layout { TextView TextView Button } Layout { TextView Layout { Button TextView } Button } Layout { TextView TextView Button } Layout { TextView TextView Button } TextView } }
+1 335 30 Layout { Toolbar Layout { TextView List { Layout { Layout { Button Layout { TextView TextView } Button } TextView Layout { Button Button } } } } }
+1 765 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 270 12 Layout { Button Layout { Button Button Button Button TextView } }
+1 620 40 Layout { Layout { Button Button Button } List { Layout { Button Layout { TextView TextView } Button } } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } }
+1 509 5 Layout { ImageView TextView }
+1 159 27 Layout { Layout { TextView Layout { TextView Button } } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView Button } }
+1 289 60 Layout { Toolbar Layout { Layout { TextView Layout { TextView TextView Button } TextView Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } } Button Layout { CheckBox Layout { TextView EditText TextView EditText } } } }
+1 773 29 Layout { Layout { ImageView TextView ImageView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } }
+1 323 30 Layout { Layout { Button Layout { TextView TextView } } Layout { Layout { TextView Layout { Button TextView } TextView } Layout { Button Button } } }
+1 636 10 Layout { Toolbar Layout { TextView Button TextView } }
+1 266 8 List { Layout { TextView TextView } }
+1 17 5 Layout { Button Button }
+1 909 14 Layout { Toolbar TextView Layout { ImageView Layout { TextView TextView } } }
+1 374 33 Layout { Layout { Layout { Button Layout { TextView Button } } Layout { TextView TextView TextView } } List { Layout { Button Layout { TextView TextView } } } }
+1 724 1 Toolbar
+1 231 12 Layout { Toolbar Layout { List { ImageView } Button } }
+1 661 14 Layout { Layout { Layout { Button EditText } Button Button } ImageView }
+1 548 22 Layout { Toolbar Layout { TextView Layout { EditText TextView } TextView EditText Layout { TextView Button TextView Button } } }
+1 118 27 Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } ImageView }
+1 40 13 Layout { Layout { ImageView TextView TextView Switch TextView Button } Button }
+1 180 53 Layout { Layout { Layout { Layout { Button TextView } Layout { TextView Button } } Layout { TextView TextView TextView TextView } } Layout { Layout { Layout { EditText TextView } EditText TextView Layout { EditText TextView Button Button } CheckBox TextView } Layout { Button Button } } }
+1 929 7 Layout { ImageView TextView Button TextView }
+1 883 9 Layout { Layout { TextView Button } ImageView }
+1 37 23 Layout { ImageView Layout { Layout { Button TextView } Layout { Button TextView } } Layout { TextView TextView } TextView }
+1 495 22 Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button Button } }
+1 616 5 Layout { TextView ImageView }
+1 246 31 Layout { Toolbar Layout { Layout { List { Layout { Button ImageView Layout { Button Button Button } } } Layout { TextView TextView TextView } } Button } }
+1 753 29 Layout { Layout { ImageView Layout { ImageView EditText EditText Layout { TextView Button } Button } } Layout { TextView Layout { TextView TextView TextView } } }
+1 303 17 Layout { Toolbar Layout { TextView EditText Layout { TextView RadioButton RadioButton } EditText Button } }
+1 587 127 Layout { Layout { TextView Button Button Button Button Button } Layout { Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } Layout { TextView TextView TextView } } Layout { Button Button Button Button Button } Layout { Button Button Button Button Button } }
+1 568 21 Layout { Layout { ImageView TextView } Layout { Layout { ImageView Layout { TextView TextView } } TextView } }
+1 138 12 Layout { Toolbar Layout { TextView TextView TextView TextView TextView } }
+1 991 21 Layout { Toolbar Layout { Layout { ImageView EditText Button } List { Layout { TextView TextView } } } }
+1 60 5 Layout { Toolbar Button }
+1 211 29 Layout { Toolbar Layout { TextView Layout { Layout { TextView Button } TextView } Layout { TextView TextView TextView } ImageView Layout { Button TextView } } }
+1 641 35 Layout { Toolbar Layout { Layout { Button TextView TextView } Layout { Button TextView Layout { TextView TextView TextView } } Layout { Button TextView Layout { TextView TextView TextView } } } }
+1 354 43 Layout { Toolbar Layout { EditText Layout { Layout { TextView TextView TextView } List { Layout { Layout { TextView TextView } Layout { Layout { TextView TextView Layout { Button Button Button } } TextView } } } } } }
+1 704 30 Layout { Toolbar Layout { List { TextView } Layout { Layout { ImageView TextView } TextView Layout { Button Layout { Button Button Button } } } } }
+1 591 22 Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button Button } }
+1 968 16 Layout { Toolbar List { Layout { TextView Layout { TextView TextView } } } }
+1 99 55 Layout { Layout { Toolbar Layout { Layout { TextView TextView TextView } List { Layout { Layout { TextView Layout { Button TextView } } Layout { TextView TextView Layout { TextView TextView } TextView TextView TextView } } } } } Layout { Button Layout { Button TextView } Button Button } }
+1 76 12 Layout { Layout { ImageView CheckBox TextView } Button TextView TextView }
+1 987 18 Layout { Toolbar Layout { Layout { ImageView EditText Button } Layout { TextView TextView } } }
+1 657 10 Layout { Layout { Button EditText } Button Button }
+1 207 22 Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button Button } }
+1 712 12 Layout { Layout { Button TextView } List { TextView } }
+1 342 9 Layout { Toolbar Layout { TextView TextView } }
+1 895 20 Layout { Layout { Button Layout { ImageView ImageView } } List { Layout { Button TextView } } }
+1 196 36 Layout { Toolbar Layout { Layout { Layout { EditText EditText EditText TextView Layout { TextView Switch TextView } } Button } Layout { Layout { TextView Button } List { TextView } } } }
+1 529 5 Layout { Toolbar TextView }
+1 483 75 Layout { Layout { TextView Layout { TextView TextView } } Layout { Layout { Button Button Button } Layout { Layout { TextView TextView } Layout { Layout { ImageView TextView } Layout { ImageView TextView } } } } ImageView Layout { Layout { Button TextView } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Button } } }
+1 179 36 Layout { Layout { Layout { Layout { Button TextView } Layout { TextView Button } } Layout { TextView TextView TextView TextView } } Layout { Layout { TextView TextView Button } TextView } }
+1 21 48 Layout { Layout { Layout { Button TextView } TextView } Layout { Layout { ImageView TextView } Layout { Layout { TextView TextView } Layout { Button Button Button } } Layout { TextView TextView } Layout { TextView TextView TextView TextView TextView TextView } } }
+1 250 22 Layout { Layout { ImageView Layout { ImageView Layout { TextView TextView } } Layout { TextView TextView } } Button }
+1 600 24 Layout { ImageView List { Layout { Layout { Button Button Button Button Button } Layout { TextView Button TextView } } } }
+1 315 11 Layout { Toolbar Layout { ImageView TextView TextView Button } }
+1 745 50 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView } } Layout { TextView Layout { Layout { Layout { ImageView TextView TextView } Layout { ImageView TextView TextView } } Layout { Layout { ImageView TextView } Layout { ImageView TextView } } } Button } }
+1 552 23 Layout { Toolbar Layout { TextView Layout { EditText TextView } TextView EditText Layout { TextView EditText TextView TextView Button } } }
+1 102 10 Layout { Layout { Button EditText } Button Button }
+1 801 9 Layout { Layout { Button Button } TextView }
+1 944 20 Layout { Toolbar TextView Layout { Layout { ImageView TextView Layout { TextView TextView TextView } } Button } }
+1 417 8 List { Layout { ImageView TextView } }
+1 694 18 Layout { Layout { ImageView TextView ImageView } Layout { TextView Layout { Button Button } } }
+1 381 14 Layout { Layout { ImageView Button Button } Layout { TextView TextView } }
+1 856 45 Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Button } Layout { Layout { Button EditText Button } List { Layout { ImageView TextView Button } } } }
+1 155 0 
+1 505 19 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { ImageView TextView TextView } } }
+1 440 1 Button
+1 913 24 Layout { Toolbar Layout { Button List { Layout { Layout { Button Layout { TextView TextView } } Button } } } }
+1 293 17 Layout { Toolbar Layout { TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView } }
+1 769 17 Layout { Layout { TextView TextView EditText Layout { TextView TextView TextView } } TextView TextView }
+1 339 14 Layout { Toolbar Layout { Layout { Button Button } EditText EditText } }
+1 786 20 Layout { Layout { Button TextView } Layout { TextView TextView Layout { TextView TextView } TextView Button } }
+1 513 1 TextView
+1 143 67 Layout { Toolbar Layout { Layout { Layout { TextView TextView } Layout { TextView Layout { ImageView TextView } } Layout { TextView TextView } } Layout { TextView TextView Layout { Layout { RadioButton RadioButton RadioButton RadioButton } List { Layout { Button TextView TextView TextView Button Layout { Layout { TextView TextView TextView } TextView } TextView Button } } } } } }
+1 840 22 Layout { Toolbar Layout { TextView Layout { TextView TextView TextView Layout { TextView TextView TextView } TextView } } Button }
+1 905 1 TextView
+1 456 5 Layout { TextView TextView }
+1 285 15 Layout { Layout { ImageView TextView TextView Layout { CheckBox TextView } } Button }
+1 790 14 Layout { Button Layout { Layout { ImageView TextView TextView } Button } }
+1 817 0 
+1 114 12 Layout { TextView List { Layout { TextView CheckBox } } }
+1 544 16 Layout { Toolbar Layout { EditText List { Layout { TextView TextView } } } }
+1 401 95 Layout { Layout { Layout { Layout { Button Button } Layout { TextView TextView } } Layout { TextView TextView } } Layout { ImageView Layout { Layout { TextView Layout { ImageView Layout { TextView Layout { TextView TextView } } } Layout { Button Button Button Button Button Button Button Button Button Button Button Button Button Button Button Button Button } TextView } Layout { TextView Layout { Button Layout { TextView Layout { Layout { Button TextView } Button } } } } Layout { TextView TextView } } } }
+1 952 31 Layout { Toolbar Layout { TextView Layout { Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } } } }
+1 728 1 Toolbar
+1 682 8 Layout { Toolbar List { TextView } }
+1 378 54 Layout { Layout { Layout { Button Layout { TextView Button } } Layout { TextView TextView TextView } } Layout { Layout { TextView Layout { Layout { ImageView ImageView ImageView } TextView } } Layout { TextView List { Layout { Button Layout { TextView TextView } } } } } }
+1 397 19 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } List { TextView } }
+1 47 19 Layout { Layout { TextView TextView } Button Layout { Button Button } Layout { TextView TextView } }
+1 959 27 Layout { Button Layout { TextView TextView Layout { TextView TextView TextView TextView TextView TextView } Layout { TextView TextView } List { TextView } } }
+1 689 0 
+1 373 26 Layout { Layout { Layout { Layout { Button Button } Layout { TextView Button } } Layout { TextView TextView TextView } } TextView }
+1 723 33 Layout { Toolbar List { Layout { Layout { TextView Button } Layout { TextView TextView TextView TextView TextView TextView } Layout { TextView TextView TextView TextView TextView TextView } } } }
+1 236 7 Layout { TextView TextView TextView Button }
+1 666 32 Layout { Toolbar Layout { Layout { ImageView Button } Layout { TextView Button } Layout { TextView Button } Layout { Layout { TextView Button } TextView } TextView } }
+1 148 8 Layout { Toolbar List { TextView } }
+1 518 83 Layout { Layout { Toolbar Layout { TextView TextView TextView } } Layout { Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { Layout { TextView Button } Layout { Layout { Layout { Layout { TextView TextView } TextView } Layout { TextView TextView CheckBox } Layout { TextView TextView } Layout { TextView TextView CheckBox } } EditText } } } Layout { TextView Button } } }
+1 10 49 Layout { Layout { Layout { Toolbar Layout { TextView TextView TextView } } List { Layout { ImageView Layout { Layout { TextView TextView } Layout { TextView Layout { Layout { TextView TextView } Layout { Button TextView } } } } } } } Button }
+1 774 15 Layout { Toolbar Layout { EditText Layout { EditText TextView } Button TextView } }
+1 324 9 Layout { EditText Layout { Button Button } }
+1 631 9 Layout { Toolbar Layout { TextView TextView } }
+1 261 21 Layout { Toolbar Layout { Layout { TextView TextView TextView } List { Layout { ImageView TextView } } } }
+1 918 14 Layout { Toolbar Layout { Layout { ImageView TextView } Button TextView } }
+1 332 19 Layout { ImageView TextView Layout { Layout { Button TextView } TextView Layout { TextView TextView } } }
+1 298 60 Layout { Toolbar Layout { Layout { TextView Layout { TextView TextView Button } Layout { TextView TextView Button } TextView Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } } Button Layout { CheckBox Layout { TextView EditText TextView EditText } } } }
+1 762 20 Layout { Layout { Layout { Button Button Button Button Button } TextView } Layout { TextView Button } }
+1 277 29 Layout { Layout { Button Layout { TextView ImageView } } ImageView TextView Layout { Button Button } Layout { Button Button } Layout { Button Button } }
+1 627 35 Layout { Button Layout { Layout { ImageView TextView TextView } Layout { Layout { Layout { TextView Layout { Button TextView } } Layout { EditText EditText EditText } } TextView } } }
+1 109 10 Layout { Layout { Button EditText } Button Button }
+1 559 18 Layout { Toolbar Layout { Button TextView Button } List { Layout { ImageView TextView } } }
+1 51 5 Layout { Toolbar Button }
+1 735 22 Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button Button } }
+1 365 13 Layout { Toolbar Layout { ImageView TextView TextView TextView Button Button } }
+1 670 0 
+1 220 0 
+1 934 19 Layout { Toolbar TextView Layout { ImageView Layout { TextView TextView Layout { TextView TextView } } } }
+1 467 9 Layout { Button Layout { Button Button } }
+1 488 67 Layout { Layout { TextView Layout { TextView TextView } } Layout { Layout { Button Button Button Button } Button Layout { Layout { TextView TextView } TextView TextView Button } } Layout { Layout { Button TextView } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } TextView } Button } }
+1 172 18 Layout { Toolbar Layout { Layout { Button Button Button } Layout { Button TextView } } }
+1 522 62 Layout { Layout { Toolbar Layout { TextView TextView TextView } } Layout { Layout { List { Layout { Button Layout { TextView EditText } } } Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { TextView Button } } } Layout { TextView Button } } }
+1 871 9 Layout { ImageView Layout { TextView TextView } }
+1 430 21 Layout { Layout { Button TextView } List { Layout { Button Layout { TextView TextView } TextView } } }
+1 963 9 Layout { Button Layout { ImageView TextView } }
+1 92 21 Layout { Button Layout { Button Button } Layout { Button EditText Button Button } Button List { TextView } }
+1 826 0 
+1 575 14 List { Layout { ImageView Layout { TextView TextView TextView Button } } }
+1 125 24 Layout { Toolbar Layout { TextView Layout { TextView Layout { ImageView TextView } Layout { TextView EditText } TextView } Button } }
+1 349 24 Layout { ImageView Layout { EditText EditText Layout { Button Layout { TextView CheckBox } } Button } Layout { Button TextView } }
+1 719 50 Layout { Toolbar Layout { Layout { TextView Button } Layout { Layout { ImageView Layout { TextView TextView } } Layout { Layout { ImageView TextView TextView TextView TextView TextView TextView TextView ImageView TextView } Layout { TextView TextView } Layout { TextView ImageView } } } } }
+1 84 35 Layout { Toolbar Layout { Layout { TextView TextView TextView } List { Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView TextView } } } } }
+1 0 51 Layout { Toolbar Layout { TextView Layout { Layout { Layout { TextView TextView } Switch } Layout { Layout { TextView TextView } Switch } Layout { Layout { TextView TextView } Switch } Layout { Layout { TextView TextView } Switch } } TextView TextView Button Button } }
+1 975 38 Layout { Layout { Layout { Button Button } Layout { TextView TextView } } Layout { TextView ImageView TextView TextView TextView TextView TextView Button TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView } }
+1 426 20 Layout { TextView Layout { Layout { CheckBox CheckBox CheckBox CheckBox CheckBox } Layout { Button Button } } }
+1 133 19 Layout { Toolbar Layout { TextView Layout { TextView TextView TextView Layout { TextView TextView } } } }
+1 563 34 Layout { List { Layout { ImageView TextView } } Layout { Layout { Toolbar Button Layout { Button TextView } } List { Layout { Button ImageView Button } } Button } }
+1 830 36 Layout { Toolbar List { Layout { Layout { Layout { TextView TextView TextView } Layout { TextView TextView TextView } } Layout { Layout { TextView TextView TextView } Button } TextView } } }
+1 471 13 Layout { Toolbar List { Layout { Button TextView Button } } }
+1 888 1 EditText
+1 922 24 Layout { Toolbar TextView Layout { Layout { Layout { ImageView ImageView } TextView Layout { TextView TextView TextView } } Button } }
+1 867 21 Layout { ImageView Layout { Button Layout { EditText EditText } Button TextView Layout { CheckBox TextView } TextView } }
+1 534 21 Layout { Layout { ImageView Button ImageView } ImageView Layout { Layout { TextView TextView } TextView Button } TextView }
+1 164 14 Layout { Toolbar Layout { Layout { Button EditText Button } EditText } }
+1 308 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 758 26 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView TextView } } Layout { Layout { ImageView TextView TextView } Button } }
+1 685 9 Layout { Layout { Button TextView } TextView }
+1 390 4 List { TextView }
+1 113 35 Layout { Layout { ImageView TextView Button Button Button Button Button Button } Layout { TextView List { Layout { Button TextView } } Layout { Button Button Button Button EditText Button } } }
+1 543 31 Layout { Layout { Button TextView Button Button } List { Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } }
+1 810 38 Layout { Layout { Button Button TextView } Button Layout { List { Layout { Button TextView } } TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView TextView } } }
+1 955 4 List { TextView }
+1 406 66 Layout { Layout { Layout { Button TextView Layout { TextView Button } } Layout { Button Button Button } } Layout { Layout { TextView Layout { Button Button } } List { Layout { ImageView Layout { TextView Layout { Layout { Layout { TextView TextView } TextView } Layout { Layout { TextView TextView } TextView } } } } } } }
+1 328 34 Layout { Toolbar Layout { Layout { TextView TextView } List { Layout { Layout { Button Layout { TextView TextView } Button } TextView Layout { Button Button } } } } }
+1 282 0 
+1 778 12 Layout { Layout { Button TextView } List { TextView } }
+1 797 9 Layout { Layout { Button TextView } TextView }
+1 847 83 Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Button } Layout { Layout { Layout { TextView Button } TextView Layout { Layout { Button Layout { TextView TextView } } Layout { Button Layout { TextView TextView } } Layout { Button Layout { TextView TextView } } Layout { Button Layout { TextView TextView } } } } Layout { Button TextView } } }
+1 514 9 Layout { Toolbar Layout { TextView Button } }
+1 144 22 Layout { Toolbar Layout { Layout { TextView TextView List { Layout { ImageView TextView TextView } } } Button } }
+1 451 9 Layout { Layout { Button Button } TextView }
+1 902 10 Layout { TextView TextView Layout { Button Button } }
+1 294 12 Layout { Toolbar Layout { Button Button Button TextView Button } }
+1 781 18 Layout { Layout { Button TextView Button } Layout { EditText EditText EditText EditText EditText TextView } }
+1 152 19 Layout { Toolbar List { Layout { ImageView Layout { Button Button Button Button } TextView } } }
+1 502 31 Layout { Toolbar Layout { Layout { Layout { TextView TextView Layout { Button TextView } } Layout { TextView TextView TextView TextView } } List { Button } } }
+1 851 9 Layout { Toolbar Layout { ImageView TextView } }
+1 914 21 Layout { Toolbar TextView Layout { Layout { ImageView ImageView } Layout { TextView TextView TextView TextView TextView } } }
+1 447 17 Layout { Layout { ImageView TextView } Layout { Layout { Button Button } TextView } }
+1 693 8 Layout { Button Button TextView TextView Switch }
+1 369 15 Layout { Toolbar Layout { TextView Layout { EditText EditText } Button Button } }
+1 739 26 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView } } Layout { TextView List { Layout { ImageView TextView } } } }
+1 386 29 Layout { Layout { ImageView Button Button } Layout { Button Button Button Button Button Button Button } Layout { TextView TextView Layout { Button Button } } }
+1 806 11 Layout { Layout { Button Button TextView } Button TextView }
+1 555 15 Layout { Layout { ImageView TextView } TextView TextView Layout { Button Button } }
+1 105 36 Layout { Layout { Layout { Layout { Button Button } TextView } Button } List { Layout { Layout { ImageView Layout { TextView TextView } } Layout { Button Button } } } }
+1 410 47 Layout { Toolbar Layout { Layout { TextView Layout { ImageView Layout { List { Layout { Button TextView } } TextView Layout { Button Button Button } } } } List { Layout { TextView TextView TextView } } } Layout { Button Button } }
+1 943 38 Layout { Layout { Button Layout { TextView TextView } } Layout { Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } TextView } Layout { Button Button } } }
+1 257 22 Layout { Toolbar List { Layout { Layout { TextView TextView TextView TextView } Layout { TextView Button } } } }
+1 607 18 Layout { Layout { Toolbar ImageView Layout { TextView TextView TextView } } List { ImageView } }
+1 312 20 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { ImageView TextView TextView Button } } }
+1 742 15 Layout { ImageView Layout { Button Button Layout { Button Button } } Button }
+1 191 21 Layout { Layout { TextView TextView Layout { TextView TextView } Layout { TextView TextView } TextView } ImageView ImageView }
+1 892 5 Layout { ImageView Button }
+1 938 25 Layout { Toolbar Layout { Button List { Layout { TextView Layout { Button Button Layout { Button Button } } } } } }
+1 26 42 Layout { Layout { Layout { Layout { ImageView ImageView ImageView } Layout { ImageView ImageView ImageView } Layout { ImageView ImageView ImageView } Layout { ImageView ImageView ImageView } } ImageView } Layout { Button Button Button Button Button } }
+1 484 81 Layout { Layout { TextView Layout { TextView TextView } } Layout { Layout { Button Button Button Button } Button Layout { Layout { TextView Button } Layout { TextView TextView } TextView TextView Button } } Layout { Layout { Button TextView } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Button } }
+1 650 12 Layout { Toolbar Layout { ImageView List { TextView } } }
+1 200 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 715 47 Layout { TextView Layout { Layout { TextView EditText } Layout { TextView EditText } Layout { TextView EditText Layout { TextView TextView TextView TextView } } Layout { TextView EditText } Layout { TextView TextView TextView EditText } Layout { TextView EditText TextView } } }
+1 345 4 List { TextView }
+1 596 9 Layout { Layout { Button TextView } TextView }
+1 129 22 Layout { Toolbar Layout { Layout { ImageView Layout { EditText Button } } Layout { Button ImageView Button } } }
+1 579 31 Layout { Layout { Toolbar Layout { Button Button Button Button } } List { Layout { ImageView Layout { Button TextView TextView TextView TextView TextView Button } } } }
+1 980 30 Layout { Layout { Button Layout { TextView TextView } } Layout { Layout { TextView Layout { Button TextView } TextView } Layout { Button Button } } }
+1 71 35 Layout { Layout { Toolbar Layout { Layout { ImageView Layout { TextView TextView } Button } Button } } Layout { TextView Layout { TextView TextView TextView TextView TextView TextView TextView } } }
+1 216 8 Layout { ImageView EditText EditText Button Button }
+1 646 32 Layout { Toolbar Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } TextView } }
+1 353 20 Layout { Toolbar Layout { List { Layout { ImageView TextView } } Layout { Button Button } } }
+1 703 9 Layout { Toolbar Layout { EditText EditText } }
+1 580 17 Layout { Toolbar Layout { Layout { ImageView Button } Layout { Button TextView } } }
+1 979 9 Layout { Layout { Button Button } TextView }
+1 88 19 Layout { Toolbar Layout { Layout { ImageView TextView TextView } Layout { TextView ImageView } Button } }
+1 67 16 Layout { Toolbar List { Layout { Layout { TextView TextView } CheckBox } } }
+1 996 0 
+1 611 23 Layout { Toolbar Layout { Layout { Layout { Button TextView TextView TextView } Button } Layout { EditText Button } } }
+1 241 35 Layout { Toolbar Layout { Layout { ImageView Layout { Button TextView } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } Button } }
+1 754 20 Layout { Toolbar Layout { Layout { EditText Button Button } ImageView Button Layout { Button Button } } }
+1 304 21 Layout { Toolbar Layout { Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView Button } } }
+1 884 21 Layout { Layout { Button TextView } Layout { ImageView Layout { Button ImageView Button } ImageView CheckBox Button } }
+1 187 58 Layout { Layout { Layout { Layout { Button TextView } Layout { TextView Button } } Layout { TextView TextView TextView TextView } } Layout { Layout { Layout { TextView TextView TextView } Layout { TextView TextView TextView } } Layout { Layout { TextView TextView } Layout { TextView TextView } } Button } }
+1 492 75 Layout { Layout { TextView Layout { TextView TextView } } Layout { Layout { Button Button Button } Layout { Layout { Button TextView } Layout { Layout { TextView TextView } ImageView } } } Layout { Layout { Button TextView } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Button } }
+1 168 69 Layout { Toolbar Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } Button Layout { Layout { TextView TextView } Layout { Layout { Button Layout { TextView TextView TextView } Button } Layout { Button Layout { TextView TextView TextView } Button } } } Layout { Layout { TextView TextView } TextView } } }
+1 538 32 Layout { Layout { Button Button } Layout { ImageView Button ImageView } Layout { Button Button Button } ImageView Layout { Layout { TextView TextView } TextView Button } TextView }
+1 30 13 Layout { Layout { TextView TextView } List { ImageView } TextView }
+1 885 6 Layout { TextView Button Button }
+1 186 17 Layout { Layout { ImageView TextView ImageView } Layout { List { CheckBox } Button } }
+1 493 78 Layout { Toolbar Layout { Layout { Layout { TextView TextView TextView } TextView Layout { Layout { TextView TextView } CheckBox } Layout { Layout { TextView TextView } CheckBox } Layout { TextView CheckBox } TextView Layout { Layout { TextView TextView } CheckBox } Layout { TextView CheckBox } } Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } }
+1 169 20 Layout { Toolbar Layout { Layout { ImageView EditText } List { Layout { CheckBox TextView } } } }
+1 539 16 Layout { Layout { ImageView Button ImageView } ImageView Layout { ImageView TextView Button } }
+1 31 17 Layout { Layout { Layout { TextView TextView } List { ImageView } TextView } TextView }
+1 610 15 Layout { ImageView Layout { Button TextView EditText EditText Button Button Button } TextView }
+1 240 0 
+1 755 17 Layout { Toolbar Layout { Layout { EditText Button Button } List { TextView } } }
+1 305 11 Layout { Toolbar Layout { ImageView TextView TextView Button } }
+1 581 17 Layout { Layout { ImageView Layout { TextView TextView } } Layout { ImageView ImageView } }
+1 89 43 Layout { Toolbar Layout { Layout { EditText EditText Layout { EditText EditText } Layout { ImageView TextView } EditText TextView Layout { Button Layout { TextView TextView } } Layout { Button Layout { TextView TextView } } } Button } }
+1 978 9 Layout { Layout { Button TextView } TextView }
+1 997 41 Layout { Layout { Layout { ImageView ImageView } ImageView Layout { ImageView ImageView } } Layout { ImageView ImageView ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } } } }
+1 66 5 Layout { Toolbar Button }
+1 217 10 Layout { TextView Layout { TextView EditText } Button }
+1 647 1 Toolbar
+1 352 37 Layout { Toolbar Layout { Layout { TextView TextView } Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } Layout { TextView TextView } EditText Button } }
+1 702 25 Layout { Toolbar List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 597 0 
+1 128 26 Layout { Toolbar Layout { Layout { Layout { TextView Button } Layout { TextView Button } Layout { TextView Button } } Button } }
+1 578 14 List { Layout { ImageView Layout { TextView TextView TextView Button } } }
+1 70 74 Layout { Layout { Toolbar Layout { Layout { TextView TextView } Layout { ImageView ImageView ImageView ImageView Button } Layout { TextView Layout { Layout { Layout { TextView TextView } TextView } Layout { TextView TextView } } } } } Layout { Layout { EditText EditText Layout { EditText EditText } EditText TextView Layout { Button TextView } Layout { Button Layout { TextView TextView } } } Button } }
+1 981 17 Layout { TextView List { Layout { Button TextView } } Layout { Button Button } }
+1 651 9 Layout { TextView Layout { Button TextView } }
+1 201 12 Layout { Toolbar Layout { TextView TextView TextView TextView Button } }
+1 714 38 Layout { TextView Layout { Layout { TextView EditText } Layout { TextView EditText } Layout { TextView TextView TextView EditText } Layout { TextView EditText TextView } Button TextView Layout { TextView TextView } TextView } }
+1 344 12 Layout { Toolbar List { Layout { TextView TextView } } }
+1 190 0 
+1 893 137 Layout { Layout { Button TextView Button } Layout { Layout { Layout { Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } } Layout { Layout { ImageView Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } Layout { ImageView Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } Layout { ImageView Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } } Layout { Button Button Button Button } } }
+1 939 25 Layout { Toolbar Layout { Button List { Layout { TextView Layout { Button Button Layout { Button Button } } } } } }
+1 27 37 Layout { Layout { Layout { Layout { Button TextView Button } Layout { ImageView ImageView ImageView } } Layout { TextView List { TextView } } } Layout { Button Button Button Button Button } }
+1 485 81 Layout { Layout { TextView Layout { TextView TextView } } Layout { Layout { Button Button Button Button } Button Layout { Layout { TextView Button } Layout { TextView TextView } TextView TextView Button } } Layout { Layout { Button TextView } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Button } }
+1 256 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 606 8 Layout { ImageView List { TextView } }
+1 313 20 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { ImageView TextView TextView Button } } }
+1 743 12 Layout { Toolbar List { Layout { TextView TextView } } }
+1 807 0 
+1 554 37 Layout { Layout { ImageView ImageView ImageView ImageView ImageView ImageView ImageView ImageView } Layout { Layout { EditText Layout { Button Button Button Layout { Button Button } } } Layout { Button Button } } }
+1 104 13 Layout { Layout { Layout { Button Button } TextView } Button }
+1 411 0 
+1 942 16 Layout { Toolbar Layout { TextView List { Layout { Button TextView } } } }
+1 692 8 Layout { Button Button TextView TextView Switch }
+1 368 12 Layout { Toolbar List { Layout { Button TextView } } }
+1 738 72 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } Layout { TextView Layout { Layout { Button TextView TextView } Layout { Button TextView TextView } Layout { Button TextView TextView } Layout { TextView Button } } TextView Layout { Layout { Button TextView TextView } Layout { Button TextView TextView } Layout { Button TextView TextView } Layout { TextView Button } } } }
+1 387 35 Layout { Layout { Button TextView Layout { TextView TextView Button } } Layout { Layout { TextView TextView TextView } List { Layout { TextView TextView TextView TextView TextView Button } } } }
+1 153 38 Layout { Toolbar Layout { Layout { Layout { CheckBox CheckBox } Layout { CheckBox Layout { ImageView TextView } } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } } List { TextView } } }
+1 503 8 Layout { TextView List { TextView } }
+1 850 45 Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Button } Layout { Layout { Button EditText Button } List { Layout { ImageView TextView Button } } } }
+1 915 30 Layout { Toolbar Layout { ImageView TextView } Layout { Toolbar Layout { Button TextView } Layout { Button TextView } Layout { EditText EditText } Button TextView } }
+1 446 32 Layout { Toolbar Layout { Layout { Button TextView TextView TextView TextView TextView } Layout { List { Layout { TextView Layout { TextView TextView } } } Button } } }
+1 295 60 Layout { Toolbar Layout { Layout { TextView Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } TextView Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } } Button Layout { CheckBox Layout { TextView EditText TextView EditText } } } }
+1 780 13 Layout { Layout { Button TextView TextView } List { TextView } }
+1 846 12 Layout { Toolbar Layout { TextView List { TextView } } }
+1 515 18 Layout { Layout { Toolbar Layout { TextView TextView TextView } } Layout { TextView Button } }
+1 145 27 Layout { Toolbar Layout { Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } } }
+1 450 13 Layout { Toolbar Layout { Layout { ImageView TextView } Button } }
+1 903 40 Layout { Layout { Button Layout { Button Button Button } } Layout { Layout { Button Button } Layout { Layout { TextView TextView } TextView } } Layout { TextView TextView TextView TextView TextView TextView Button } }
+1 329 56 Layout { Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { Layout { Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } } Layout { Button Button Button } } } } Layout { Button Layout { TextView TextView } Button } }
+1 283 16 Layout { Layout { Button Button Button Button } TextView Layout { Button Button } }
+1 779 14 Layout { Layout { TextView TextView } Button Layout { TextView TextView } }
+1 796 25 Layout { Layout { Toolbar Layout { TextView TextView } } Layout { List { Layout { Button TextView TextView } } Button } }
+1 112 35 Layout { Layout { ImageView TextView Button Button Button Button Button Button } Layout { TextView List { Layout { Button TextView } } Layout { Button Button Button Button EditText Button } } }
+1 542 18 Layout { Layout { Button TextView Button Button } List { Layout { TextView TextView } } }
+1 811 31 Layout { Layout { Button Button TextView } Button Layout { Layout { TextView TextView TextView } List { Layout { Layout { TextView TextView } Button } } } }
+1 954 25 Layout { Toolbar Layout { Layout { Layout { TextView TextView ImageView Button } Layout { TextView TextView ImageView Button } } Button } }
+1 407 62 Layout { Layout { Layout { Layout { Button Button } Layout { TextView TextView } } Layout { TextView TextView } } Layout { Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } List { Layout { Button Layout { TextView Layout { TextView TextView } TextView } } } } }
+1 684 13 Layout { Layout { ImageView Layout { TextView TextView } } TextView }
+1 391 27 Layout { Layout { Button TextView Layout { TextView TextView Button } } Layout { Layout { TextView TextView TextView } List { TextView } } }
+1 309 12 Layout { Toolbar Layout { ImageView TextView TextView Button Button } }
+1 759 24 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView TextView } } List { Layout { TextView ImageView } } }
+1 470 4 List { TextView }
+1 889 4 List { CheckBox }
+1 923 14 Layout { Layout { ImageView TextView TextView } Layout { Button Button } }
+1 866 22 Layout { Toolbar Layout { List { Layout { ImageView Layout { TextView TextView TextView TextView } } } Button } }
+1 535 16 Layout { Layout { TextView List { TextView } } Layout { Button Button } }
+1 165 12 Layout { Toolbar Layout { TextView EditText EditText EditText Button } }
+1 974 20 Layout { TextView Layout { Layout { TextView TextView TextView TextView TextView TextView TextView TextView TextView } Button } }
+1 1 43 Layout { Toolbar Layout { Layout { Layout { ImageView TextView } Layout { Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } } TextView } Layout { Layout { EditText EditText } Button } } }
+1 85 15 Layout { Toolbar Layout { Layout { EditText EditText Button } EditText Button } }
+1 427 0 
+1 132 12 Layout { Toolbar List { Layout { TextView Switch } } }
+1 562 18 Layout { Layout { ImageView TextView } Layout { TextView TextView TextView EditText EditText TextView } TextView }
+1 831 43 Layout { Toolbar Layout { Layout { TextView TextView TextView TextView } Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } Layout { TextView Layout { TextView TextView } } } Button }
+1 348 16 Layout { Layout { TextView TextView EditText EditText Layout { Button Button } } Button }
+1 718 1 Toolbar
+1 431 6 Layout { Button Button Button }
+1 93 13 Layout { Layout { ImageView TextView Button Button } TextView TextView Button }
+1 962 11 Layout { ImageView Layout { TextView TextView TextView Button } }
+1 827 29 Layout { ImageView ImageView Layout { Layout { Button EditText } Layout { Button EditText } Layout { Button EditText } Layout { Button EditText } Button } }
+1 574 26 Layout { Layout { TextView TextView } List { Layout { Layout { TextView Button } TextView Layout { TextView TextView TextView } } } }
+1 124 19 Layout { TextView TextView TextView Layout { Layout { ImageView TextView } Layout { ImageView TextView } } }
+1 935 64 Layout { Toolbar Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { Layout { TextView TextView } Button } TextView TextView Layout { TextView Button Button } Layout { TextView TextView Button } Layout { TextView Layout { Button TextView } Button } Layout { TextView TextView Button } Layout { TextView TextView Button } TextView } }
+1 466 9 Layout { EditText Layout { Button Button } }
+1 489 55 Layout { Layout { TextView Layout { TextView TextView } } Button Layout { Layout { Button TextView } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Button } }
+1 173 28 Layout { Layout { Button Layout { TextView Layout { TextView TextView TextView TextView TextView TextView TextView TextView } } Button } Layout { Button Button } }
+1 523 15 Layout { TextView Layout { ImageView ImageView } Layout { Button Button Button } }
+1 870 21 Layout { ImageView Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } } }
+1 734 35 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } Layout { TextView Layout { TextView TextView } Layout { TextView TextView } TextView Layout { TextView TextView } } }
+1 364 13 Layout { Toolbar Layout { ImageView TextView TextView TextView Button Button } }
+1 671 33 Layout { Toolbar Layout { Layout { TextView ImageView } List { Layout { ImageView TextView TextView Layout { ImageView ImageView ImageView ImageView } Layout { Button TextView } } } } }
+1 221 22 Layout { Toolbar List { Layout { ImageView Layout { TextView TextView Layout { Button TextView Button } } } } }
+1 108 30 Layout { TextView Layout { Layout { ImageView TextView } Layout { ImageView TextView } } Layout { Layout { ImageView TextView } Layout { ImageView TextView } } }
+1 558 16 Layout { ImageView TextView Layout { Button Button Button } Layout { TextView TextView } }
+1 50 5 Layout { Toolbar ImageView }
+1 333 30 Layout { Toolbar Layout { Layout { TextView TextView } Layout { Layout { Button Layout { TextView TextView Layout { TextView TextView } } } TextView } } }
+1 299 64 Layout { Toolbar Layout { Layout { Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } TextView Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } } Layout { CheckBox Layout { TextView EditText TextView EditText } } } }
+1 763 0 
+1 276 29 Layout { ImageView Layout { Layout { CheckBox CheckBox CheckBox TextView } TextView Layout { TextView Layout { Button Layout { TextView TextView } } } Button } }
+1 626 33 Layout { Toolbar Layout { Layout { ImageView TextView TextView Layout { TextView TextView TextView TextView TextView TextView TextView } } Layout { TextView TextView } Layout { Button TextView } } }
+1 919 24 Layout { Toolbar TextView Layout { Layout { ImageView ImageView } Layout { TextView TextView Layout { TextView TextView } } Button } }
+1 775 12 Layout { TextView List { Layout { Button TextView } } }
+1 325 35 Layout { Toolbar Layout { List { Layout { Layout { Button Layout { TextView TextView } Button } TextView Layout { Layout { TextView TextView } Button Button } } } EditText } }
+1 630 15 Layout { Button ImageView Layout { TextView ImageView } Layout { Button TextView } }
+1 260 17 Layout { Toolbar List { Layout { ImageView Layout { TextView TextView TextView } } } }
+1 149 5 Layout { Toolbar TextView }
+1 519 19 Layout { Toolbar Layout { TextView Layout { ImageView EditText } Layout { ImageView EditText Button } } }
+1 11 12 Layout { Toolbar List { Layout { ImageView TextView } } }
+1 688 49 Layout { Layout { TextView Layout { ImageView ImageView ImageView } } Layout { Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } } Layout { Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } } }
+1 372 99 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView } } Layout { Layout { Layout { TextView TextView } Layout { ImageView TextView TextView Layout { TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView } TextView TextView TextView TextView TextView TextView TextView TextView } } Layout { Button TextView Button } } }
+1 722 33 Layout { Toolbar List { Layout { Layout { TextView Button } Layout { TextView TextView TextView TextView TextView TextView } Layout { TextView TextView TextView TextView TextView TextView } } } }
+1 237 36 Layout { Toolbar Layout { List { Layout { Layout { Button Layout { TextView TextView Button } } TextView Layout { Button Button Button } } } Layout { TextView TextView TextView } } }
+1 667 43 Layout { Toolbar Layout { ImageView Layout { TextView Button } Layout { TextView Button } Layout { TextView Layout { TextView Button } } Layout { TextView Layout { TextView TextView Button } Layout { TextView TextView Button } } } }
+1 46 1 Toolbar
+1 958 8 Layout { Toolbar List { TextView } }
+1 536 26 Layout { Layout { Button Button } Layout { ImageView Button ImageView } ImageView Layout { Layout { TextView TextView } TextView Button } TextView }
+1 166 50 Layout { Toolbar Layout { Layout { Layout { TextView TextView } TextView Layout { Layout { TextView TextView } Button } Layout { Layout { TextView TextView } Button } Layout { TextView Layout { Button TextView Button } } TextView } Layout { Button TextView } } }
+1 865 21 Layout { Toolbar Layout { List { Layout { Button Layout { TextView TextView TextView } } } Button } }
+1 920 28 Layout { Toolbar TextView Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView TextView } } } }
+1 189 65 Layout { Layout { TextView Layout { TextView EditText TextView } } Layout { Button TextView } Layout { Layout { TextView TextView } TextView Layout { TextView TextView TextView TextView Layout { TextView TextView TextView TextView TextView TextView } TextView Layout { TextView TextView TextView TextView TextView TextView } TextView Layout { EditText EditText } TextView Layout { EditText EditText } } } }
+1 473 9 Layout { Button Layout { Button Button } }
+1 648 0 
+1 218 28 Layout { Toolbar List { Layout { Layout { TextView Button } TextView ImageView Layout { TextView TextView Layout { Button TextView Button } } } } }
+1 832 32 Layout { Toolbar Layout { Layout { TextView TextView } List { Layout { ImageView Layout { TextView TextView TextView TextView } } } Layout { TextView TextView TextView } } }
+1 69 104 Layout { Toolbar Layout { Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button TextView } Layout { Button TextView } Layout { Button Layout { TextView TextView } } } }
+1 998 0 
+1 131 18 Layout { Toolbar Layout { TextView TextView List { Layout { ImageView TextView TextView } } } }
+1 561 22 Layout { Toolbar Layout { Button TextView Button } Layout { List { Layout { ImageView TextView } } Button } }
+1 424 64 Layout { TextView Layout { Layout { TextView EditText } Layout { TextView Button } Layout { TextView EditText } Layout { TextView Button } Button Button Layout { Button Button } Layout { Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView TextView TextView TextView } } Button Button Button } }
+1 977 26 Layout { Layout { Layout { Button TextView } Button } Layout { Layout { EditText EditText } ImageView Layout { Button Button } } }
+1 2 13 Layout { Layout { ImageView TextView } Layout { Button Button } }
+1 86 104 Layout { Toolbar Layout { Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button TextView } Layout { Button TextView } Layout { Button Layout { TextView TextView } } } }
+1 577 14 List { Layout { ImageView Layout { TextView TextView TextView Button } } }
+1 127 16 Layout { Layout { Button ImageView TextView TextView } TextView Layout { Button Button } }
+1 824 22 Layout { Layout { ImageView List { Layout { ImageView TextView } } } Layout { TextView TextView TextView TextView } }
+1 90 21 Layout { Button Layout { Button Button } Layout { Button EditText Button Button } List { TextView } Button }
+1 961 31 Layout { Button Layout { TextView TextView Layout { TextView TextView TextView TextView TextView TextView } Layout { TextView Layout { TextView TextView } } List { TextView } } }
+1 432 39 Layout { Layout { Layout { ImageView Layout { ImageView TextView } } Layout { Layout { Button TextView } Button } Layout { Layout { Button TextView } Layout { Button TextView } } ImageView } Button }
+1 598 20 Layout { Layout { Layout { TextView TextView } List { TextView } } Layout { Button Button } }
+1 609 23 Layout { ImageView List { Layout { Layout { Button Button Button Button Button } Layout { TextView TextView } } } }
+1 259 21 Layout { Toolbar Layout { Layout { TextView TextView TextView } List { Layout { ImageView TextView } } } }
+1 873 33 Layout { Toolbar Layout { Layout { Layout { Button TextView } Layout { Button TextView } } List { Layout { ImageView Layout { TextView TextView TextView } } } } }
+1 28 111 Layout { Layout { Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } List { Layout { TextView TextView } } } Layout { Layout { Layout { Button TextView TextView Button } Layout { Layout { Button Button Button TextView Button } TextView TextView } } Button } Layout { Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } TextView } TextView Layout { Layout { TextView Layout { TextView TextView } } Layout { Layout { TextView TextView } Layout { Button Button } } } } }
+1 170 41 Layout { Toolbar Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } Layout { ImageView TextView } Layout { Layout { TextView TextView } TextView TextView } } }
+1 520 83 Layout { Layout { Toolbar Layout { TextView TextView TextView } } Layout { Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { Layout { TextView Button } Layout { Layout { Layout { Layout { TextView TextView } TextView } Layout { TextView TextView CheckBox } Layout { TextView TextView } Layout { TextView TextView CheckBox } } EditText } } } Layout { TextView Button } } }
+1 465 4 List { TextView }
+1 936 10 Layout { Layout { TextView ImageView } TextView Button }
+1 388 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 672 10 Layout { Button TextView Layout { Button TextView } }
+1 222 14 Layout { ImageView TextView Layout { Layout { Button Button } TextView } }
+1 737 28 Layout { Toolbar Layout { Layout { Layout { ImageView TextView } TextView } Layout { ImageView TextView Button } Layout { ImageView TextView Button } } }
+1 367 20 Layout { Toolbar Layout { Layout { TextView TextView Layout { EditText EditText } Button Button } Button } }
+1 808 19 Layout { Layout { Button Button TextView } Layout { ImageView ImageView } Button List { Button } }
+1 53 27 Layout { Toolbar Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } }
+1 275 16 Layout { Layout { Button Button Button Button } TextView Layout { Button Button } }
+1 625 1 ImageView
+1 330 27 Layout { Toolbar Layout { Layout { Layout { Button Layout { TextView TextView } Button } TextView Layout { Button Button } } EditText } }
+1 760 24 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } Layout { Layout { ImageView TextView } Button } }
+1 449 22 Layout { Toolbar Layout { Layout { TextView TextView } Layout { TextView ImageView } } Layout { TextView Button } }
+1 633 18 Layout { Toolbar Layout { Layout { TextView Button TextView } Layout { TextView Button } } }
+1 799 7 Layout { TextView ImageView TextView Button }
+1 263 21 Layout { Toolbar Layout { Layout { TextView TextView TextView } List { Layout { Button TextView } } } }
+1 776 20 Layout { Layout { Button TextView } Layout { TextView TextView TextView Layout { TextView TextView } Button } }
+1 326 39 Layout { Toolbar Layout { TextView Layout { RadioButton RadioButton } TextView ImageView TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { Button TextView } TextView TextView TextView } }
+1 849 58 Layout { Toolbar Layout { TextView TextView Layout { Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } TextView } } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } } Button }
+1 12 14 Layout { Layout { Toolbar Layout { TextView TextView TextView } } TextView }
+1 234 27 Layout { Toolbar Layout { Layout { ImageView TextView TextView } ImageView Layout { ImageView TextView } } Layout { Button Button Button Button Button } }
+1 664 27 Layout { Toolbar Layout { Layout { TextView ImageView } List { Layout { ImageView Layout { Button Button Button Button Button } } } } }
+1 371 57 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView } } Layout { Layout { Layout { Layout { ImageView TextView TextView TextView TextView TextView TextView } Layout { Button TextView TextView TextView TextView TextView TextView TextView TextView } } Layout { TextView TextView TextView } } Layout { Button TextView Button } } }
+1 721 17 Layout { Layout { Layout { TextView TextView } Button } Layout { Button Button } }
+1 408 19 Layout { Layout { Button TextView } Layout { EditText ImageView ImageView Layout { Button Button } } }
+1 45 10 Layout { Layout { Button EditText } Button Button }
+1 869 22 Layout { Toolbar Layout { List { Layout { ImageView Layout { TextView TextView TextView TextView } } } Button } }
+1 32 17 Layout { Layout { Layout { TextView TextView } List { ImageView } TextView } TextView }
+1 490 73 Layout { Layout { TextView Layout { TextView TextView } } Layout { Layout { Button Button Button Button } Button Layout { TextView List { Layout { Layout { ImageView TextView TextView } Layout { ImageView TextView TextView } } } } } Layout { Layout { Button TextView } Layout { TextView Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Button } }
+1 185 12 Layout { Toolbar List { Layout { TextView TextView } } }
+1 886 19 Layout { Layout { Button TextView } Layout { ImageView ImageView Layout { EditText EditText ImageView } } }
+1 756 17 Layout { Toolbar Layout { Layout { TextView TextView } Layout { TextView TextView } } }
+1 306 30 Layout { Toolbar Layout { Layout { TextView TextView } Layout { Layout { Button Layout { TextView TextView Layout { TextView TextView } } } TextView } } }
+1 613 21 Layout { Layout { Layout { TextView TextView } Layout { Button Button } } Layout { Button Button } }
+1 243 32 Layout { Toolbar Layout { List { Layout { Layout { Button TextView TextView TextView } Layout { Button Button Button } } } Layout { TextView TextView TextView } } }
+1 994 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 65 9 Layout { Toolbar Layout { Button Button } }
+1 428 19 Layout { Layout { ImageView TextView } Layout { Button Button Button Button Button Button Button } Button }
+1 582 13 Layout { Toolbar Layout { Layout { ImageView Button } Button } }
+1 351 48 Layout { Toolbar Layout { Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } TextView } Layout { Layout { TextView TextView TextView } List { Layout { TextView TextView } } } } }
+1 701 23 Layout { Toolbar Layout { Layout { ImageView TextView } TextView Layout { Button Layout { Button Button Button } } } }
+1 214 4 List { CheckBox }
+1 644 35 Layout { Toolbar Layout { Layout { Button TextView TextView } Layout { Button TextView Layout { TextView TextView TextView } } Layout { Button TextView Layout { TextView TextView TextView } } } }
+1 828 8 Layout { TextView List { CheckBox } }
+1 73 0 
+1 982 0 
+1 594 0 
+1 717 35 Layout { Layout { TextView EditText } Layout { TextView EditText } Layout { TextView TextView TextView EditText } Layout { TextView EditText Switch TextView } Button TextView Layout { TextView TextView } TextView }
+1 347 7 Layout { ImageView TextView TextView TextView }
+1 652 8 Layout { Toolbar List { TextView } }
+1 202 19 Layout { Toolbar List { Layout { TextView Layout { ImageView ImageView ImageView ImageView } TextView } } }
+1 486 98 Layout { Layout { TextView Layout { TextView TextView } } Layout { Layout { Button Button Button } Layout { Layout { Layout { Layout { TextView TextView } Layout { TextView TextView } } Layout { Layout { ImageView TextView TextView } Layout { ImageView TextView TextView } } Layout { Layout { ImageView TextView TextView } Layout { TextView TextView } } } Button } } Layout { Layout { Button TextView } Layout { Layout { Button TextView } TextView Layout { Button TextView } Layout { Button TextView } } Button } }
+1 24 70 Layout { Layout { TextView Layout { Layout { TextView Button } Layout { TextView Button } Layout { TextView Button } TextView Layout { TextView TextView } Layout { TextView Button } Layout { TextView Button } Layout { TextView Button } Layout { TextView Button } Layout { TextView Button } Layout { TextView TextView } TextView } } Layout { Button Button Button Button Button } }
+1 890 16 Layout { Layout { Button TextView Button } Layout { Button Button Button Button } }
+1 193 11 Layout { Toolbar Layout { TextView Button Button Button } }
+1 469 24 Layout { Layout { TextView TextView Layout { Button TextView Button } Layout { Button TextView } } Layout { Button Button } }
+1 310 39 Layout { Toolbar Layout { Layout { TextView TextView TextView TextView } Layout { Layout { TextView Layout { TextView EditText } Layout { TextView TextView } Button } Layout { TextView TextView TextView Button } } } }
+1 740 108 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } Layout { Layout { ImageView Layout { TextView TextView TextView } } Layout { TextView Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } Layout { Layout { Button TextView } Layout { Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } } Layout { Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } } } } } } }
+1 255 8 Layout { Toolbar List { TextView } }
+1 605 21 Layout { Layout { Layout { TextView TextView } Layout { Button Button } } Layout { Button Button } }
+1 941 24 Layout { Toolbar Layout { Button List { Layout { Layout { Button Layout { TextView TextView } } Button } } } }
+1 412 17 Layout { List { Layout { ImageView TextView } } Layout { TextView TextView TextView } }
+1 557 0 
+1 107 1 Toolbar
+1 804 20 Layout { Layout { Button Button TextView } Layout { Layout { Button Button Button } Button } TextView }
+1 384 36 Layout { Layout { ImageView Button } Layout { Button Button Button Button Button Button Button } Layout { TextView Layout { EditText Layout { CheckBox TextView } } EditText Button TextView TextView TextView } }
+1 691 25 Layout { Layout { Layout { ImageView TextView } Layout { Button Button } } Layout { TextView Layout { Button TextView } } }
+1 445 52 Layout { ImageView Layout { Layout { Layout { Button TextView TextView TextView TextView TextView } TextView } Layout { TextView TextView } Layout { ImageView Layout { TextView TextView } } Layout { ImageView Layout { TextView TextView } } Layout { ImageView Layout { TextView TextView } } } }
+1 916 56 Layout { Toolbar Layout { Layout { TextView TextView Layout { Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } Layout { ImageView TextView } } } Button } }
+1 853 62 Layout { Toolbar Layout { TextView TextView Layout { Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } TextView } } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } } }
+1 150 40 Layout { Toolbar Layout { Layout { Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } } List { Layout { ImageView TextView TextView } } Button } }
+1 500 27 Layout { Toolbar Layout { Layout { Layout { Button TextView } Layout { Button TextView } } TextView Layout { ImageView TextView TextView } } }
+1 629 17 Layout { Toolbar List { Layout { Button Layout { TextView TextView } Button } } }
+1 783 23 Layout { Layout { Button TextView } Layout { Layout { TextView TextView } EditText EditText EditText EditText EditText EditText EditText } }
+1 279 5 Layout { Button Button }
+1 296 12 Layout { Toolbar Layout { TextView TextView TextView TextView TextView } }
+1 900 1 TextView
+1 453 4 List { CheckBox }
+1 516 59 Layout { Layout { Toolbar Layout { TextView TextView TextView } } Layout { Layout { Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { TextView Button } } } Button } }
+1 146 1 Toolbar
+1 845 12 Layout { Toolbar Layout { List { TextView } Button } }
+1 795 10 Layout { Layout { EditText EditText EditText } Button }
+1 280 16 Layout { Layout { Button Button Button Button } TextView Layout { Button Button } }
+1 404 66 Layout { Layout { Layout { Button TextView Layout { TextView Button } } Layout { Button Button Button } } Layout { Layout { TextView Layout { Button Button } } List { Layout { ImageView Layout { TextView Layout { Layout { Layout { TextView TextView } TextView } Layout { Layout { TextView TextView } TextView } } } } } } }
+1 957 51 Layout { Toolbar Layout { Layout { Layout { ImageView TextView } Layout { ImageView TextView } } Layout { Layout { ImageView TextView } Layout { ImageView TextView } } Layout { Layout { ImageView TextView } Layout { ImageView TextView } } Layout { ImageView TextView } } }
+1 812 14 Layout { ImageView Layout { Button Button } TextView EditText EditText Button Button }
+1 49 12 Layout { Toolbar Layout { ImageView List { TextView } } }
+1 111 9 Layout { Toolbar Layout { TextView TextView } }
+1 541 9 Layout { ImageView Layout { TextView TextView } }
+1 392 27 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } List { Layout { ImageView Layout { TextView Button } } } }
+1 668 19 Layout { Layout { ImageView ImageView } Layout { Button TextView } Layout { Button TextView } TextView }
+1 238 61 Layout { Toolbar Layout { Layout { List { Layout { Layout { TextView ImageView } Layout { Button TextView TextView TextView } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } } Layout { TextView TextView TextView } } Button } Layout { Button Button Button Button Button } }
+1 687 0 
+1 393 12 List { Layout { ImageView Layout { TextView Button } } }
+1 669 22 Layout { Toolbar Layout { TextView Layout { TextView TextView } TextView TextView TextView TextView TextView TextView TextView TextView TextView } }
+1 239 70 Layout { Toolbar Layout { Layout { List { Layout { Layout { Button Layout { TextView TextView } } Layout { TextView ImageView } Layout { Button TextView TextView TextView } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } } Layout { TextView TextView TextView } } Button } Layout { Button Button Button Button Button } }
+1 686 12 Layout { Toolbar Layout { List { Button } Button } }
+1 405 42 Layout { Layout { Layout { Button TextView Button } Layout { Button Button Button } } Layout { TextView Layout { ImageView ImageView ImageView } Layout { EditText Layout { EditText Button } } Layout { TextView Button } } }
+1 956 33 Layout { Toolbar Layout { List { Layout { Button TextView } } Layout { Layout { ImageView TextView } TextView Layout { TextView TextView TextView TextView Button } TextView } } }
+1 813 1 Button
+1 48 5 Layout { Toolbar ImageView }
+1 110 0 
+1 540 11 Layout { TextView Layout { TextView TextView TextView } Button }
+1 794 33 Layout { Layout { Toolbar Layout { TextView TextView } } Layout { Layout { TextView Button Button Button TextView TextView TextView TextView Layout { TextView TextView Button } } Button } }
+1 281 16 Layout { Layout { Button Layout { TextView ImageView } } List { TextView } }
+1 901 5 Layout { Button Button }
+1 452 18 Layout { Toolbar Layout { EditText Layout { ImageView Button } TextView TextView CheckBox TextView } Button }
+1 517 79 Layout { Layout { Toolbar Layout { TextView TextView TextView } } Layout { Layout { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { Layout { TextView Button } Layout { Layout { Layout { Layout { TextView TextView } TextView } Layout { TextView TextView CheckBox } Layout { TextView TextView } Layout { TextView TextView CheckBox } } EditText } } } Button } }
+1 147 30 Layout { Toolbar Layout { List { Layout { CheckBox TextView Button } } Layout { TextView TextView List { Layout { ImageView TextView TextView } } } } }
+1 844 38 Layout { Toolbar Layout { Layout { TextView Layout { TextView TextView } } Layout { TextView TextView } TextView Layout { TextView Layout { Button TextView TextView } Layout { Button TextView } TextView } } }
+1 628 0 
+1 782 16 Layout { Layout { Button TextView } List { Layout { TextView TextView } } }
+1 278 10 Layout { ImageView Layout { TextView TextView } Button }
+1 297 64 Layout { Toolbar Layout { Layout { Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } TextView Layout { TextView TextView Button } Layout { TextView TextView Button } } Layout { CheckBox Layout { TextView EditText TextView EditText } } } }
+1 444 29 Layout { Toolbar Layout { Layout { Button TextView TextView TextView TextView TextView } Layout { List { Layout { Button TextView TextView } } Button } } }
+1 917 22 Layout { Toolbar TextView Layout { Layout { ImageView Layout { TextView Layout { TextView TextView } } } Button } }
+1 852 16 Layout { Toolbar Layout { Layout { ImageView EditText } List { TextView } } }
+1 151 19 Layout { Toolbar Layout { TextView TextView List { Layout { ImageView TextView TextView TextView } } } }
+1 501 38 Layout { Toolbar Layout { Layout { Button TextView } Layout { ImageView TextView } Layout { TextView TextView } Layout { TextView TextView } TextView Layout { TextView Layout { Switch Switch Switch } } } }
+1 385 9 Layout { TextView List { CheckBox } Button }
+1 690 12 Layout { Toolbar Layout { Button Button TextView TextView Switch } }
+1 940 20 Layout { Toolbar TextView Layout { ImageView Layout { TextView TextView Layout { TextView TextView } } Button } }
+1 413 12 Layout { Toolbar Layout { EditText Button TextView Button TextView } }
+1 556 0 
+1 106 24 Layout { Layout { Layout { Button EditText } Button Button } Layout { CheckBox TextView TextView Layout { Button Button } } }
+1 805 38 Layout { Layout { Button Button TextView } Button Layout { List { Layout { Button TextView } } TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView TextView } } }
+1 311 11 Layout { Toolbar Layout { ImageView TextView TextView Button } }
+1 741 8 Layout { TextView ImageView TextView CheckBox Button }
+1 254 20 Layout { Toolbar List { Layout { TextView TextView TextView ImageView Layout { Button TextView Button } } } }
+1 604 18 Layout { Layout { Toolbar ImageView Layout { TextView TextView TextView } } List { ImageView } }
+1 487 12 Layout { TextView ImageView TextView Layout { Button Button } ImageView }
+1 25 24 Layout { Layout { Layout { TextView Button } EditText List { TextView } } Layout { Button Button Button Button Button } }
+1 891 40 Layout { Layout { Button TextView Button } Layout { Layout { Layout { Button Button Button } TextView Layout { Layout { ImageView ImageView ImageView } TextView Button } } Layout { Button Button Button Button } } }
+1 192 14 Layout { Toolbar Layout { TextView Layout { TextView TextView } Button } }
+1 468 0 
+1 716 20 Layout { ImageView Layout { TextView EditText TextView EditText TextView Button TextView Layout { TextView TextView } TextView } }
+1 346 9 Layout { Toolbar Layout { Button TextView } }
+1 653 29 Layout { Toolbar Layout { Layout { Layout { Layout { ImageView TextView } TextView } Layout { Layout { ImageView TextView } TextView } } TextView } }
+1 203 5 Layout { Toolbar ImageView }
+1 829 13 Layout { TextView List { CheckBox } Layout { Button Button } }
+1 983 55 Layout { Layout { Layout { ImageView ImageView } ImageView Layout { ImageView Layout { ImageView TextView } } } Layout { ImageView ImageView ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } }
+1 72 12 Layout { List { Layout { Button TextView } } Button }
+1 595 0 
+1 350 11 Layout { TextView TextView Layout { Button Button Button } }
+1 700 12 Layout { Toolbar List { Layout { Button TextView } } }
+1 215 10 Layout { TextView Layout { Button Button Button } }
+1 645 15 Layout { Toolbar Layout { Layout { TextView Button TextView } Button Button } }
+1 64 18 Layout { Toolbar Layout { Layout { TextView Layout { EditText Button } Button } Button } }
+1 995 18 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { TextView TextView } } }
+1 429 43 Layout { Layout { Layout { ImageView Layout { ImageView TextView } } Layout { Layout { Button TextView } Button } Layout { Layout { Button TextView } Layout { Button TextView } } ImageView } Layout { TextView Button } }
+1 583 15 Layout { Layout { TextView TextView } Layout { ImageView ImageView ImageView ImageView } }
+1 757 17 Layout { Toolbar Layout { Layout { EditText Button Button } List { TextView } } }
+1 307 54 Layout { Toolbar Layout { Layout { TextView TextView TextView TextView } List { Layout { Layout { ImageView TextView TextView } Button Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } TextView TextView TextView Layout { TextView TextView } } } } } }
+1 612 23 Layout { ImageView List { Layout { Layout { Button Button Button Button Button } Layout { TextView TextView } } } }
+1 242 24 Layout { Toolbar Layout { TextView Layout { ImageView ImageView ImageView ImageView ImageView } } Layout { Button Button Button Button Button } }
+1 868 22 Layout { Toolbar Layout { List { Layout { ImageView Layout { TextView TextView TextView TextView } } } Button } }
+1 33 13 Layout { Layout { TextView TextView } List { ImageView } TextView }
+1 491 64 Layout { Layout { TextView Layout { TextView TextView } } Layout { Layout { Button Button Button Button } Button Layout { TextView List { Layout { Layout { ImageView TextView TextView } Layout { ImageView TextView TextView } } } } } Layout { Layout { Button TextView } Layout { Layout { Button TextView } Button TextView } Button } }
+1 184 53 Layout { Layout { Layout { Layout { Button TextView } Layout { TextView Button } } Layout { TextView TextView TextView TextView } } Layout { Layout { Layout { EditText TextView } EditText TextView Layout { EditText TextView Button Button } CheckBox TextView } Layout { Button Button } } }
+1 887 19 Layout { Layout { Button TextView } Layout { ImageView ImageView Layout { ImageView ImageView ImageView } } }
+1 409 38 Layout { Layout { Layout { Button TextView Button } Layout { Button Button Button } } Layout { TextView Layout { ImageView ImageView ImageView } Layout { EditText EditText } Layout { TextView Button } } }
+1 44 22 Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button Button } }
+1 235 45 Layout { Toolbar Layout { Layout { List { Layout { ImageView Layout { Button TextView TextView TextView } Layout { Button Button Button } } } Layout { TextView TextView TextView } } Button } Layout { Button Button Button Button Button } }
+1 665 9 Layout { TextView Layout { Button TextView } }
+1 370 5 Layout { Toolbar TextView }
+1 720 59 Layout { Toolbar Layout { Layout { RadioButton RadioButton } Layout { ImageView ImageView Layout { TextView TextView } Layout { TextView TextView } Layout { Button Layout { TextView TextView } } Layout { Button Layout { TextView TextView } CheckBox } } Layout { Layout { Layout { TextView TextView } TextView } Button } } }
+1 848 11 Layout { Toolbar Layout { TextView EditText TextView } Button }
+1 13 18 Layout { ImageView Layout { Button TextView } Layout { TextView Layout { Button Button } } }
+1 632 0 
+1 798 12 Layout { TextView List { Layout { Button TextView } } }
+1 262 31 Layout { Toolbar Layout { Layout { Layout { ImageView TextView } TextView Layout { TextView TextView } Layout { TextView Button } } Layout { TextView Button } } }
+1 777 13 Layout { Layout { EditText EditText } Layout { Button Button } }
+1 327 13 Layout { TextView Layout { Layout { TextView ImageView } Button } }
+1 448 17 Layout { Toolbar Layout { EditText Layout { ImageView Button } TextView TextView CheckBox } Button }
+1 274 12 Layout { Button Layout { Button Button Button Button TextView } }
+1 624 0 
+1 331 20 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { ImageView TextView TextView Button } } }
+1 761 20 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } Layout { TextView ImageView } }
+1 809 28 Layout { Layout { Button Button TextView } Button Layout { Layout { TextView TextView } Layout { Button TextView Layout { Button Button } } } }
+1 52 9 Layout { Toolbar Layout { Button Button } }
+1 389 16 Layout { Layout { Layout { Button Button } TextView } List { TextView } }
+1 673 9 Layout { Layout { Button Button } TextView }
+1 223 50 Layout { Layout { Layout { Button Button } TextView } Layout { TextView List { Layout { TextView List { Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView TextView TextView TextView } } } } } }
+1 736 4 List { CheckBox }
+1 366 12 Layout { Toolbar Layout { List { TextView } Button } }
+1 872 33 Layout { Toolbar Layout { Layout { Layout { Button TextView } Layout { Button TextView } } List { Layout { ImageView Layout { TextView TextView TextView } } } } }
+1 29 0 
+1 171 72 Layout { Toolbar Layout { Layout { Layout { TextView TextView } TextView Layout { Layout { TextView TextView } Button } Layout { Layout { TextView TextView } Button } Layout { TextView Layout { Button TextView Button } } Layout { Layout { TextView Layout { Button TextView Button } } Layout { TextView Layout { Button TextView Button } } } } Layout { Button TextView } } }
+1 521 18 Layout { Layout { Toolbar Layout { TextView TextView TextView } } Layout { TextView Button } }
+1 464 9 Layout { Button Layout { Button Button } }
+1 937 26 Layout { Toolbar TextView Layout { Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } } } Button } }
+1 608 31 Layout { Layout { TextView Layout { Layout { ImageView ImageView } Layout { EditText Layout { EditText EditText TextView } Layout { EditText TextView } } } } Button }
+1 258 21 Layout { Toolbar Layout { Layout { TextView TextView TextView } List { Layout { ImageView TextView } } } }
+1 576 9 List { Layout { Button TextView TextView } }
+1 126 10 Layout { Layout { TextView ImageView TextView } Button }
+1 825 22 Layout { Layout { TextView List { Layout { Button TextView } } } Layout { TextView TextView TextView TextView } }
+1 960 20 Layout { Button Layout { TextView Layout { TextView EditText EditText TextView } } Layout { TextView Button } }
+1 91 25 Layout { Layout { Layout { ImageView TextView } Layout { Button Button } } Layout { TextView Layout { Button TextView } } }
+1 433 15 Layout { ImageView Layout { Button Button Layout { Button Button } } Button }
+1 599 7 Layout { ImageView TextView TextView Button }
+1 833 70 Layout { Layout { Toolbar List { Layout { Layout { Layout { Button Layout { TextView TextView TextView } } Layout { Button Layout { TextView TextView TextView } } } Layout { Layout { Button Layout { TextView TextView TextView } } Layout { Button Layout { TextView TextView TextView } } } Button } } } Layout { Layout { TextView TextView TextView } TextView } }
+1 999 35 Layout { Layout { Toolbar Layout { TextView TextView } } List { Layout { ImageView Layout { TextView TextView } Button } } Layout { Button Layout { TextView TextView } Button } }
+1 68 104 Layout { Toolbar Layout { Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button TextView } Layout { Button TextView } Layout { Button Layout { TextView TextView } } } }
+1 130 0 
+1 560 21 Layout { Layout { ImageView TextView } Layout { Layout { ImageView Layout { TextView TextView } } TextView } }
+1 425 47 Layout { TextView Layout { Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } Button } }
+1 87 104 Layout { Toolbar Layout { Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button TextView } Layout { Button TextView } Layout { Button Layout { TextView TextView } } } }
+1 3 18 Layout { Layout { Layout { TextView TextView } Toolbar Button } Layout { ImageView Button } }
+1 976 15 Layout { Layout { Button TextView } Layout { TextView Button Button Button } }
+1 649 14 Layout { Button Layout { Layout { ImageView TextView TextView } Button } }
+1 219 13 Layout { Toolbar List { Layout { Button TextView Button } } }
+1 537 15 Layout { Layout { Button TextView Button Button } Layout { TextView TextView } }
+1 167 72 Layout { Toolbar Layout { Layout { Layout { TextView TextView } TextView Layout { Layout { TextView TextView } Button } Layout { Layout { TextView TextView } Button } Layout { TextView Layout { Button TextView Button } } Layout { Layout { TextView Layout { Button TextView Button } } Layout { TextView Layout { Button TextView Button } } } } Layout { Button Button } } }
+1 864 17 Layout { Toolbar List { Layout { ImageView Layout { TextView TextView TextView } } } }
+1 921 13 Layout { Layout { TextView TextView } Layout { Button Button } }
+1 188 86 Layout { Layout { TextView Layout { TextView EditText TextView } } Layout { Button Layout { TextView Layout { TextView TextView } Layout { TextView TextView } } } Layout { List { Layout { Layout { TextView ImageView } Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } }
+1 472 9 Layout { Layout { Button Button } EditText }
+1 496 16 Layout { Toolbar Layout { List { Layout { TextView TextView } } TextView } }
+1 34 33 Layout { Toolbar Layout { Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } List { Layout { TextView TextView } } } }
+1 880 1 Button
+1 183 42 Layout { Layout { Layout { Layout { Button TextView } Layout { TextView Button } } Layout { TextView TextView TextView TextView TextView } } Layout { Layout { TextView TextView Button } Layout { Button TextView Button } } }
+1 479 120 Layout { Toolbar Layout { Layout { Layout { TextView EditText } Layout { TextView EditText } Layout { TextView EditText } Layout { TextView EditText } Layout { TextView EditText } } Layout { Layout { TextView TextView } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } } Layout { Layout { TextView TextView } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } } Layout { TextView Button Button Button Button Button } } }
+1 750 0 
+1 300 59 Layout { Toolbar Layout { Layout { Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } TextView Layout { TextView TextView Button } } Button Layout { CheckBox Layout { TextView EditText TextView EditText } } } }
+1 615 1 ImageView
+1 245 18 Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } TextView }
+1 992 59 Layout { Layout { Layout { Layout { ImageView ImageView } ImageView Layout { ImageView Layout { ImageView TextView } } } Layout { ImageView ImageView ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } } Layout { ImageView TextView TextView } }
+1 63 16 Layout { Toolbar Layout { Button List { Layout { Button TextView } } } }
+1 838 10 Layout { Toolbar Layout { EditText TextView TextView } }
+1 584 21 Layout { Layout { Button Layout { Layout { TextView TextView } Layout { Button TextView } } } TextView }
+1 8 16 Layout { Toolbar Layout { EditText EditText Layout { CheckBox TextView } Button TextView } }
+1 357 32 Layout { Layout { Button TextView Button } Layout { TextView Layout { Layout { Button TextView } TextView TextView TextView Layout { Button TextView } } ImageView ImageView ImageView } }
+1 707 16 Layout { Toolbar Layout { Layout { EditText EditText } List { TextView } } }
+1 212 29 Layout { Layout { ImageView ImageView } Layout { Layout { TextView Button } Layout { Layout { ImageView ImageView } Layout { ImageView ImageView } } } }
+1 642 1 Toolbar
+1 75 45 Layout { Toolbar Layout { List { Layout { ImageView TextView TextView Button } } Layout { Layout { TextView TextView } List { Layout { ImageView TextView TextView Button } } } Layout { TextView Layout { ImageView ImageView ImageView } } } }
+1 984 12 Layout { Toolbar List { Layout { TextView TextView } } }
+1 592 157 Layout { Layout { TextView Layout { Button TextView TextView } } Layout { Button Button Button } Layout { Button TextView } Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } }
+1 438 11 Layout { Toolbar Layout { Button Button Button Button } }
+1 711 21 Layout { Layout { Layout { Button TextView } Layout { TextView TextView } } Layout { TextView EditText } }
+1 341 9 Layout { Toolbar Layout { Button TextView } }
+1 654 5 Layout { Toolbar TextView }
+1 204 1 Toolbar
+1 22 24 Layout { Layout { Layout { TextView Button } EditText List { TextView } } Layout { Button Button Button Button Button } }
+1 879 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 480 110 Layout { Toolbar Layout { Layout { Layout { TextView EditText } Layout { TextView EditText } Layout { TextView EditText } } Layout { Layout { TextView TextView } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } } Layout { Layout { TextView TextView } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } } Layout { TextView Button Button Button Button Button } } }
+1 195 21 Layout { Toolbar Layout { Layout { EditText EditText EditText TextView Layout { TextView Switch TextView } } Button } }
+1 896 12 Layout { List { Layout { Button TextView } } Button }
+1 316 21 Layout { Toolbar Layout { Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView Button } } }
+1 746 27 Layout { Layout { Layout { Button TextView } Layout { TextView Button } } List { Layout { TextView TextView TextView TextView TextView } } }
+1 253 1 Toolbar
+1 603 22 Layout { ImageView List { Layout { Layout { Button TextView TextView TextView } Layout { Button Button } } } }
+1 414 22 Layout { Toolbar List { Layout { Layout { TextView TextView } ImageView TextView Layout { TextView TextView } } } }
+1 947 16 Layout { Toolbar Layout { TextView List { Layout { Button TextView } } } }
+1 59 9 Layout { Toolbar Layout { TextView TextView } }
+1 802 32 Layout { Layout { Button Button TextView } Button Layout { Layout { TextView Layout { TextView ImageView } } Layout { Button TextView Layout { Button Button } } } }
+1 551 4 List { TextView }
+1 101 20 Layout { Layout { ImageView Layout { ImageView ImageView TextView TextView } } Layout { Button Button } Button }
+1 228 8 Layout { TextView List { CheckBox } }
+1 382 32 Layout { Layout { ImageView Button Button } Layout { Button Button Button Button Button Button Button } Layout { EditText Layout { TextView TextView } List { TextView } } }
+1 678 21 Layout { Toolbar Layout { List { Button } Layout { TextView Button TextView Button TextView Button Button } } }
+1 697 17 Layout { Toolbar Layout { TextView Layout { EditText EditText EditText EditText EditText Button } } }
+1 910 9 Layout { Toolbar Layout { ImageView TextView } }
+1 443 51 Layout { Layout { Layout { TextView Button } Layout { Layout { ImageView TextView TextView TextView } Layout { ImageView TextView TextView TextView } Layout { ImageView TextView TextView TextView } Layout { ImageView TextView TextView TextView } Layout { ImageView TextView TextView TextView } } TextView } Button }
+1 156 27 Layout { Toolbar Layout { Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } } }
+1 506 8 Layout { Toolbar List { ImageView } }
+1 855 12 Layout { Toolbar Layout { TextView List { TextView } } }
+1 785 20 Layout { Layout { Button TextView } Layout { TextView Layout { TextView TextView } TextView TextView Button } }
+1 290 59 Layout { Toolbar Layout { Layout { Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } TextView } Button Layout { CheckBox Layout { TextView EditText TextView EditText } } } }
+1 455 9 Layout { Layout { Button TextView } TextView }
+1 906 10 Layout { Layout { ImageView TextView } TextView Button }
+1 18 17 Layout { Layout { TextView TextView Button } Layout { Button Button Button Button Button } }
+1 843 73 Layout { Toolbar Layout { Layout { Layout { TextView Layout { TextView TextView } Layout { TextView Layout { TextView Button } } TextView Layout { RadioButton RadioButton RadioButton RadioButton RadioButton RadioButton } TextView Layout { RadioButton RadioButton RadioButton RadioButton RadioButton RadioButton } TextView Layout { CheckBox CheckBox CheckBox CheckBox CheckBox } Layout { TextView Layout { TextView Button } } } TextView } Layout { TextView TextView TextView } } }
+1 510 18 Layout { Toolbar Layout { Layout { Layout { TextView TextView TextView } Button } TextView } }
+1 140 39 Layout { Toolbar Layout { Layout { Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } } List { Layout { ImageView TextView TextView } } } }
+1 793 9 Layout { Layout { EditText EditText } Button }
+1 269 5 Layout { Button TextView }
+1 639 12 Layout { Toolbar Layout { ImageView List { TextView } } }
+1 286 0 
+1 951 22 Layout { Toolbar Layout { List { Layout { TextView TextView ImageView Button } } Layout { TextView Button } } }
+1 402 25 Layout { Layout { Layout { Layout { Button Button } TextView } Layout { TextView TextView } } Layout { TextView TextView } }
+1 117 47 Layout { TextView Layout { ImageView Layout { TextView Layout { TextView TextView } TextView Layout { TextView TextView } TextView Layout { TextView TextView } TextView Layout { TextView TextView } TextView Layout { TextView TextView } } Layout { Button Switch Button } } }
+1 547 46 Layout { Toolbar Layout { EditText Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 814 33 Layout { Layout { Button Button TextView } Layout { Layout { Button Button Button } Button } Layout { TextView Layout { Button TextView Layout { Button Button } } } }
+1 394 12 List { Layout { Button Layout { TextView Button } } }
+1 681 12 Layout { Toolbar Layout { List { Button } Button } }
+1 249 0 
+1 619 122 Layout { Toolbar Layout { Layout { ImageView Layout { Button TextView Layout { Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } } } Layout { Layout { Button TextView TextView } Layout { Button TextView TextView } Layout { Button TextView } } } Layout { Layout { Button TextView } Layout { Button TextView } } } }
+1 38 1 Toolbar
+1 863 23 Layout { Toolbar Layout { Layout { Button Layout { TextView TextView } Button } Button Layout { Button Button } } }
+1 530 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 160 32 Layout { Layout { Button TextView } Layout { TextView Layout { TextView TextView Layout { CheckBox CheckBox } } } Layout { TextView Layout { TextView TextView CheckBox } } }
+1 475 13 Layout { Layout { Button EditText } Layout { Button Button } }
+1 926 34 Layout { Layout { Layout { Toolbar Layout { TextView TextView } } Layout { Layout { Button Button } Layout { Layout { TextView TextView } Button Button } } } Button }
+1 137 30 Layout { Toolbar Layout { List { Layout { CheckBox TextView Button } } Layout { TextView TextView List { Layout { ImageView TextView TextView } } } } }
+1 567 40 Layout { List { Layout { ImageView TextView } } Layout { Layout { Toolbar Button Layout { Button TextView } } List { Layout { Layout { Button TextView } Layout { Button TextView } } } } }
+1 834 73 Layout { Toolbar Layout { Layout { Layout { TextView Layout { TextView TextView } Layout { TextView Layout { TextView Button } } TextView Layout { RadioButton RadioButton RadioButton RadioButton RadioButton RadioButton } TextView Layout { RadioButton RadioButton RadioButton RadioButton RadioButton RadioButton } TextView Layout { CheckBox CheckBox CheckBox CheckBox CheckBox } Layout { TextView Layout { TextView Button } } } TextView } Layout { TextView TextView TextView } } }
+1 971 4 List { CheckBox }
+1 4 5 Layout { ImageView Button }
+1 80 8 Layout { Toolbar List { TextView } }
+1 588 165 Layout { Layout { TextView Button Button Button Button Button } Layout { Layout { TextView ImageView TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView } Layout { Button TextView Button TextView TextView TextView } Layout { Button TextView Button TextView TextView TextView } } CheckBox Layout { Button Button Button Button Button } }
+1 422 22 Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } Layout { Button Button } }
+1 208 20 Layout { Toolbar Layout { Layout { TextView ImageView } List { Layout { TextView Button } } } }
+1 658 14 Layout { Layout { Layout { Button EditText } Button Button } ImageView }
+1 988 18 Layout { Toolbar Layout { Layout { ImageView EditText Button } Layout { TextView TextView } } }
+1 79 43 Layout { Toolbar Layout { Layout { Layout { ImageView Layout { TextView TextView } Button } Layout { TextView Layout { Layout { TextView Layout { TextView TextView } } TextView } } Button } Layout { TextView ImageView } } }
+1 822 22 Layout { Layout { ImageView List { Layout { ImageView TextView } } } Layout { TextView TextView TextView TextView } }
+1 571 18 List { Layout { Layout { TextView Button } TextView Layout { TextView TextView TextView } } }
+1 121 15 Layout { Toolbar Layout { TextView Layout { EditText EditText TextView } Button } }
+1 434 16 Layout { Toolbar Layout { List { TextView } Layout { Button Button } } }
+1 96 14 Layout { TextView TextView TextView TextView Button Layout { Button Button } Button }
+1 967 16 Layout { Layout { Button TextView } List { Layout { TextView TextView } } }
+1 176 8 Layout { TextView TextView ImageView Button Button }
+1 526 1 Toolbar
+1 875 0 
+1 930 16 Layout { Toolbar Layout { TextView List { Layout { Button TextView } } } }
+1 199 1 Toolbar
+1 463 17 Layout { Layout { TextView Layout { ImageView Layout { TextView CheckBox } } } Button }
+1 674 18 Layout { Layout { ImageView Layout { TextView TextView } } Layout { Button ImageView Button } }
+1 224 123 Layout { Layout { Layout { Button Button } TextView } Layout { Layout { TextView Layout { TextView TextView TextView } } Layout { TextView TextView TextView TextView } Layout { Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } } } }
+1 731 39 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } Layout { TextView Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } }
+1 361 17 Layout { Layout { Button TextView Layout { Button Button } } List { TextView } }
+1 418 41 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { ImageView Layout { TextView List { Layout { Button TextView } } TextView Layout { Button Button Button } } } } Layout { Button Button } }
+1 55 9 Layout { Toolbar Layout { TextView ImageView } }
+1 789 7 Layout { TextView ImageView Button TextView }
+1 273 58 Layout { Layout { Button Layout { Button Button Button Button TextView } } Layout { Layout { Layout { Layout { TextView Button } Layout { TextView Button } } List { Layout { ImageView Layout { TextView Button } Layout { TextView TextView TextView TextView TextView } } } } List { TextView } } }
+1 623 1 ImageView
+1 336 16 Layout { Toolbar Layout { Layout { Button Button } List { TextView } } }
+1 766 18 Layout { Button TextView Layout { TextView TextView TextView TextView TextView } Layout { TextView ImageView } }
+1 859 17 Layout { Layout { ImageView Layout { TextView TextView } } Layout { TextView Button } }
+1 635 8 Layout { Toolbar List { TextView } }
+1 265 14 Layout { Layout { Button TextView } Layout { TextView EditText TextView } }
+1 770 0 
+1 320 34 Layout { Toolbar Layout { Layout { TextView TextView } List { Layout { Layout { Button Layout { TextView TextView } Button } TextView Layout { Button Button } } } } }
+1 459 30 Layout { TextView List { Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } }
+1 14 0 
+1 232 12 Layout { Toolbar Layout { List { ImageView } Button } }
+1 398 10 Layout { ImageView Layout { Button TextView } Button }
+1 662 0 
+1 377 12 Layout { TextView List { Layout { Button TextView } } }
+1 727 66 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } Layout { TextView Layout { TextView Layout { ImageView ImageView } Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } Layout { Layout { TextView TextView Button } Layout { TextView TextView } TextView } Layout { Button Button } } }
+1 43 12 Layout { Toolbar List { Layout { TextView TextView } } }
+1 818 26 Layout { Layout { Button Button TextView } Button Layout { TextView List { Layout { Layout { TextView TextView } Button } } } }
+1 42 8 Layout { Toolbar List { ImageView } }
+1 819 37 Layout { Layout { Button Button TextView } Layout { Layout { Button Button Button } Button } Layout { Layout { TextView TextView } Layout { Button TextView Layout { Button Button } } } }
+1 233 34 Layout { Toolbar Layout { List { Layout { ImageView Layout { Button Button Button } } } Layout { TextView TextView TextView } } Layout { Button Button Button Button Button } }
+1 399 19 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } List { TextView } }
+1 663 16 Layout { Layout { ImageView TextView ImageView TextView TextView } Layout { Button TextView } }
+1 376 1 TextView
+1 726 45 Layout { Toolbar Layout { Layout { RadioButton RadioButton } Layout { Layout { Button Button TextView } Layout { Button Button Button } Layout { Button Button } } Layout { Layout { Layout { TextView TextView } TextView } Button } } }
+1 458 6 Layout { ImageView Button Button }
+1 15 33 Layout { Layout { Toolbar Layout { TextView TextView TextView } } List { Layout { ImageView Layout { TextView Layout { TextView Layout { TextView TextView } } } } } }
+1 634 5 Layout { Toolbar TextView }
+1 264 1 Toolbar
+1 771 23 Layout { Toolbar Layout { Layout { TextView EditText Button } Layout { TextView Layout { ImageView TextView } Button } } }
+1 321 21 Layout { Toolbar Layout { Layout { TextView TextView TextView TextView TextView } Layout { TextView TextView Button } } }
+1 858 18 Layout { Layout { ImageView TextView } Layout { Layout { Button TextView } TextView TextView } }
+1 788 15 Layout { Layout { Button TextView TextView } Layout { TextView EditText EditText } }
+1 272 19 Layout { Layout { Button Layout { Button Button Button Button TextView } } List { TextView } }
+1 622 30 Layout { Layout { Layout { ImageView TextView } Layout { Button Button } } Layout { TextView Layout { Button TextView } Layout { Button TextView } } }
+1 337 24 Layout { Toolbar Layout { Layout { Layout { Button Button Button Button Button } TextView } Layout { Button Button } } }
+1 767 17 Layout { Button Layout { TextView Button } Layout { TextView TextView TextView TextView TextView } }
+1 419 26 Layout { Toolbar List { Layout { Layout { Button ImageView } Layout { TextView TextView TextView } } } Layout { Button Button } }
+1 54 5 Layout { Toolbar Button }
+1 675 30 Layout { Toolbar Layout { Layout { Layout { TextView Button } Layout { TextView Button } Layout { TextView Button } } Layout { Button TextView } } }
+1 225 123 Layout { Layout { Layout { Button Button } TextView } Layout { Layout { TextView Layout { TextView TextView TextView } } Layout { TextView TextView TextView TextView } Layout { Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } Layout { TextView Layout { TextView TextView } TextView TextView } } } }
+1 730 35 Layout { TextView Layout { Layout { TextView TextView } Layout { ImageView ImageView } Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } }
+1 360 13 Layout { TextView Layout { TextView TextView TextView ImageView TextView TextView } }
+1 177 19 Layout { Button Layout { ImageView Layout { ImageView Layout { TextView TextView } } TextView } Button }
+1 527 28 Layout { Layout { Toolbar Layout { TextView TextView } } List { Layout { ImageView Layout { Layout { TextView TextView } Button } } } }
+1 874 23 Layout { Toolbar Layout { Layout { Button Layout { TextView TextView } Button } Button Layout { Button Button } } }
+1 931 36 Layout { Layout { Layout { Toolbar Layout { TextView TextView } } List { Layout { Layout { Button Button } Layout { Layout { TextView TextView } Button } } } } Button }
+1 198 19 Layout { Toolbar List { Layout { TextView Layout { ImageView ImageView ImageView ImageView } TextView } } }
+1 462 16 Layout { Layout { EditText Layout { Button Button } } List { TextView } }
+1 78 66 Layout { Toolbar Layout { Layout { Layout { TextView Layout { TextView TextView } } Layout { TextView Layout { Layout { TextView TextView } TextView } } Layout { TextView Layout { ImageView ImageView ImageView ImageView Button } } Layout { TextView Layout { Layout { Layout { TextView TextView } TextView } Layout { TextView TextView } } } } TextView } }
+1 989 46 Layout { Layout { Layout { ImageView ImageView } ImageView Layout { ImageView ImageView } } Layout { ImageView ImageView ImageView ImageView } Layout { TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } } }
+1 823 22 Layout { Layout { TextView List { Layout { ImageView TextView } } } Layout { TextView TextView TextView TextView } }
+1 570 4 List { TextView }
+1 120 18 Layout { Toolbar Layout { Layout { ImageView Layout { TextView EditText TextView } } Button } }
+1 435 47 Layout { Layout { ImageView List { Layout { Layout { Button ImageView } TextView } } } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } }
+1 966 10 Layout { Layout { TextView TextView } ImageView Button }
+1 97 12 Layout { Toolbar Layout { List { ImageView } Button } }
+1 209 23 Layout { Toolbar Layout { Layout { Layout { TextView Button } TextView } TextView Layout { TextView TextView } ImageView } }
+1 659 10 Layout { Layout { Button EditText } Button Button }
+1 136 1 Toolbar
+1 566 18 Layout { Toolbar Layout { Button TextView Button } List { Layout { ImageView TextView } } }
+1 835 17 Layout { Toolbar Layout { TextView EditText TextView EditText TextView TextView Button TextView EditText TextView } }
+1 81 45 Layout { Toolbar Layout { List { Layout { ImageView TextView TextView Button } } Layout { Layout { TextView TextView } List { Layout { ImageView TextView TextView Button } } } Layout { TextView Layout { ImageView ImageView ImageView } } } }
+1 5 24 Layout { Toolbar Layout { Layout { TextView Button } EditText EditText EditText Layout { EditText EditText } EditText EditText EditText Button } }
+1 970 12 Layout { Toolbar List { Layout { Button TextView } } }
+1 589 12 List { Layout { Layout { TextView TextView } CheckBox } }
+1 423 17 Layout { Toolbar List { Layout { ImageView Layout { TextView TextView TextView } } } }
+1 39 8 Layout { Toolbar List { ImageView } }
+1 862 21 Layout { Layout { TextView TextView } Layout { TextView List { CheckBox } } Layout { Button Button } }
+1 531 18 Layout { Layout { Button TextView Button Button } List { Layout { TextView TextView } } }
+1 161 7 Layout { ImageView TextView TextView TextView }
+1 474 13 Layout { Toolbar List { Layout { Button TextView Button } } }
+1 927 19 Layout { Toolbar TextView Layout { Layout { TextView TextView Layout { TextView TextView } } Button } }
+1 248 12 Layout { Toolbar List { Layout { TextView TextView } } }
+1 618 9 Layout { Layout { TextView Button } ImageView }
+1 395 27 Layout { Layout { Toolbar Layout { TextView TextView TextView TextView TextView } } List { Layout { ImageView Layout { TextView Button } } } }
+1 680 1 Toolbar
+1 950 34 Layout { Toolbar Layout { List { Layout { Button TextView } } Layout { List { Layout { TextView TextView TextView TextView Button } } Layout { TextView Button } } } }
+1 403 95 Layout { Layout { Layout { Layout { Button Button } Layout { TextView TextView } } Layout { TextView TextView } } Layout { ImageView Layout { Layout { TextView Layout { ImageView Layout { TextView Layout { TextView TextView } } } Layout { Button Button Button Button Button Button Button Button Button Button Button Button Button Button Button Button Button } TextView } Layout { TextView Layout { Button Layout { TextView Layout { Layout { Button TextView } Button } } } } Layout { TextView TextView } } } }
+1 116 13 Layout { Layout { ImageView TextView } Layout { Button Button } }
+1 546 42 Layout { ImageView Layout { TextView TextView Layout { Layout { ImageView TextView Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } TextView } Layout { Button Button } } TextView } }
+1 815 23 Layout { ImageView TextView Layout { TextView TextView Layout { Button Button } TextView EditText Button Layout { TextView TextView } } }
+1 792 20 Layout { Layout { Toolbar EditText EditText TextView Button Button TextView TextView Layout { TextView Button } } Button }
+1 268 21 Layout { Layout { Layout { Button TextView } Button } Layout { TextView Button TextView TextView Button Button } }
+1 638 18 Layout { Toolbar Layout { Layout { TextView Button TextView } Layout { TextView Button } } }
+1 287 7 Layout { TextView TextView Button Button }
+1 454 13 Layout { Toolbar Layout { Layout { ImageView TextView } Button } }
+1 907 12 Layout { Toolbar List { Layout { TextView TextView } } }
+1 19 0 
+1 842 65 Layout { Toolbar List { Layout { Layout { Layout { Button Layout { TextView TextView TextView } } Layout { Button Layout { TextView TextView TextView } } } Layout { Layout { Button Layout { TextView TextView TextView } } Layout { Button Layout { TextView TextView TextView } } } Layout { Layout { TextView TextView } Button } } } }
+1 511 1 Toolbar
+1 141 45 Layout { Toolbar Layout { Layout { Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } Layout { CheckBox CheckBox } } List { Layout { ImageView Layout { Button Button Button Button } TextView } } } }
+1 784 17 Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } } }
+1 291 54 Layout { Toolbar Layout { Layout { TextView TextView TextView Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } } Layout { CheckBox Layout { TextView EditText TextView EditText } } } }
+1 911 19 Layout { Toolbar TextView Layout { ImageView Layout { TextView TextView Layout { TextView TextView } } } }
+1 442 0 
+1 157 203 Layout { Toolbar Layout { TextView Layout { Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } Layout { TextView Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } Layout { Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } Layout { Button TextView } } } } } }
+1 507 12 Layout { TextView List { Layout { Button TextView } } }
+1 854 0 
+1 229 41 Layout { Layout { Button Button } Layout { TextView Layout { Layout { TextView TextView } Button } Layout { Layout { TextView TextView } Button } TextView Layout { TextView Button } Layout { TextView Button } } }
+1 383 45 Layout { Layout { ImageView Button Button } Layout { Button Button Button Button Button Button Button } Layout { TextView Layout { Layout { TextView TextView TextView } List { Layout { TextView TextView Layout { TextView TextView } } } } } }
+1 679 11 Layout { ImageView TextView TextView Layout { Button TextView } }
+1 696 16 Layout { Toolbar Layout { Layout { EditText EditText } List { TextView } } }
+1 415 26 Layout { Toolbar List { Layout { Layout { Button ImageView } Layout { TextView TextView TextView } } } Layout { Button Button } }
+1 946 24 Layout { Toolbar Layout { Button List { Layout { Layout { Button Layout { TextView TextView } } Button } } } }
+1 58 5 Layout { Toolbar Button }
+1 803 8 Layout { TextView List { CheckBox } }
+1 550 22 Layout { Toolbar Layout { TextView Layout { EditText TextView } TextView EditText Layout { TextView Button TextView Button } } }
+1 100 26 Layout { Layout { Toolbar List { Layout { Button TextView } } } Layout { Button Layout { Button TextView } Button Button } }
+1 317 20 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { ImageView TextView TextView Button } } }
+1 747 24 Layout { Layout { Button TextView } Layout { Layout { EditText Button } List { Layout { TextView TextView } } } }
+1 252 0 
+1 602 22 Layout { ImageView List { Layout { Layout { Button TextView TextView TextView } Layout { Button Button } } } }
+1 23 1 Button
+1 878 22 Layout { Layout { Button Layout { ImageView Layout { TextView TextView } } Button } ImageView List { ImageView } }
+1 481 105 Layout { Toolbar Layout { Layout { Layout { TextView EditText } Layout { TextView EditText } } Layout { Layout { TextView TextView } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } } Layout { Layout { TextView TextView } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } Layout { Button Button Button Button Button Button Button } } Layout { TextView Button Button Button Button Button } } }
+1 194 21 Layout { Toolbar Layout { Layout { EditText EditText EditText TextView Layout { TextView Switch TextView } } Button } }
+1 897 4 List { TextView }
+1 710 33 Layout { Toolbar Layout { Layout { TextView Layout { TextView TextView } } List { Layout { Button Layout { TextView TextView } Layout { TextView TextView } } } } }
+1 340 12 Layout { Toolbar List { Layout { TextView TextView } } }
+1 655 0 
+1 205 19 Layout { Toolbar List { Layout { TextView Layout { ImageView ImageView ImageView ImageView } TextView } } }
+1 985 12 Layout { ImageView Layout { TextView TextView TextView TextView } Button }
+1 74 4 List { TextView }
+1 593 28 Layout { Layout { TextView Button Button Button Button } Layout { TextView ImageView TextView TextView TextView } CheckBox Layout { Button Button Button Button Button } }
+1 439 5 Layout { Button Button }
+1 356 27 Layout { Layout { Button TextView Layout { Button Button } } List { Layout { ImageView Layout { TextView TextView TextView } Button } } }
+1 706 46 Layout { Toolbar Layout { Button Layout { Layout { Layout { TextView Button } Layout { ImageView TextView } TextView } TextView } Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } TextView TextView } }
+1 213 19 Layout { Layout { Layout { ImageView ImageView ImageView ImageView } Layout { TextView TextView } } Button }
+1 643 9 Layout { Toolbar Layout { TextView TextView } }
+1 62 14 Layout { TextView Layout { Button Button } Layout { TextView TextView } }
+1 993 12 Layout { Toolbar List { Layout { TextView CheckBox } } }
+1 839 32 Layout { Toolbar Layout { Layout { TextView TextView } List { Layout { ImageView Layout { TextView TextView TextView TextView } } } Layout { TextView TextView TextView } } }
+1 585 5 Layout { TextView TextView }
+1 9 17 Layout { Toolbar Layout { ImageView TextView Button Button Button Layout { Button Button } } }
+1 751 1 Toolbar
+1 301 43 Layout { Toolbar Layout { Layout { TextView TextView TextView } Layout { Layout { Layout { TextView TextView Button } Layout { TextView TextView Button } Layout { TextView TextView Button } } Layout { Button Button Button } } } }
+1 614 45 Layout { Layout { Layout { Layout { Toolbar ImageView Layout { TextView TextView TextView } } Layout { TextView ImageView Layout { ImageView Layout { TextView TextView } } Layout { ImageView Layout { TextView TextView } } } } Button } TextView }
+1 244 12 Layout { Toolbar Layout { Button Button Button Button Button } }
+1 497 20 Layout { Toolbar Layout { List { Layout { Layout { TextView Button } TextView } } TextView } }
+1 35 55 Layout { Layout { Layout { Layout { TextView TextView } Layout { TextView TextView } Layout { TextView TextView } } List { Layout { TextView TextView } } } Layout { Layout { Button TextView TextView Button } Layout { Layout { Button Button Button TextView Button } TextView TextView } } }
+1 881 22 Layout { Layout { Button Layout { ImageView Layout { TextView TextView } } Button } ImageView List { ImageView } }
+1 182 42 Layout { Layout { Layout { Layout { Button TextView } Layout { TextView Button } } Layout { TextView TextView TextView TextView TextView } } Layout { Layout { TextView TextView Button } Layout { Button TextView Button } } }
+1 478 9 Layout { Layout { Button Button } EditText }

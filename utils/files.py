@@ -16,8 +16,8 @@ from os import walk
 
 MODE = 'divide_rico'  # divide_rico merge_sketches file_copy
 
-# NUM_PER_DIR = 1000
-NUM_PER_DIR = 2
+NUM_PER_DIR = 1000
+# NUM_PER_DIR = 2
 
 cfg = ConfigParser(interpolation=ExtendedInterpolation())
 cfg.read('../config.ini')
